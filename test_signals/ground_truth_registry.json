@@ -1,0 +1,164 @@
+{
+    "eeg_signal_01.csv": {
+        "class_id": 1,
+        "word": "Help (Ayuda)",
+        "category": "Critical Emergency",
+        "active_cortex": "Broca speech planning (F7, FC5)",
+        "channels": 14,
+        "samples": 128,
+        "sampling_rate_hz": 128
+    },
+    "eeg_signal_01.npy": {
+        "class_id": 1,
+        "word": "Help (Ayuda)",
+        "category": "Critical Emergency",
+        "active_cortex": "Broca speech planning (F7, FC5)",
+        "channels": 14,
+        "samples": 128,
+        "sampling_rate_hz": 128
+    },
+    "eeg_signal_02.csv": {
+        "class_id": 3,
+        "word": "Pain (Dolor)",
+        "category": "Critical Emergency",
+        "active_cortex": "Parietal nociceptive sensory network (P7, P8)",
+        "channels": 14,
+        "samples": 128,
+        "sampling_rate_hz": 128
+    },
+    "eeg_signal_02.npy": {
+        "class_id": 3,
+        "word": "Pain (Dolor)",
+        "category": "Critical Emergency",
+        "active_cortex": "Parietal nociceptive sensory network (P7, P8)",
+        "channels": 14,
+        "samples": 128,
+        "sampling_rate_hz": 128
+    },
+    "eeg_signal_03.csv": {
+        "class_id": 5,
+        "word": "Hungry (Hambre)",
+        "category": "Basic Need",
+        "active_cortex": "Insular visceral retrieval & temporal lobe",
+        "channels": 14,
+        "samples": 128,
+        "sampling_rate_hz": 128
+    },
+    "eeg_signal_03.npy": {
+        "class_id": 5,
+        "word": "Hungry (Hambre)",
+        "category": "Basic Need",
+        "active_cortex": "Insular visceral retrieval & temporal lobe",
+        "channels": 14,
+        "samples": 128,
+        "sampling_rate_hz": 128
+    },
+    "eeg_signal_04.csv": {
+        "class_id": 7,
+        "word": "Thirsty (Sed)",
+        "category": "Basic Need",
+        "active_cortex": "Temporal sensory projection (T7, T8)",
+        "channels": 14,
+        "samples": 128,
+        "sampling_rate_hz": 128
+    },
+    "eeg_signal_04.npy": {
+        "class_id": 7,
+        "word": "Thirsty (Sed)",
+        "category": "Basic Need",
+        "active_cortex": "Temporal sensory projection (T7, T8)",
+        "channels": 14,
+        "samples": 128,
+        "sampling_rate_hz": 128
+    },
+    "eeg_signal_05.csv": {
+        "class_id": 2,
+        "word": "Bathroom (Ba\u00f1o)",
+        "category": "Basic Assistance",
+        "active_cortex": "Frontal-parietal somatosensory network",
+        "channels": 14,
+        "samples": 128,
+        "sampling_rate_hz": 128
+    },
+    "eeg_signal_05.npy": {
+        "class_id": 2,
+        "word": "Bathroom (Ba\u00f1o)",
+        "category": "Basic Assistance",
+        "active_cortex": "Frontal-parietal somatosensory network",
+        "channels": 14,
+        "samples": 128,
+        "sampling_rate_hz": 128
+    },
+    "eeg_signal_06.csv": {
+        "class_id": 8,
+        "word": "Yes (S\u00ed)",
+        "category": "Patient Response",
+        "active_cortex": "Frontal motor affirmative synchronization",
+        "channels": 14,
+        "samples": 128,
+        "sampling_rate_hz": 128
+    },
+    "eeg_signal_06.npy": {
+        "class_id": 8,
+        "word": "Yes (S\u00ed)",
+        "category": "Patient Response",
+        "active_cortex": "Frontal motor affirmative synchronization",
+        "channels": 14,
+        "samples": 128,
+        "sampling_rate_hz": 128
+    },
+    "eeg_signal_07.csv": {
+        "class_id": 6,
+        "word": "No",
+        "category": "Patient Response",
+        "active_cortex": "Prefrontal inhibitory modulation",
+        "channels": 14,
+        "samples": 128,
+        "sampling_rate_hz": 128
+    },
+    "eeg_signal_07.npy": {
+        "class_id": 6,
+        "word": "No",
+        "category": "Patient Response",
+        "active_cortex": "Prefrontal inhibitory modulation",
+        "channels": 14,
+        "samples": 128,
+        "sampling_rate_hz": 128
+    },
+    "eeg_signal_08.csv": {
+        "class_id": 4,
+        "word": "Thanks (Gracias)",
+        "category": "Social Interaction",
+        "active_cortex": "Frontal-central polite affirmative marker",
+        "channels": 14,
+        "samples": 128,
+        "sampling_rate_hz": 128
+    },
+    "eeg_signal_08.npy": {
+        "class_id": 4,
+        "word": "Thanks (Gracias)",
+        "category": "Social Interaction",
+        "active_cortex": "Frontal-central polite affirmative marker",
+        "channels": 14,
+        "samples": 128,
+        "sampling_rate_hz": 128
+    },
+    "eeg_signal_09.csv": {
+        "class_id": 0,
+        "word": "Rest",
+        "category": "Cognitive Baseline",
+        "active_cortex": "Occipital Alpha rhythm (O1, O2)",
+        "channels": 14,
+        "samples": 128,
+        "sampling_rate_hz": 128
+    },
+    "eeg_signal_09.npy": {
+        "class_id": 0,
+        "word": "Rest",
+        "category": "Cognitive Baseline",
+        "active_cortex": "Occipital Alpha rhythm (O1, O2)",
+        "channels": 14,
+        "samples": 128,
+        "sampling_rate_hz": 128
+    }
+}

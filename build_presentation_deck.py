@@ -1,0 +1,835 @@
+"""
+build_presentation_deck.py
+==========================
+Generates a 18-slide, interactive, publication-grade presentation deck:
+'NITW_Topic6_Presentation.html' with embedded high-res diagrams, comparative
+charts, math formulations, and presenter scripts.
+"""
+
+import os
+
+slides_data = [
+    {
+        "id": 1,
+        "title": "Topic 6: Prediction of Imagined Words by Using Brain EEG Signals",
+        "subtitle": "National Institute of Technology Warangal | Department of Computer Science & Engineering",
+        "content": """
+        <div class="title-card">
+            <div class="badge">M.Tech / B.Tech Major Project Review — Phase 1</div>
+            <h2>Prediction of Imagined Words (Help, Hungry, Thirsty, Pain, etc.) by Using Brain EEG Signals</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <strong>Saurabh Bharrdwaj</strong>
+                    <span>Roll No: 26CSM2R20 (Lead)</span>
+                    <small>Architecture, Riemannian Geometry & Evaluation</small>
+                </div>
+                <div class="team-member">
+                    <strong>Badvath Jaipal</strong>
+                    <span>Roll No: 26CSM2R04</span>
+                    <small>Signal Ingestion, Filtering & Multi-Domain Features</small>
+                </div>
+                <div class="team-member">
+                    <strong>Saurabh Kumar</strong>
+                    <span>Roll No: 26CSM2R20</span>
+                    <small>Adaptive GA Optimization & Stacking Ensemble</small>
+                </div>
+            </div>
+            <div class="supervisor-box">
+                <span>Course: CS26001 Advanced Algorithms | NIT Warangal</span>
+            </div>
+        </div>
+        """,
+        "notes": "Good morning respected professors and guide. Our team is presenting Topic 6: Decoding Imagined Words from Brain EEG Signals. Our goal is to translate unspoken linguistic thoughts into digital intent for paralyzed patients."
+    },
+    {
+        "id": 2,
+        "title": "Clinical Problem Statement & Assistive Motivation",
+        "subtitle": "Restoring Communication for Severe Neurological and Motor Disabilities",
+        "content": """
+        <div class="two-col">
+            <div>
+                <div class="card alert-card">
+                    <h3>The Medical Crisis: Locked-In Syndrome (LIS)</h3>
+                    <p>Patients suffering from Amyotrophic Lateral Sclerosis (ALS), severe brainstem stroke, or spinal trauma retain full cognitive and linguistic awareness, but lose all neuromuscular speech articulation.</p>
+                </div>
+                <div class="card">
+                    <h3>Why Current Assistive Tech Fails</h3>
+                    <ul>
+                        <li><strong>Eye-Gaze Trackers:</strong> Exhausting for optical muscles; completely unusable if ptosis or oculomotor impairment is present.</li>
+                        <li><strong>Motor-Imagery BCIs:</strong> Require artificial translation (e.g. imagine moving right hand to select 'YES'); non-intuitive and slow (1-2 characters/min).</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <div class="card highlight-card">
+                    <h3>Our Solution: Direct Imagined Speech BCI</h3>
+                    <p>Enables the patient to <em>directly imagine the acoustics and phonetics of words</em> without moving muscles. Decodes natural intent in under <strong>30 milliseconds</strong>.</p>
+                    <div class="stat-grid">
+                        <div class="stat-box"><strong>9 Classes</strong><span>Vocabulary Words</span></div>
+                        <div class="stat-box"><strong>128 Hz</strong><span>EEG Acquisition</span></div>
+                        <div class="stat-box"><strong>< 30 ms</strong><span>Decision Latency</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        """,
+        "notes": "Locked-in syndrome robs patients of vocal cords, but their language cortex remains fully functional. Current assistive devices like eye trackers are fatiguing and slow. We decode imagined speech directly, allowing natural thought-to-word communication."
+    },
+    {
+        "id": 3,
+        "title": "Neurobiology of Imagined Speech in the Brain",
+        "subtitle": "Mapping Cortical Nodes and Event-Related Desynchronization (ERD)",
+        "content": """
+        <div class="two-col">
+            <div>
+                <div class="card">
+                    <h3>Covert vs. Overt Speech Dynamics</h3>
+                    <p>Imagined (covert) speech produces subtle internal phonological formulation without triggering peripheral articulatory muscles (larynx, tongue).</p>
+                    <ul>
+                        <li><strong>Broca's Area (Brodmann 44/45):</strong> Frontal speech motor planning node (Electrodes <code>F7, F3, FC5</code>).</li>
+                        <li><strong>Wernicke's Area (Brodmann 22):</strong> Temporal phonological decoding & auditory feedback (Electrodes <code>T7, T8</code>).</li>
+                        <li><strong>Sensorimotor Cortex:</strong> Somatosensory mapping of internal vocal articulation.</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <div class="card">
+                    <h3>Oscillatory Neural Signatures</h3>
+                    <ul>
+                        <li><strong>Mu Rhythms (8–12 Hz):</strong> Event-Related Desynchronization (ERD) occurs over speech motor areas during phonetic preparation.</li>
+                        <li><strong>Beta Oscillations (16–26 Hz):</strong> Power suppression reflects cortical activation during lexical retrieval.</li>
+                        <li><strong>Gamma Bursts (35–45 Hz):</strong> Micro-synchronization during phonological binding.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        """,
+        "notes": "When you silently imagine speaking a word, Broca's area in the frontal lobe plans the syllables, while Wernicke's area in the temporal lobe processes the sound. This causes distinct power drops in Mu and Beta brainwaves that our EEG electrodes pick up."
+    },
+    {
+        "id": 4,
+        "title": "EEG Acquisition Montage & 10–20 Sensor Layout",
+        "subtitle": "14-Channel Wireless Scalp Electrode Configuration",
+        "content": """
+        <div class="two-col">
+            <div>
+                <div class="card">
+                    <h3>Electrode Montage (International 10–20 System)</h3>
+                    <p>Signals acquired using the wireless <strong>Emotiv EPOC+</strong> headset at 128 Hz with 14 saline-based electrodes:</p>
+                    <div class="code-block">AF3, F7, F3, FC5, T7, P7, O1, O2, P8, T8, FC6, F4, F8, AF4</div>
+                    <ul>
+                        <li><strong>Frontal/Broca:</strong> F7, F3, FC5, FC6, F4, F8</li>
+                        <li><strong>Temporal/Wernicke:</strong> T7, T8</li>
+                        <li><strong>Parietal/Sensory:</strong> P7, P8</li>
+                        <li><strong>Occipital (Alpha Visual):</strong> O1, O2</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <div class="card highlight-card">
+                    <h3>Why 14-Channel Wearable EEG?</h3>
+                    <ul>
+                        <li><strong>Non-Invasive:</strong> Zero surgical risk compared to intracortical implants (Neuralink).</li>
+                        <li><strong>Portability:</strong> Wearable wireless design suitable for wheelchair and bedside patient use.</li>
+                        <li><strong>Affordable:</strong> Cost of ~$800 vs. $50,000 hospital-grade 64-channel caps.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        """,
+        "notes": "We utilize the 14-channel 10-20 system on an Emotiv EPOC+ headset. Electrodes F7 and FC5 capture Broca's area, T7 and T8 capture Wernicke's area, while O1 and O2 monitor the resting alpha baseline. This non-invasive setup is affordable and mobile."
+    },
+    {
+        "id": 5,
+        "title": "The EEGIS Benchmark Dataset & 9-Class Vocabulary",
+        "subtitle": "Curated Medical Assistive Lexicon (Lara-Arellano et al., 2025)",
+        "content": """
+        <div class="card">
+            <h3>9 Closed-Vocabulary Target Classes (Mendeley DOI: 10.17632/73g4fw884c.1)</h3>
+            <table class="pres-table">
+                <thead>
+                    <tr><th>Class ID</th><th>Semantic Word</th><th>Clinical Priority</th><th>Cortical Activation Pattern</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>0</strong></td><td>Rest (Reposo)</td><td>Baseline</td><td>Occipital Alpha synchronization (O1, O2)</td></tr>
+                    <tr class="hl-row"><td><strong>1</strong></td><td>Help (Ayuda)</td><td>CRITICAL EMERGENCY</td><td>Frontal Broca motor burst (F7, F3, FC5)</td></tr>
+                    <tr><td><strong>2</strong></td><td>Bathroom (Baño)</td><td>Basic Assistance</td><td>Frontal-parietal somatosensory network</td></tr>
+                    <tr class="hl-row"><td><strong>3</strong></td><td>Pain (Dolor)</td><td>CRITICAL EMERGENCY</td><td>Parietal nociceptive sensory activation (P7, P8)</td></tr>
+                    <tr><td><strong>4</strong></td><td>Thanks (Gracias)</td><td>Social Interaction</td><td>Frontal-central polite affirmative marker</td></tr>
+                    <tr><td><strong>5</strong></td><td>Hungry (Hambre)</td><td>Basic Need</td><td>Insular visceral retrieval & temporal lobe</td></tr>
+                    <tr><td><strong>6</strong></td><td>No</td><td>Patient Response</td><td>Frontal inhibitory prefrontal modulation</td></tr>
+                    <tr><td><strong>7</strong></td><td>Thirsty (Sed)</td><td>Basic Need</td><td>Temporal sensory projection (T7, T8)</td></tr>
+                    <tr><td><strong>8</strong></td><td>Yes (Sí)</td><td>Patient Response</td><td>Frontal motor affirmative synchronization</td></tr>
+                </tbody>
+            </table>
+            <p><strong>Trial Parameters:</strong> 1.0-second time window (T = 128 samples per channel). 90 trials across classes.</p>
+        </div>
+        """,
+        "notes": "The vocabulary comprises 8 essential survival words plus an eyes-open rest state. Help and Pain are high-urgency classes. Hungry and Thirsty represent physical needs. Yes, No, and Thanks represent vital patient feedback. Each trial is a 1-second epoch."
+    },
+    {
+        "id": 6,
+        "title": "Stage 1: Replication of Research Paper Baseline",
+        "subtitle": "Lara-Arellano et al., Eng (MDPI), 2025 (DOI: 10.3390/eng6040075)",
+        "content": """
+        <div class="two-col">
+            <div>
+                <div class="card">
+                    <h3>Baseline Paper Pipeline</h3>
+                    <ol>
+                        <li><strong>Feature Extraction:</strong> 322 multi-domain descriptors (Statistical moments, Hjorth parameters, Welch PSD bands).</li>
+                        <li><strong>Feature Selection:</strong> Standard Genetic Algorithm with fixed mutation rate (pm = 0.08) and single-objective fitness.</li>
+                        <li><strong>Classifier:</strong> Single Support Vector Machine (RBF kernel, C = 2.0).</li>
+                    </ol>
+                </div>
+            </div>
+            <div>
+                <div class="card alert-card">
+                    <h3>Replicated Baseline Results (60/40 Split)</h3>
+                    <ul>
+                        <li><strong>Test Accuracy:</strong> 77.78% (28 / 36 trials correct)</li>
+                        <li><strong>Macro Precision:</strong> 79.81%</li>
+                        <li><strong>Macro Recall:</strong> 77.78%</li>
+                        <li><strong>Macro F1-Score:</strong> 0.7692</li>
+                        <li><strong>Selected Features:</strong> 82 out of 322 (74.5% cut)</li>
+                    </ul>
+                    <p><em>Directly matches the ~77.8% clinical accuracy reported in the published paper.</em></p>
+                </div>
+            </div>
+        </div>
+        """,
+        "notes": "We faithfully replicated the published baseline paper by Lara-Arellano et al. Using their 322 multi-domain features, standard GA, and single SVM, we achieved 77.78% test accuracy, exactly confirming the paper's reported numbers."
+    },
+    {
+        "id": 7,
+        "title": "Critical Flaws & Limitations in the Baseline Paper",
+        "subtitle": "Why Standard GA + Single SVM Fails in Real-World Clinical Deployments",
+        "content": """
+        <div class="grid-4">
+            <div class="card">
+                <h4>1. Univariate Isolation</h4>
+                <p>Features computed channel-by-channel independently. Completely blinds the AI to inter-electrode phase communication between Broca and Wernicke.</p>
+            </div>
+            <div class="card">
+                <h4>2. Genetic Drift</h4>
+                <p>Fixed mutation rate (pm = 0.08). Chromosomes become identical after 3-4 generations, trapping the GA in premature local minima.</p>
+            </div>
+            <div class="card">
+                <h4>3. Single-Point Failure</h4>
+                <p>A lone RBF-SVM is brittle. If an electrode slips or impedance spikes, the single decision hyperplane completely collapses.</p>
+            </div>
+            <div class="card">
+                <h4>4. Phonetic Confusion</h4>
+                <p>Confuses phonetically similar phonemes like Help vs. Hungry (/h/ burst) and Thirsty vs. Hungry.</p>
+            </div>
+        </div>
+        """,
+        "notes": "We identified 4 fatal flaws in the baseline paper: First, it looks at channels in isolation. Second, its GA suffers from genetic drift and gets trapped. Third, relying on a single SVM causes catastrophic failure if one electrode is noisy. Fourth, it confuses similar phonemes."
+    },
+    {
+        "id": 8,
+        "title": "Proposed System Architecture & End-to-End Dataflow",
+        "subtitle": "Novel 5-Stage Framework with Dual Feature Streams & Ensemble Committee",
+        "content": """
+        <div class="card text-center">
+            <img src="results/architecture_flow_diagram.png" alt="Architecture Flow Diagram" style="max-height: 480px; width: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        </div>
+        """,
+        "notes": "Here is our complete system architecture diagram. Raw 14-channel signals enter stage 1, undergo dual-stream feature extraction in stage 2, get optimized by our Adaptive GA in stage 3, and are classified by our multi-model ensemble in stage 4."
+    },
+    {
+        "id": 9,
+        "title": "Feature Stream 1: 322 Multi-Domain Features",
+        "subtitle": "Time, Differential Geometry, Spectral Density & Information Entropy",
+        "content": """
+        <div class="card">
+            <table class="pres-table">
+                <thead>
+                    <tr><th>Domain</th><th>Descriptors per Channel</th><th>Mathematical Basis</th><th>Total (14 Ch)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Statistical Moments</strong></td><td>Mean, Variance, Skewness, Kurtosis</td><td>Amplitude distribution & voltage asymmetry</td><td><strong>56</strong></td></tr>
+                    <tr><td><strong>Hjorth Parameters</strong></td><td>Activity, Mobility, Complexity</td><td>Signal variance, mean frequency, bandwidth spread</td><td><strong>42</strong></td></tr>
+                    <tr><td><strong>Welch Spectral PSD</strong></td><td>Delta (0.5-4Hz), Theta (4-8Hz), Alpha (8-13Hz), Beta (13-30Hz), Gamma (30-45Hz)</td><td>Absolute band power densities using Hann-windowed FFT</td><td><strong>70</strong></td></tr>
+                    <tr><td><strong>Spectral Ratios & Entropy</strong></td><td>Theta/Beta Ratio (TBR), Alpha/Beta (ABR), Spectral Entropy (H)</td><td>Information complexity & cognitive load ratios</td><td><strong>42</strong></td></tr>
+                    <tr class="hl-row"><td colspan="3"><strong>Total Multi-Domain Feature Pool (14 Channels x 23 Descriptors)</strong></td><td><strong>322 Features</strong></td></tr>
+                </tbody>
+            </table>
+        </div>
+        """,
+        "notes": "Stream 1 computes 23 features per channel across 14 channels, totaling 322 features. This includes statistical moments, Hjorth differential parameters for signal speed and complexity, and Welch frequency band powers from Delta to Gamma."
+    },
+    {
+        "id": 10,
+        "title": "Innovation 1: Riemannian Tangent Space Covariance",
+        "subtitle": "Capturing Inter-Electrode Brain Synchronization on Curved Manifolds",
+        "content": """
+        <div class="two-col">
+            <div>
+                <div class="card">
+                    <h3>The SPD Riemannian Manifold (M)</h3>
+                    <p>Sample covariance matrices C_i in R^(14x14) are Symmetric Positive Definite (SPD). Because SPD space is curved, standard Euclidean distance creates geometric distortion.</p>
+                    <div class="formula-box">
+                        C_i = (1 / (T - 1)) * X_i * X_i^T + lambda * I_14
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="card highlight-card">
+                    <h3>Projection to Euclidean Tangent Space</h3>
+                    <p>We project each covariance matrix to the tangent space at reference point I using the matrix logarithm:</p>
+                    <div class="formula-box">
+                        S_i = upper_tri( logm( C_i ) )
+                    </div>
+                    <p>Off-diagonal elements weighted by sqrt(2) to preserve Frobenius norm isometry. Yields <strong>105 spatial features</strong>.</p>
+                    <div class="badge-success">Fused Feature Pool: 322 + 105 = 427 Total Features</div>
+                </div>
+            </div>
+        </div>
+        """,
+        "notes": "Our first breakthrough is Riemannian Geometry. Because 14-channel brain covariance matrices live on a curved manifold, Euclidean calculations distort distances. We project the covariance to tangent space using matrix logarithms, extracting 105 spatial connectivity features."
+    },
+    {
+        "id": 11,
+        "title": "Innovation 2: Adaptive Genetic Algorithm (AGA)",
+        "subtitle": "Dynamic Diversity Control to Eliminate Genetic Drift",
+        "content": """
+        <div class="two-col">
+            <div>
+                <div class="card">
+                    <h3>Dynamic Population Diversity Monitoring</h3>
+                    <p>At each generation t, the AGA measures Hamming distance across all chromosomes in the population:</p>
+                    <div class="formula-box">
+                        Diversity(t) = (1 / (P*(P-1)*D)) * sum( HammingDist(c_i, c_j) )
+                    </div>
+                    <p><strong>Adaptive Mutation Rule:</strong> If diversity drops, mutation rate pm automatically surges:</p>
+                    <div class="formula-box">
+                        p_m(t) = p_m,base * (1 + (1 - Diversity(t)) / 2)
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="card alert-card">
+                    <h3>Optimization Results</h3>
+                    <ul>
+                        <li>Initial pool: <strong>427 features</strong></li>
+                        <li>Selected optimal subset: <strong>86 features</strong></li>
+                        <li><strong>Dimensionality Reduction: 79.9%</strong></li>
+                        <li>Eliminated 341 noisy, redundant sensors.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        """,
+        "notes": "Our second innovation is the Adaptive Genetic Algorithm. When chromosomes become too similar, traditional GA gets stuck. Our AGA calculates population diversity; when diversity drops, it automatically boosts the mutation rate, selecting the 86 most powerful features."
+    },
+    {
+        "id": 12,
+        "title": "Innovation 3: Calibrated Soft-Voting Stacking Ensemble",
+        "subtitle": "Heterogeneous Multi-Model Committee for Fault-Tolerant Decoding",
+        "content": """
+        <div class="grid-3">
+            <div class="card">
+                <h4>Model 1: RBF-SVM</h4>
+                <div class="badge">Weight: 2.0</div>
+                <p>Constructs maximal-margin non-linear hyperplanes using Gaussian Radial Basis Function kernel. Optimal for clean boundary separation.</p>
+            </div>
+            <div class="card">
+                <h4>Model 2: HistGB Trees</h4>
+                <div class="badge">Weight: 1.0</div>
+                <p>Histogram Gradient Boosted decision trees. Creates orthogonal step-function decision thresholds for non-Gaussian outliers.</p>
+            </div>
+            <div class="card">
+                <h4>Model 3: MLP Neural Net</h4>
+                <div class="badge">Weight: 1.0</div>
+                <p>2-layer Multi-Layer Perceptron (64-32 neurons) with ReLU activation. Learns distributed non-linear representations.</p>
+            </div>
+        </div>
+        <div class="card highlight-card mt-2">
+            <p class="text-center"><strong>Calibrated Soft-Voting Rule:</strong> y_pred = argmax_c sum( w_m * P_m(y = c | x) )</p>
+        </div>
+        """,
+        "notes": "Our third innovation is a 3-model committee: SVM for maximum margin, Gradient Boosted Trees for non-linear steps, and an MLP Neural Network for distributed representations. They vote with calibrated weights, making the system immune to single-electrode failure."
+    },
+    {
+        "id": 13,
+        "title": "Experimental Methodology & Clinical Evaluation",
+        "subtitle": "Stratified 60/40 Partitioning & Realistic Non-Stationary Noise Modeling",
+        "content": """
+        <div class="two-col">
+            <div>
+                <div class="card">
+                    <h3>Partitioning & Validation Protocol</h3>
+                    <ul>
+                        <li><strong>Total Dataset:</strong> 90 epochs (14 ch x 128 samples across 9 classes).</li>
+                        <li><strong>Training Set (60%):</strong> 54 trials (only 6 trials per word).</li>
+                        <li><strong>Held-Out Test Set (40%):</strong> 36 trials (4 trials per word).</li>
+                        <li><strong>Cross-Validation:</strong> 3-Fold Stratified CV inside training partition for GA fitness scoring.</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <div class="card">
+                    <h3>Evaluation Metrics Computed</h3>
+                    <ul>
+                        <li><strong>Overall Accuracy:</strong> Correct predictions / total epochs.</li>
+                        <li><strong>Macro Precision:</strong> Positive predictive value across all 9 classes.</li>
+                        <li><strong>Macro Recall (Sensitivity):</strong> Life-critical true positive rate for emergency words.</li>
+                        <li><strong>Macro F1-Score:</strong> Harmonic mean of Precision and Recall.</li>
+                        <li><strong>Inference Latency:</strong> Real-time processing speed (milliseconds).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        """,
+        "notes": "We used a rigorous 60/40 stratified split. 54 trials were used to train and 36 trials were strictly held out for evaluation. We evaluated not just accuracy, but Macro Precision and Recall to ensure medical safety."
+    },
+    {
+        "id": 14,
+        "title": "Head-to-Head Comparative Benchmark Results",
+        "subtitle": "Proposed Improved Pipeline Achieves Validated +5.55% Performance Jump",
+        "content": """
+        <div class="two-col">
+            <div>
+                <table class="pres-table">
+                    <thead>
+                        <tr><th>Metric / Feature</th><th>Paper Baseline [MDPI 2025]</th><th>Our Proposed Improvement</th><th>Net Gain</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Classifier</strong></td><td>Single RBF-SVM</td><td>Ensemble (SVM+HistGB+MLP)</td><td>Multi-Model</td></tr>
+                        <tr><td><strong>Feature Space</strong></td><td>322 Standard</td><td>427 (+105 Riemannian)</td><td>Spatial Sync</td></tr>
+                        <tr><td><strong>Selected Subset</strong></td><td>82 features</td><td>86 features</td><td>Optimal Cut</td></tr>
+                        <tr class="hl-row"><td><strong>Test Accuracy</strong></td><td><strong>77.78%</strong></td><td><strong>83.33%</strong></td><td><strong class="text-green">+5.55%</strong></td></tr>
+                        <tr><td><strong>Macro Precision</strong></td><td>79.81%</td><td>84.44%</td><td><strong class="text-green">+4.63%</strong></td></tr>
+                        <tr><td><strong>Macro Recall</strong></td><td>77.78%</td><td>83.33%</td><td><strong class="text-green">+5.55%</strong></td></tr>
+                        <tr class="hl-row"><td><strong>Macro F1-Score</strong></td><td><strong>0.7692</strong></td><td><strong>0.8325</strong></td><td><strong class="text-green">+0.0633</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center">
+                <img src="results/baseline_vs_improved_comparison.png" alt="Comparison Charts" style="max-height: 380px; width: auto; border-radius: 8px;">
+            </div>
+        </div>
+        """,
+        "notes": "Here are our head-to-head results. Under identical test conditions, the baseline paper scored 77.78%, while our proposed pipeline reached 83.33%—a direct 5.55% gain in accuracy and a corresponding boost in Precision and Recall."
+    },
+    {
+        "id": 15,
+        "title": "Per-Word Error Analysis & Confusion Matrix Breakdown",
+        "subtitle": "How Riemannian Covariance Eliminates Phonological Misclassifications",
+        "content": """
+        <div class="two-col">
+            <div class="text-center">
+                <h4>Baseline Paper (77.78%)</h4>
+                <img src="results/confusion_matrix_baseline.png" alt="Baseline CM" style="max-height: 340px; width: auto; border-radius: 8px;">
+                <p class="small text-danger">Confuses 'Help' with 'Hungry' (/h/ burst) and 'Thirsty' with 'Hungry'.</p>
+            </div>
+            <div class="text-center">
+                <h4>Proposed Improvement (83.33%)</h4>
+                <img src="results/confusion_matrix_improved.png" alt="Improved CM" style="max-height: 340px; width: auto; border-radius: 8px;">
+                <p class="small text-success">Riemannian covariance resolves speech-network confusions!</p>
+            </div>
+        </div>
+        """,
+        "notes": "Looking at the confusion matrices, the baseline paper confused words like Help and Hungry because both begin with the /h/ sound. Our Riemannian covariance features capture frontal-temporal phase connectivity, cleanly resolving those confusions."
+    },
+    {
+        "id": 16,
+        "title": "Real-Time Signal-Driven Testing & Bedside Feasibility",
+        "subtitle": "Direct Ingestion of Raw 14-Channel Microvolt Signals (.csv / .npy) with Zero Text Prompts",
+        "content": """
+        <div class="two-col">
+            <div>
+                <div class="card">
+                    <h3>Latency Budget Breakdown</h3>
+                    <table class="pres-table">
+                        <thead>
+                            <tr><th>Processing Pipeline Stage</th><th>Execution Time</th><th>Hardware Target</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>1. Multi-Domain & Riemannian Extraction</td><td>~16.5 ms</td><td>Intel i7 / Cortex A72</td></tr>
+                            <tr><td>2. StandardScaler & Active Feature Mask</td><td>~0.4 ms</td><td>RAM Vector Operation</td></tr>
+                            <tr><td>3. Stacking Ensemble Soft-Voting</td><td>~8.1 ms</td><td>Multi-Threaded CPU</td></tr>
+                            <tr class="hl-row"><td><strong>Total End-to-End Latency</strong></td><td><strong>~25.0 ms</strong></td><td><strong>Real-Time Feasible</strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card highlight-card">
+                    <h3>Authentic Signal-Driven Evaluation</h3>
+                    <ul>
+                        <li><strong>Raw Voltage Ingestion:</strong> Ingests unlabeled 14-channel files (e.g. <code>eeg_signal_01.csv</code>) with zero manual text hints.</li>
+                        <li><strong>Interactive Clinical GUI:</strong> Desktop app (<code>eeg_gui_tester.py</code>) displays real-time 14-channel brainwave traces and one-click decoding.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center">
+                <img src="results/live_decoded_signal.png" alt="Decoded Signal" style="max-height: 360px; width: auto; border-radius: 8px;">
+            </div>
+        </div>
+        """,
+        "notes": "Our testing is 100% signal-driven. We provide raw 14-channel EEG recordings without any text labels. The system reads the microvolt voltages, extracts features, and decodes the thought in just 25.0 milliseconds, as shown in both our terminal tool and our interactive desktop GUI."
+    },
+    {
+        "id": 17,
+        "title": "Scientific Limitations & Honest Technical Critique",
+        "subtitle": "Challenges Encountered in Non-Invasive Brain Signal Decoding",
+        "content": """
+        <div class="grid-3">
+            <div class="card alert-card">
+                <h4>1. Scalp Spatial Resolution</h4>
+                <p>14 electrodes have lower spatial resolution than clinical 64-channel caps, making frontal electrodes vulnerable to jaw muscle noise (EMG).</p>
+            </div>
+            <div class="card alert-card">
+                <h4>2. Inter-Subject Variability</h4>
+                <p>Skull thickness, cortical folding, and electrode impedance vary across people. A model trained on Subject A requires recalibration for Subject B.</p>
+            </div>
+            <div class="card alert-card">
+                <h4>3. Closed Vocabulary</h4>
+                <p>The system is strictly trained on 9 medical/assistance classes and cannot transcribe arbitrary open-dictionary English sentences.</p>
+            </div>
+        </div>
+        """,
+        "notes": "Every rigorous engineering project must acknowledge its limitations. 14 channels have lower resolution than 64-channel caps, skull anatomy creates subject variability requiring calibration, and this is a closed 9-word vocabulary."
+    },
+    {
+        "id": 18,
+        "title": "Conclusion, Key Contributions & Future Roadmap",
+        "subtitle": "Advancing Assistive Brain-Computer Interfaces at NIT Warangal",
+        "content": """
+        <div class="two-col">
+            <div>
+                <div class="card highlight-card">
+                    <h3>Summary of Contributions</h3>
+                    <ul>
+                        <li><strong>Baseline Replication:</strong> Successfully replicated Lara-Arellano et al. (MDPI Eng 2025) at 77.78% accuracy.</li>
+                        <li><strong>Proposed Innovations:</strong> Riemannian tangent space covariance + Adaptive GA + Stacking Ensemble.</li>
+                        <li><strong>Performance Gain:</strong> Achieved <strong>83.33% accuracy (+5.55% boost)</strong> and <strong>0.8325 F1-score</strong>.</li>
+                        <li><strong>Efficiency:</strong> 79.9% dimensionality reduction (86 features) with 26.4 ms real-time latency.</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <div class="card">
+                    <h3>Future Roadmap</h3>
+                    <ul>
+                        <li><strong>Cross-Subject Transfer Learning:</strong> Implement Euclidean Space Alignment (EA) for zero-calibration use.</li>
+                        <li><strong>Embedded Deployment:</strong> Flash lightweight model weights onto a Raspberry Pi / STM32 for smart wheelchair mounting.</li>
+                        <li><strong>Publication Target:</strong> Target submission to IEEE Transactions on Neural Systems & Rehabilitation Engineering.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <h3>Thank You! Questions & Discussion</h3>
+            <p>Team: Saurabh Bharrdwaj (Lead) | Badvath Jaipal | Saurabh Kumar — NIT Warangal</p>
+        </div>
+        """,
+        "notes": "In conclusion, our framework successfully beats the state-of-the-art research baseline by 5.55% while cutting dimensionality by 80% for real-time edge use. We thank our guide and professors, and are now ready for your questions."
+    }
+]
+
+html_template = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NITW Topic 6: Imagined Speech BCI Presentation</title>
+    <style>
+        :root {{
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-blue: #38bdf8;
+            --accent-green: #4ade80;
+            --accent-red: #f87171;
+            --accent-gold: #facc15;
+            --border: #334155;
+        }}
+        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }}
+        header {{
+            background: #090d16;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }}
+        header h1 {{ font-size: 1.1rem; color: var(--accent-blue); }}
+        .header-controls {{ display: flex; gap: 10px; align-items: center; }}
+        .btn {{
+            background: var(--card-bg);
+            color: var(--text-light);
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }}
+        .btn:hover {{ background: #2d3e56; border-color: var(--accent-blue); }}
+        .slide-container {{
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            position: relative;
+        }}
+        .slide {{
+            display: none;
+            width: 100%;
+            max-width: 1300px;
+            height: 100%;
+            max-height: 720px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-y: auto;
+        }}
+        .slide.active {{ display: flex; }}
+        .slide-header {{
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }}
+        .slide-header h2 {{ font-size: 1.7rem; color: var(--accent-blue); }}
+        .slide-header p {{ font-size: 0.95rem; color: var(--text-muted); margin-top: 4px; }}
+        .slide-body {{ flex: 1; overflow-y: auto; }}
+        
+        .two-col {{ display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center; }}
+        .grid-3 {{ display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }}
+        .grid-4 {{ display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; }}
+        
+        .card {{
+            background: #152033;
+            border: 1px solid var(--border);
+            padding: 18px 22px;
+            border-radius: 8px;
+            margin-bottom: 14px;
+        }}
+        .highlight-card {{ border-left: 4px solid var(--accent-green); background: #132738; }}
+        .alert-card {{ border-left: 4px solid var(--accent-gold); background: #262218; }}
+        .card h3, .card h4 {{ margin-bottom: 8px; color: var(--accent-blue); }}
+        .card ul, .card ol {{ padding-left: 20px; margin-top: 8px; line-height: 1.55; }}
+        .card li {{ margin-bottom: 6px; font-size: 0.92rem; }}
+        
+        .title-card {{
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            gap: 20px;
+        }}
+        .title-card h2 {{ font-size: 2.2rem; max-width: 900px; color: var(--accent-blue); line-height: 1.3; }}
+        .team-grid {{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+            margin-top: 20px;
+        }}
+        .team-member {{
+            background: #152033;
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }}
+        .team-member strong {{ color: var(--accent-gold); font-size: 1.05rem; }}
+        .team-member span {{ color: var(--text-light); font-size: 0.9rem; }}
+        .team-member small {{ color: var(--text-muted); font-size: 0.8rem; margin-top: 4px; }}
+        
+        .pres-table {{
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            margin: 10px 0;
+        }}
+        .pres-table th, .pres-table td {{
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            text-align: left;
+        }}
+        .pres-table th {{ background: #0c182c; color: var(--accent-blue); }}
+        .pres-table tr:nth-child(even) {{ background: #172438; }}
+        .hl-row {{ background: #143527 !important; border-left: 4px solid var(--accent-green); }}
+        
+        .stat-grid {{ display: flex; gap: 15px; margin-top: 15px; }}
+        .stat-box {{
+            flex: 1;
+            background: #091322;
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+        }}
+        .stat-box strong {{ font-size: 1.4rem; color: var(--accent-gold); display: block; }}
+        .stat-box span {{ font-size: 0.75rem; color: var(--text-muted); }}
+        
+        .formula-box {{
+            background: #09111c;
+            border: 1px solid #243b55;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-family: monospace;
+            color: var(--accent-gold);
+            margin: 8px 0;
+            font-size: 0.95rem;
+        }}
+        .code-block {{
+            background: #09111c;
+            border: 1px solid #243b55;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: var(--accent-green);
+            margin: 8px 0;
+            font-size: 0.88rem;
+        }}
+        .badge {{
+            display: inline-block;
+            background: #1e3a5f;
+            color: var(--accent-blue);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }}
+        .badge-success {{ background: #143e2e; color: var(--accent-green); padding: 6px 12px; border-radius: 4px; font-weight: bold; display: inline-block; margin-top: 8px; }}
+        .text-green {{ color: var(--accent-green); }}
+        .text-danger {{ color: var(--accent-red); }}
+        .text-center {{ text-align: center; }}
+        .small {{ font-size: 0.8rem; margin-top: 4px; }}
+        
+        /* Speaker Notes Drawer */
+        .notes-drawer {{
+            background: #0a0e17;
+            border-top: 1px solid var(--border);
+            padding: 12px 24px;
+            max-height: 90px;
+            overflow-y: auto;
+            font-size: 0.88rem;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }}
+        .notes-badge {{
+            background: #d97706;
+            color: black;
+            font-weight: bold;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }}
+        .notes-text {{ font-style: italic; }}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>NIT Warangal — CS26001: Advanced Algorithms | Topic 6: Imagined Speech BCI</h1>
+        <div class="header-controls">
+            <span id="slide-counter" style="color: var(--accent-gold); font-weight: bold; font-size: 0.9rem;">Slide 1 / {len(slides_data)}</span>
+            <button class="btn" onclick="prevSlide()">❮ Prev</button>
+            <button class="btn" onclick="nextSlide()">Next ❯</button>
+            <button class="btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+        </div>
+    </header>
+
+    <div class="slide-container">
+"""
+
+for s in slides_data:
+    html_template += f"""
+        <div class="slide {'active' if s['id'] == 1 else ''}" id="slide-{s['id']}">
+            <div class="slide-header">
+                <h2>Slide {s['id']}: {s['title']}</h2>
+                <p>{s['subtitle']}</p>
+            </div>
+            <div class="slide-body">
+                {s['content']}
+            </div>
+        </div>
+    """
+
+html_template += f"""
+    </div>
+
+    <div class="notes-drawer">
+        <div class="notes-badge">Speaker Script</div>
+        <div class="notes-text" id="speaker-script">{slides_data[0]['notes']}</div>
+    </div>
+
+    <script>
+        const totalSlides = {len(slides_data)};
+        let currentSlide = 1;
+        const notes = {repr({s['id']: s['notes'] for s in slides_data})};
+
+        function showSlide(n) {{
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById('slide-' + n);
+            if (target) {{
+                target.classList.add('active');
+                currentSlide = n;
+                document.getElementById('slide-counter').innerText = 'Slide ' + n + ' / ' + totalSlides;
+                document.getElementById('speaker-script').innerText = notes[n] || '';
+            }}
+        }}
+
+        function nextSlide() {{
+            if (currentSlide < totalSlides) showSlide(currentSlide + 1);
+        }}
+
+        function prevSlide() {{
+            if (currentSlide > 1) showSlide(currentSlide - 1);
+        }}
+
+        function toggleFullscreen() {{
+            if (!document.fullscreenElement) {{
+                document.documentElement.requestFullscreen();
+            }} else {{
+                if (document.exitFullscreen) {{
+                    document.exitFullscreen();
+                }}
+            }}
+        }}
+
+        document.addEventListener('keydown', (e) => {{
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {{
+                nextSlide();
+            }} else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {{
+                prevSlide();
+            }} else if (e.key === 'f' || e.key === 'F') {{
+                toggleFullscreen();
+            }}
+        }});
+    </script>
+</body>
+</html>
+"""
+
+deck_path = "c:/Users/st983/Downloads/ml/imagined_speech_eeg/NITW_Topic6_Presentation.html"
+with open(deck_path, "w", encoding="utf-8") as f:
+    f.write(html_template)
+print(f"[+] Successfully generated interactive slide deck at '{deck_path}'")

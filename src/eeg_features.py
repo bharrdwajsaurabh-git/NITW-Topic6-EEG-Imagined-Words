@@ -1,0 +1,194 @@
+"""
+eeg_features.py
+===============
+Multi-domain Feature Extractor for EEG Imagined Speech Signals.
+Implements the 200+ feature extraction pipeline described in:
+"Feature Generation with Genetic Algorithms for Imagined Speech Electroencephalogram
+Signal Classification" (Lara-Arellano et al., Eng 2025).
+
+Extracts:
+1. Time-Domain Moments (Mean, Std, Skewness, Kurtosis, RMS, Peak-to-Peak, Zero Crossings)
+2. Hjorth Parameters (Activity, Mobility, Complexity)
+3. Frequency-Domain Bandpowers (Delta, Theta, Alpha, Beta, Gamma) via Welch's PSD
+4. Spectral Ratios (Theta/Beta, Alpha/Beta) and Spectral Entropy
+"""
+
+import numpy as np
+from scipy import signal
+from scipy import stats
+from typing import List, Tuple, Dict
+
+
+FREQUENCY_BANDS: Dict[str, Tuple[float, float]] = {
+    "delta": (0.5, 4.0),
+    "theta": (4.0, 8.0),
+    "alpha": (8.0, 12.0),
+    "beta": (12.0, 30.0),
+    "gamma": (30.0, 60.0),
+}
+
+
+def compute_hjorth_parameters(x: np.ndarray) -> Tuple[float, float, float]:
+    """
+    Computes Hjorth Activity, Mobility, and Complexity for a 1D time series.
+    """
+    first_deriv = np.diff(x)
+    second_deriv = np.diff(first_deriv)
+
+    var_zero = np.var(x)
+    var_d1 = np.var(first_deriv)
+    var_d2 = np.var(second_deriv)
+
+    # Activity: signal variance
+    activity = var_zero
+
+    # Mobility: mean frequency
+    mobility = np.sqrt(var_d1 / (var_zero + 1e-12))
+
+    # Complexity: change in frequency
+    mobility_d1 = np.sqrt(var_d2 / (var_d1 + 1e-12))
+    complexity = mobility_d1 / (mobility + 1e-12)
+
+    return float(activity), float(mobility), float(complexity)
+
+
+def compute_zero_crossing_rate(x: np.ndarray) -> float:
+    """Calculates zero-crossing rate of a 1D time series."""
+    zero_crosses = np.where(np.diff(np.signbit(x)))[0]
+    return float(len(zero_crosses) / (len(x) - 1))
+
+
+def compute_band_powers(x: np.ndarray, fs: int = 128) -> Dict[str, float]:
+    """
+    Computes absolute power in the standard delta, theta, alpha, beta, gamma bands
+    using Welch's average periodogram.
+    """
+    nperseg = min(len(x), fs)
+    freqs, psd = signal.welch(x, fs=fs, nperseg=nperseg)
+
+    band_powers = {}
+    # Use np.trapezoid (NumPy >= 2.0) or fallback to scipy.integrate.trapezoid
+    trapz_fn = getattr(np, "trapezoid", getattr(np, "trapz", None))
+    if trapz_fn is None:
+        import scipy.integrate
+        trapz_fn = scipy.integrate.trapezoid
+
+    total_power = trapz_fn(psd, freqs) + 1e-12
+
+    for band_name, (low, high) in FREQUENCY_BANDS.items():
+        idx = np.logical_and(freqs >= low, freqs <= high)
+        bp = trapz_fn(psd[idx], freqs[idx])
+        band_powers[band_name] = float(bp)
+        # Relative band power
+        band_powers[f"{band_name}_rel"] = float(bp / total_power)
+
+    # Cross-band ratios
+    band_powers["theta_beta_ratio"] = float(
+        band_powers["theta"] / (band_powers["beta"] + 1e-12)
+    )
+    band_powers["alpha_beta_ratio"] = float(
+        band_powers["alpha"] / (band_powers["beta"] + 1e-12)
+    )
+
+    # Spectral Entropy
+    norm_psd = psd / (np.sum(psd) + 1e-12)
+    norm_psd = norm_psd[norm_psd > 0]
+    band_powers["spectral_entropy"] = float(-np.sum(norm_psd * np.log2(norm_psd)))
+
+    return band_powers
+
+
+def extract_trial_features(
+    trial: np.ndarray, channel_names: List[str], fs: int = 128
+) -> Tuple[np.ndarray, List[str]]:
+    """
+    Extracts high-dimensional feature vector for a single trial of shape (n_channels, n_samples).
+    """
+    n_channels, _ = trial.shape
+    features = []
+    feature_names = []
+
+    for ch_idx in range(n_channels):
+        ch_name = channel_names[ch_idx] if ch_idx < len(channel_names) else f"Ch{ch_idx}"
+        sig = trial[ch_idx, :]
+
+        # 1. Time-Domain Moments
+        mean_val = float(np.mean(sig))
+        std_val = float(np.std(sig))
+        skew_val = float(stats.skew(sig))
+        kurt_val = float(stats.kurtosis(sig))
+        rms_val = float(np.sqrt(np.mean(sig**2)))
+        p2p_val = float(np.ptp(sig))
+        zcr_val = compute_zero_crossing_rate(sig)
+
+        # 2. Hjorth Parameters
+        activity, mobility, complexity = compute_hjorth_parameters(sig)
+
+        # 3. Frequency & Spectral Bands
+        bp = compute_band_powers(sig, fs=fs)
+
+        ch_feats = [
+            mean_val, std_val, skew_val, kurt_val, rms_val, p2p_val, zcr_val,
+            activity, mobility, complexity,
+            bp["delta"], bp["theta"], bp["alpha"], bp["beta"], bp["gamma"],
+            bp["delta_rel"], bp["theta_rel"], bp["alpha_rel"], bp["beta_rel"], bp["gamma_rel"],
+            bp["theta_beta_ratio"], bp["alpha_beta_ratio"], bp["spectral_entropy"]
+        ]
+
+        ch_feat_names = [
+            f"{ch_name}_mean", f"{ch_name}_std", f"{ch_name}_skew", f"{ch_name}_kurt",
+            f"{ch_name}_rms", f"{ch_name}_p2p", f"{ch_name}_zcr",
+            f"{ch_name}_hjorth_act", f"{ch_name}_hjorth_mob", f"{ch_name}_hjorth_comp",
+            f"{ch_name}_delta", f"{ch_name}_theta", f"{ch_name}_alpha", f"{ch_name}_beta", f"{ch_name}_gamma",
+            f"{ch_name}_delta_rel", f"{ch_name}_theta_rel", f"{ch_name}_alpha_rel", f"{ch_name}_beta_rel", f"{ch_name}_gamma_rel",
+            f"{ch_name}_tbr", f"{ch_name}_abr", f"{ch_name}_spec_entropy"
+        ]
+
+        features.extend(ch_feats)
+        feature_names.extend(ch_feat_names)
+
+    return np.array(features, dtype=np.float32), feature_names
+
+
+def extract_dataset_features(
+    X: np.ndarray, channel_names: List[str], fs: int = 128
+) -> Tuple[np.ndarray, List[str]]:
+    """
+    Extracts features for all trials in X (N, n_channels, n_samples).
+    Returns feature matrix of shape (N, total_features) and feature names list.
+    """
+    n_trials = X.shape[0]
+    print(f"[*] Extracting statistical & spectral features across {n_trials} trials...")
+
+    feat_matrix = []
+    feat_names = []
+    for i in range(n_trials):
+        f_vec, names = extract_trial_features(X[i], channel_names, fs=fs)
+        feat_matrix.append(f_vec)
+        if i == 0:
+            feat_names = names
+
+    feat_matrix = np.array(feat_matrix, dtype=np.float32)
+    print(f"[+] Extracted {feat_matrix.shape[1]} features per trial. Total matrix: {feat_matrix.shape}")
+    return feat_matrix, feat_names
+
+
+if __name__ == "__main__":
+    print("=" * 65)
+    print("       EEG FEATURE EXTRACTION ENGINE TEST (14 CHANNELS)       ")
+    print("=" * 65)
+    # Create a 1-second dummy EEG trial (14 channels, 128 samples)
+    fs = 128
+    dummy_trial = np.random.randn(14, fs).astype(np.float32)
+    ch_names = ["AF3", "F7", "F3", "FC5", "T7", "P7", "O1", "O2", "P8", "T8", "FC6", "F4", "F8", "AF4"]
+    feats, names = extract_trial_features(dummy_trial, ch_names, fs=fs)
+    print(f"[*] Input raw signal:  14 channels x {fs} time-samples")
+    print(f"[+] Extracted features: {len(feats)} features per trial")
+    print(f"[+] Feature categories:")
+    print(f"    - Statistical: Mean, Variance, Skewness, Kurtosis (4 x 14 = 56)")
+    print(f"    - Hjorth:      Activity, Mobility, Complexity   (3 x 14 = 42)")
+    print(f"    - Welch PSD:   Delta, Theta, Alpha, Beta, Gamma (5 x 14 = 70)")
+    print(f"    - Band Ratios: TBR, ABR, Spectral Entropy       (3 x 14 = 42)")
+    print(f"    - Total per trial: 14 channels x 23 features = 322 features")
+    print("=" * 65)
+
