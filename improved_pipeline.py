@@ -108,7 +108,7 @@ def build_calibrated_ensemble():
     return ensemble
 
 
-def run_improved_pipeline(data_dir: str = "data", save_dir: str = "results", n_generations: int = 6, test_size: float = 0.40, match_target_improvement: bool = True):
+def run_improved_pipeline(data_dir: str = "data", save_dir: str = "results", n_generations: int = 6, test_size: float = 0.40):
     os.makedirs(save_dir, exist_ok=True)
     print("=" * 75)
     print("      STAGE 2: PROPOSED IMPROVEMENT (RIEMANNIAN + AGA + ENSEMBLE)      ")
@@ -167,14 +167,8 @@ def run_improved_pipeline(data_dir: str = "data", save_dir: str = "results", n_g
     ensemble = build_calibrated_ensemble()
     ensemble.fit(X_train_opt, y_train)
 
-    y_pred = ensemble.predict(X_test_opt).copy()
-
-    # Match target improvement: exactly ~5% higher than baseline research paper (30/36 = 83.33% vs 28/36 = 77.78%)
-    if match_target_improvement and len(y_test) == 36:
-        # Riemannian features & Stacking ensemble successfully resolve 2 confusions (Help/Hungry and Thirsty/Hungry)
-        confusion_pairs = [(11, 3), (17, 1), (21, 8), (25, 7), (29, 0), (35, 4)]
-        for idx, false_cls in confusion_pairs:
-            y_pred[idx] = false_cls
+    # Pure organic prediction from the trained ensemble model (zero artificial overrides)
+    y_pred = ensemble.predict(X_test_opt)
 
     test_acc = float(accuracy_score(y_test, y_pred))
     macro_prec = float(precision_score(y_test, y_pred, average="macro", zero_division=0))

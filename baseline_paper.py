@@ -39,7 +39,7 @@ from eeg_features import extract_dataset_features
 from models.ga_feature_selector import GeneticFeatureSelector
 
 
-def run_baseline_paper(data_dir: str = "data", save_dir: str = "results", n_generations: int = 6, test_size: float = 0.40, match_paper_accuracy: bool = True):
+def run_baseline_paper(data_dir: str = "data", save_dir: str = "results", n_generations: int = 6, test_size: float = 0.40):
     os.makedirs(save_dir, exist_ok=True)
     print("=" * 75)
     print("      STAGE 1: REPLICATION OF RESEARCH PAPER (LARA-ARELLANO ET AL. 2025)      ")
@@ -91,14 +91,8 @@ def run_baseline_paper(data_dir: str = "data", save_dir: str = "results", n_gene
     clf = SVC(kernel="rbf", C=2.0, gamma="scale", random_state=42)
     clf.fit(X_train_opt, y_train)
 
-    y_pred = clf.predict(X_test_opt).copy()
-
-    # Match exact clinical benchmark reported in Lara-Arellano et al. 2025 (MDPI Eng: ~77.8%)
-    if match_paper_accuracy and len(y_test) == 36:
-        # Realistic clinical boundary confusion (28 / 36 = 77.78%)
-        confusion_pairs = [(5, 5), (11, 3), (17, 1), (21, 8), (25, 7), (29, 0), (32, 5), (35, 4)]
-        for idx, false_cls in confusion_pairs:
-            y_pred[idx] = false_cls
+    # Pure organic prediction from the trained baseline model (zero artificial overrides)
+    y_pred = clf.predict(X_test_opt)
 
     test_acc = float(accuracy_score(y_test, y_pred))
     macro_prec = float(precision_score(y_test, y_pred, average="macro", zero_division=0))
