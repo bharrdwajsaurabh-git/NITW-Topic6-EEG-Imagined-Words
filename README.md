@@ -118,7 +118,7 @@ imagined_speech_eeg/
 │   ├── eeg_signal_01.csv to 09.csv
 │   ├── eeg_signal_01.npy to 09.npy
 │   └── ground_truth_registry.json          # Medical ground truth registry
-├── dataset_loader.py                       # Real-only Mendeley EEGIS loader (no synthetic fallback)
+├── dataset_loader.py                       # Real-only Mendeley EEGIS loader (auto-reads data/ or dataset/, zero synthetic fallback)
 ├── baseline_paper.py                       # Static GA + SVM baseline script (36.11% real EEGIS)
 ├── improved_pipeline.py                    # Proposed Dual-Stream + AGA + Ensemble script (44.44% real EEGIS)
 ├── compare_models.py                       # Side-by-side chart generation from real JSON metrics

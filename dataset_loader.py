@@ -36,11 +36,35 @@ EPOCH_DURATION: float = 1.0  # seconds
 SAMPLES_PER_EPOCH: int = int(SAMPLING_RATE * EPOCH_DURATION)  # 128 samples
 
 
+def _find_real_csv_files(data_dir: str) -> List[str]:
+    """Locate raw real-EEGIS class CSV files from data_dir or sibling dataset/ folder."""
+    base_dir = os.path.dirname(os.path.abspath(data_dir)) if os.path.isabs(data_dir) else "."
+    candidate_roots = [
+        os.path.join(data_dir, "eegis_raw"),
+        os.path.join(base_dir, "dataset", "EEGIS - Electroencephalogram Imagined Speech dataset", "raw"),
+        os.path.join(base_dir, "dataset", "raw"),
+        data_dir,
+        os.path.join(base_dir, "dataset"),
+    ]
+    band_dirs = {f"{os.sep}{b}{os.sep}" for b in ("alpha", "beta", "delta", "theta", "gamma")}
+    for root in candidate_roots:
+        if not os.path.isdir(root):
+            continue
+        files = glob.glob(os.path.join(root, "**", "*.csv"), recursive=True)
+        files = [f for f in files if "test_signals" not in f]
+        if root.endswith(f"{os.sep}dataset") or root == os.path.join(base_dir, "dataset"):
+            files = [f for f in files if not any(bd in f.lower() for bd in band_dirs)]
+        if files:
+            print(f"[*] Discovered {len(files)} raw real EEGIS CSV files in '{root}'.")
+            return files
+    return []
+
+
 def load_eegis_dataset(data_dir: str = "data") -> Tuple[np.ndarray, np.ndarray, List[str]]:
     """
     Loads real EEGIS dataset trials (4,044 trials from 10 human subjects) from Mendeley Data.
     Checks for the cached binary archive 'eegis_real_dataset.npz' first for instant ingestion,
-    or parses raw Mendeley CSV recordings directly from 'data/eegis_raw/'.
+    or parses raw Mendeley CSV recordings directly from 'data/eegis_raw/' or 'dataset/'.
     Raises FileNotFoundError if the real dataset is absent (no synthetic fallback).
 
     Returns:
@@ -57,14 +81,13 @@ def load_eegis_dataset(data_dir: str = "data") -> Tuple[np.ndarray, np.ndarray, 
         print(f"[+] Loaded {len(X)} real human EEG trials across 9 classes (shape: {X.shape}).")
         return X, y, CHANNEL_NAMES
 
-    csv_files = glob.glob(os.path.join(data_dir, "**", "*.csv"), recursive=True)
-    csv_files = [f for f in csv_files if "test_signals" not in f]
+    csv_files = _find_real_csv_files(data_dir)
 
     if len(csv_files) == 0:
         raise FileNotFoundError(
-            f"Real Mendeley EEGIS dataset not found in '{data_dir}'. "
-            "Please place 'eegis_real_dataset.npz' or the extracted 'eegis_raw/' CSV folders "
-            "(DOI: 10.17632/73g4fw884c.1) inside 'data/'."
+            f"Real Mendeley EEGIS dataset not found in '{data_dir}' or 'dataset/'. "
+            "Please place 'eegis_real_dataset.npz' or the extracted raw EEGIS CSV folders "
+            "(DOI: 10.17632/73g4fw884c.1) inside 'data/eegis_raw/' or 'dataset/'."
         )
 
     print(f"[*] Found {len(csv_files)} raw Mendeley CSV files. Parsing & detrending records...")
