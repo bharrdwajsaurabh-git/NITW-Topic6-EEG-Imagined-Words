@@ -1,164 +1,128 @@
-{
-    "eeg_signal_01.csv": {
-        "class_id": 1,
-        "word": "Help (Ayuda)",
-        "category": "Critical Emergency",
-        "active_cortex": "Broca speech planning (F7, FC5)",
-        "channels": 14,
-        "samples": 128,
-        "sampling_rate_hz": 128
+[
+    {
+        "signal_id": "eeg_signal_01",
+        "file_csv": "test_signals/eeg_signal_01.csv",
+        "file_npy": "test_signals/eeg_signal_01.npy",
+        "true_class_id": 1,
+        "true_word": "Help (Ayuda)",
+        "patient_source": "Real Human Subject 01 (EEGIS Mendeley Database)",
+        "sampling_rate_hz": 128,
+        "duration_sec": 1.0,
+        "voltage_range_uv": [
+            -135.2841796875,
+            94.97216796875
+        ]
     },
-    "eeg_signal_01.npy": {
-        "class_id": 1,
-        "word": "Help (Ayuda)",
-        "category": "Critical Emergency",
-        "active_cortex": "Broca speech planning (F7, FC5)",
-        "channels": 14,
-        "samples": 128,
-        "sampling_rate_hz": 128
+    {
+        "signal_id": "eeg_signal_02",
+        "file_csv": "test_signals/eeg_signal_02.csv",
+        "file_npy": "test_signals/eeg_signal_02.npy",
+        "true_class_id": 3,
+        "true_word": "Pain (Dolor)",
+        "patient_source": "Real Human Subject 01 (EEGIS Mendeley Database)",
+        "sampling_rate_hz": 128,
+        "duration_sec": 1.0,
+        "voltage_range_uv": [
+            -106.70263671875,
+            66.63037109375
+        ]
     },
-    "eeg_signal_02.csv": {
-        "class_id": 3,
-        "word": "Pain (Dolor)",
-        "category": "Critical Emergency",
-        "active_cortex": "Parietal nociceptive sensory network (P7, P8)",
-        "channels": 14,
-        "samples": 128,
-        "sampling_rate_hz": 128
+    {
+        "signal_id": "eeg_signal_03",
+        "file_csv": "test_signals/eeg_signal_03.csv",
+        "file_npy": "test_signals/eeg_signal_03.npy",
+        "true_class_id": 5,
+        "true_word": "Hungry (Hambre)",
+        "patient_source": "Real Human Subject 01 (EEGIS Mendeley Database)",
+        "sampling_rate_hz": 128,
+        "duration_sec": 1.0,
+        "voltage_range_uv": [
+            -61.130126953125,
+            55.27978515625
+        ]
     },
-    "eeg_signal_02.npy": {
-        "class_id": 3,
-        "word": "Pain (Dolor)",
-        "category": "Critical Emergency",
-        "active_cortex": "Parietal nociceptive sensory network (P7, P8)",
-        "channels": 14,
-        "samples": 128,
-        "sampling_rate_hz": 128
+    {
+        "signal_id": "eeg_signal_04",
+        "file_csv": "test_signals/eeg_signal_04.csv",
+        "file_npy": "test_signals/eeg_signal_04.npy",
+        "true_class_id": 7,
+        "true_word": "Thirsty (Sed)",
+        "patient_source": "Real Human Subject 01 (EEGIS Mendeley Database)",
+        "sampling_rate_hz": 128,
+        "duration_sec": 1.0,
+        "voltage_range_uv": [
+            -54.546875,
+            55.712890625
+        ]
     },
-    "eeg_signal_03.csv": {
-        "class_id": 5,
-        "word": "Hungry (Hambre)",
-        "category": "Basic Need",
-        "active_cortex": "Insular visceral retrieval & temporal lobe",
-        "channels": 14,
-        "samples": 128,
-        "sampling_rate_hz": 128
+    {
+        "signal_id": "eeg_signal_05",
+        "file_csv": "test_signals/eeg_signal_05.csv",
+        "file_npy": "test_signals/eeg_signal_05.npy",
+        "true_class_id": 2,
+        "true_word": "Bathroom (Ba\u00f1o)",
+        "patient_source": "Real Human Subject 01 (EEGIS Mendeley Database)",
+        "sampling_rate_hz": 128,
+        "duration_sec": 1.0,
+        "voltage_range_uv": [
+            -181.46240234375,
+            59.4716796875
+        ]
     },
-    "eeg_signal_03.npy": {
-        "class_id": 5,
-        "word": "Hungry (Hambre)",
-        "category": "Basic Need",
-        "active_cortex": "Insular visceral retrieval & temporal lobe",
-        "channels": 14,
-        "samples": 128,
-        "sampling_rate_hz": 128
+    {
+        "signal_id": "eeg_signal_06",
+        "file_csv": "test_signals/eeg_signal_06.csv",
+        "file_npy": "test_signals/eeg_signal_06.npy",
+        "true_class_id": 8,
+        "true_word": "Yes (S\u00ed)",
+        "patient_source": "Real Human Subject 01 (EEGIS Mendeley Database)",
+        "sampling_rate_hz": 128,
+        "duration_sec": 1.0,
+        "voltage_range_uv": [
+            -97.65234375,
+            117.21923828125
+        ]
     },
-    "eeg_signal_04.csv": {
-        "class_id": 7,
-        "word": "Thirsty (Sed)",
-        "category": "Basic Need",
-        "active_cortex": "Temporal sensory projection (T7, T8)",
-        "channels": 14,
-        "samples": 128,
-        "sampling_rate_hz": 128
+    {
+        "signal_id": "eeg_signal_07",
+        "file_csv": "test_signals/eeg_signal_07.csv",
+        "file_npy": "test_signals/eeg_signal_07.npy",
+        "true_class_id": 6,
+        "true_word": "No",
+        "patient_source": "Real Human Subject 01 (EEGIS Mendeley Database)",
+        "sampling_rate_hz": 128,
+        "duration_sec": 1.0,
+        "voltage_range_uv": [
+            -43.88623046875,
+            52.5400390625
+        ]
     },
-    "eeg_signal_04.npy": {
-        "class_id": 7,
-        "word": "Thirsty (Sed)",
-        "category": "Basic Need",
-        "active_cortex": "Temporal sensory projection (T7, T8)",
-        "channels": 14,
-        "samples": 128,
-        "sampling_rate_hz": 128
+    {
+        "signal_id": "eeg_signal_08",
+        "file_csv": "test_signals/eeg_signal_08.csv",
+        "file_npy": "test_signals/eeg_signal_08.npy",
+        "true_class_id": 4,
+        "true_word": "Thanks (Gracias)",
+        "patient_source": "Real Human Subject 01 (EEGIS Mendeley Database)",
+        "sampling_rate_hz": 128,
+        "duration_sec": 1.0,
+        "voltage_range_uv": [
+            -49.98388671875,
+            60.66064453125
+        ]
     },
-    "eeg_signal_05.csv": {
-        "class_id": 2,
-        "word": "Bathroom (Ba\u00f1o)",
-        "category": "Basic Assistance",
-        "active_cortex": "Frontal-parietal somatosensory network",
-        "channels": 14,
-        "samples": 128,
-        "sampling_rate_hz": 128
-    },
-    "eeg_signal_05.npy": {
-        "class_id": 2,
-        "word": "Bathroom (Ba\u00f1o)",
-        "category": "Basic Assistance",
-        "active_cortex": "Frontal-parietal somatosensory network",
-        "channels": 14,
-        "samples": 128,
-        "sampling_rate_hz": 128
-    },
-    "eeg_signal_06.csv": {
-        "class_id": 8,
-        "word": "Yes (S\u00ed)",
-        "category": "Patient Response",
-        "active_cortex": "Frontal motor affirmative synchronization",
-        "channels": 14,
-        "samples": 128,
-        "sampling_rate_hz": 128
-    },
-    "eeg_signal_06.npy": {
-        "class_id": 8,
-        "word": "Yes (S\u00ed)",
-        "category": "Patient Response",
-        "active_cortex": "Frontal motor affirmative synchronization",
-        "channels": 14,
-        "samples": 128,
-        "sampling_rate_hz": 128
-    },
-    "eeg_signal_07.csv": {
-        "class_id": 6,
-        "word": "No",
-        "category": "Patient Response",
-        "active_cortex": "Prefrontal inhibitory modulation",
-        "channels": 14,
-        "samples": 128,
-        "sampling_rate_hz": 128
-    },
-    "eeg_signal_07.npy": {
-        "class_id": 6,
-        "word": "No",
-        "category": "Patient Response",
-        "active_cortex": "Prefrontal inhibitory modulation",
-        "channels": 14,
-        "samples": 128,
-        "sampling_rate_hz": 128
-    },
-    "eeg_signal_08.csv": {
-        "class_id": 4,
-        "word": "Thanks (Gracias)",
-        "category": "Social Interaction",
-        "active_cortex": "Frontal-central polite affirmative marker",
-        "channels": 14,
-        "samples": 128,
-        "sampling_rate_hz": 128
-    },
-    "eeg_signal_08.npy": {
-        "class_id": 4,
-        "word": "Thanks (Gracias)",
-        "category": "Social Interaction",
-        "active_cortex": "Frontal-central polite affirmative marker",
-        "channels": 14,
-        "samples": 128,
-        "sampling_rate_hz": 128
-    },
-    "eeg_signal_09.csv": {
-        "class_id": 0,
-        "word": "Rest",
-        "category": "Cognitive Baseline",
-        "active_cortex": "Occipital Alpha rhythm (O1, O2)",
-        "channels": 14,
-        "samples": 128,
-        "sampling_rate_hz": 128
-    },
-    "eeg_signal_09.npy": {
-        "class_id": 0,
-        "word": "Rest",
-        "category": "Cognitive Baseline",
-        "active_cortex": "Occipital Alpha rhythm (O1, O2)",
-        "channels": 14,
-        "samples": 128,
-        "sampling_rate_hz": 128
+    {
+        "signal_id": "eeg_signal_09",
+        "file_csv": "test_signals/eeg_signal_09.csv",
+        "file_npy": "test_signals/eeg_signal_09.npy",
+        "true_class_id": 0,
+        "true_word": "Rest",
+        "patient_source": "Real Human Subject 01 (EEGIS Mendeley Database)",
+        "sampling_rate_hz": 128,
+        "duration_sec": 1.0,
+        "voltage_range_uv": [
+            -52.75244140625,
+            74.51123046875
+        ]
     }
-}
+]

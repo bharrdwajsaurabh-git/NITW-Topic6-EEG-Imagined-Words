@@ -1,82 +1,112 @@
 {
     "model_name": "Proposed Improvement (Riemannian + AGA + Soft-Voting Ensemble)",
-    "train_test_split": "60/40",
-    "train_samples": 54,
-    "test_samples": 36,
-    "accuracy": 0.9722222222222222,
-    "precision": 0.9777777777777779,
-    "recall": 0.9722222222222222,
-    "macro_f1": 0.9717813051146386,
+    "train_test_split": "75/25",
+    "train_samples": 540,
+    "test_samples": 180,
+    "accuracy": 0.4444444444444444,
+    "precision": 0.44091575091575097,
+    "recall": 0.4444444444444444,
+    "macro_f1": 0.4392486535283878,
     "n_original_features": 427,
-    "n_selected_features": 86,
+    "n_selected_features": 131,
     "classification_method": "Soft-Voting Ensemble (RBF-SVM + HistGB + MLP)",
+    "aga_history": {
+        "fitness": [
+            0.3500329603608292,
+            0.3756310174342961,
+            0.3756310174342961,
+            0.38128024980483993,
+            0.38979009454419294
+        ],
+        "diversity": [
+            0.18212090163934427,
+            0.181059718969555,
+            0.16709357923497267,
+            0.15390807962529274,
+            0.14795163283892793
+        ],
+        "mutation": [
+            0.03970979865091951,
+            0.03981338600491219,
+            0.041284259272429534,
+            0.042874695116134356,
+            0.04366486901412517
+        ],
+        "active_features": [
+            110,
+            117,
+            117,
+            115,
+            131
+        ]
+    },
     "per_class": {
         "Rest": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 4.0
+            "precision": 0.47619047619047616,
+            "recall": 0.5,
+            "f1-score": 0.4878048780487805,
+            "support": 20.0
         },
         "Help (Ayuda)": {
-            "precision": 0.8,
-            "recall": 1.0,
-            "f1-score": 0.8888888888888888,
-            "support": 4.0
+            "precision": 0.6153846153846154,
+            "recall": 0.8,
+            "f1-score": 0.6956521739130435,
+            "support": 20.0
         },
         "Bathroom (Ba\u00f1o)": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 4.0
+            "precision": 0.3333333333333333,
+            "recall": 0.35,
+            "f1-score": 0.34146341463414637,
+            "support": 20.0
         },
         "Pain (Dolor)": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 4.0
+            "precision": 0.5294117647058824,
+            "recall": 0.45,
+            "f1-score": 0.4864864864864865,
+            "support": 20.0
         },
         "Thanks (Gracias)": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 4.0
+            "precision": 0.36,
+            "recall": 0.45,
+            "f1-score": 0.4,
+            "support": 20.0
         },
         "Hungry (Hambre)": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 4.0
+            "precision": 0.35,
+            "recall": 0.35,
+            "f1-score": 0.35,
+            "support": 20.0
         },
         "No": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 4.0
+            "precision": 0.5,
+            "recall": 0.45,
+            "f1-score": 0.47368421052631576,
+            "support": 20.0
         },
         "Thirsty (Sed)": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 4.0
+            "precision": 0.47058823529411764,
+            "recall": 0.4,
+            "f1-score": 0.43243243243243246,
+            "support": 20.0
         },
         "Yes (S\u00ed)": {
-            "precision": 1.0,
-            "recall": 0.75,
-            "f1-score": 0.8571428571428571,
-            "support": 4.0
+            "precision": 0.3333333333333333,
+            "recall": 0.25,
+            "f1-score": 0.2857142857142857,
+            "support": 20.0
         },
-        "accuracy": 0.9722222222222222,
+        "accuracy": 0.4444444444444444,
         "macro avg": {
-            "precision": 0.9777777777777779,
-            "recall": 0.9722222222222222,
-            "f1-score": 0.9717813051146386,
-            "support": 36.0
+            "precision": 0.44091575091575097,
+            "recall": 0.4444444444444444,
+            "f1-score": 0.4392486535283878,
+            "support": 180.0
         },
         "weighted avg": {
-            "precision": 0.9777777777777779,
-            "recall": 0.9722222222222222,
-            "f1-score": 0.9717813051146386,
-            "support": 36.0
+            "precision": 0.44091575091575097,
+            "recall": 0.4444444444444444,
+            "f1-score": 0.4392486535283879,
+            "support": 180.0
         }
     }
 }

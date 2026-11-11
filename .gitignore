@@ -49,3 +49,6 @@ venv.bak/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Raw extracted Mendeley CSVs (compiled in data/eegis_real_dataset.npz)
+data/eegis_raw/

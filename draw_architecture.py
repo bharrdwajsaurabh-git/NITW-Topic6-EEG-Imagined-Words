@@ -136,12 +136,12 @@ def draw_flow_diagram(save_path="results/architecture_flow_diagram.png"):
         "- Feature Concatenation:",
         "  [322 Standard Feats || 105 Riemannian Feats]",
         "  Total Fused Vector: D = 427 Dimensions",
-        "- Stratified Partitioning: 80% Train, 20% Test",
+        "- Stratified Partitioning: 75% Train, 25% Test",
         "- Strict Zero-Leakage Protocol:",
         "  StandardScaler fit ONLY on Training Set",
         "  Test Set Transformed Using Training mu & sigma",
-        "- Per-Epoch Robust Z-Score Normalization",
-        "  Eliminates Baseline Drifts and Skull Variations"
+        "- Per-Epoch Detrending & Z-Score Scaling",
+        "  Eliminates Emotiv DC Offset & Baseline Drift"
     ]
     add_card_text(s3_text, 72, 80)
 
@@ -149,7 +149,7 @@ def draw_flow_diagram(save_path="results/architecture_flow_diagram.png"):
     # STAGE 4: ADAPTIVE GENETIC ALGORITHM (Middle-Right / Bottom-Right)
     # -------------------------------------------------------------
     draw_card(70, 18, 26, 35, "STAGE 4: ADAPTIVE GA (AGA)", "Innovation 2: Dynamic Phenotypic Diversity Control",
-              "#ffffff", "#6366f1", badge_text="OPTIMAL 86 FEATS", badge_color="#4f46e5")
+              "#ffffff", "#6366f1", badge_text="OPTIMAL 131 FEATS", badge_color="#4f46e5")
     s4_text = [
         "- Binary Chromosome: b in {0, 1}^427",
         "- Dual-Objective Pareto Fitness Function:",
@@ -159,9 +159,9 @@ def draw_flow_diagram(save_path="results/architecture_flow_diagram.png"):
         "  Monitors Population Variance: sigma(t)",
         "  Adaptive Mutation Rate:",
         "  Pm(t) = Pm0 * (1 + 2 * exp(-10 * sigma(t)))",
-        "- Automatically Boosts Mutation (0.039 -> 0.053)",
+        "- Automatically Boosts Mutation (0.039 -> 0.044)",
         "  Prevents Stagnation & Escapes Local Minima",
-        "- Retains ~86 Optimal Features (~80% Noise Pruned)"
+        "- Retains 131 Optimal Features (69.3% Pruned)"
     ]
     add_card_text(s4_text, 72, 45.5)
 
@@ -169,7 +169,7 @@ def draw_flow_diagram(save_path="results/architecture_flow_diagram.png"):
     # STAGE 5: CALIBRATED STACKING ENSEMBLE (Bottom-Center)
     # -------------------------------------------------------------
     draw_card(36, 18, 29, 23, "STAGE 5: STACKING ENSEMBLE", "Innovation 3: Multi-Model Soft-Voting Consensus",
-              "#ffffff", "#0284c7", badge_text="96.5% - 98.5% ACC", badge_color="#0369a1")
+              "#ffffff", "#0284c7", badge_text="44.4% (+8.3% GAIN)", badge_color="#0369a1")
     s5_text = [
         "- Model 1: RBF Support Vector Machine (C=2.5, Max-Margin)",
         "- Model 2: Histogram Gradient Boosted Trees (Non-Linear)",
@@ -230,7 +230,7 @@ def draw_flow_diagram(save_path="results/architecture_flow_diagram.png"):
     ax.text(67.5, 76.5, "322D", color="#6b21a8", fontsize=7.5, fontweight="bold", ha="center")
     ax.text(67.5, 58, "105D", color="#047857", fontsize=7.5, fontweight="bold", ha="center")
     ax.text(85.5, 54.5, "427D", color="#b45309", fontsize=7.5, fontweight="bold", ha="center")
-    ax.text(67.5, 31.5, "86D Subset", color="#4338ca", fontsize=7.5, fontweight="bold", ha="center")
+    ax.text(67.5, 31.5, "131D Subset", color="#4338ca", fontsize=7.5, fontweight="bold", ha="center")
 
     plt.tight_layout()
     plt.savefig(save_path, dpi=300, facecolor=fig.get_facecolor(), edgecolor="none")

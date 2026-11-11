@@ -35,7 +35,7 @@ from sklearn.metrics import (
     classification_report, confusion_matrix
 )
 
-from dataset_loader import load_eegis_dataset, generate_synthetic_benchmark, CLASS_MAP
+from dataset_loader import load_eegis_dataset, CLASS_MAP
 from eeg_features import extract_dataset_features
 from models.aga_selector import AdaptiveGeneticFeatureSelector
 
@@ -108,37 +108,46 @@ def build_calibrated_ensemble():
     return ensemble
 
 
-def run_improved_pipeline(data_dir: str = "data", save_dir: str = "results", n_generations: int = 6, test_size: float = 0.40):
+def run_improved_pipeline(data_dir: str = "data", save_dir: str = "results", n_generations: int = 5, test_size: float = 0.25):
     os.makedirs(save_dir, exist_ok=True)
     print("=" * 75)
     print("      STAGE 2: PROPOSED IMPROVEMENT (RIEMANNIAN + AGA + ENSEMBLE)      ")
+    print("               [EVALUATED ON REAL MENDELEY EEGIS IN-VIVO DATASET]             ")
     print(f"               [DATASET SPLIT: {int((1-test_size)*100)}% Train / {int(test_size*100)}% Test Stratified]")
     print("=" * 75)
 
-    # 1. Load Data
-    X, y, channel_names = load_eegis_dataset(data_dir=data_dir)
-    if X is None:
-        X, y, channel_names = generate_synthetic_benchmark(
-            n_trials_per_class=60, noise_level=0.45, save_dir=data_dir
-        )
+    # 1. Load Real Features or Raw Data
+    real_feats_path = os.path.join(data_dir, "eegis_real_features.npz")
+    if os.path.exists(real_feats_path):
+        print(f"[*] Loading pre-extracted real EEGIS feature bundle: '{real_feats_path}'...")
+        bundle = np.load(real_feats_path)
+        fused_features = bundle["X"]  # 427 total features (322 standard + 105 Riemannian)
+        y = bundle["y"]
+        channel_names = ["AF3", "F7", "F3", "FC5", "T7", "P7", "O1", "O2", "P8", "T8", "FC6", "F4", "F8", "AF4"]
+        print(f"[+] Loaded {len(fused_features)} real EEG trials with {fused_features.shape[1]} fused features.")
+    else:
+        X, y, channel_names = load_eegis_dataset(data_dir=data_dir)
+        print("[*] Extracting Multi-Domain Features (322 descriptors)...")
+        base_feats, _ = extract_dataset_features(X, channel_names)
+        print("[*] Innovation 1: Extracting Riemannian Tangent Space Spatial Covariance Features (105 descriptors)...")
+        riemann_feats = extract_riemannian_features(X)
+        fused_features = np.hstack([base_feats, riemann_feats])
 
-    # 2. Extract Multi-Domain Features + Novel Riemannian Tangent Space Features
-    print("[*] Extracting Multi-Domain Features (322 descriptors)...")
-    base_feats, _ = extract_dataset_features(X, channel_names)
+    # Use a balanced real cohort for evaluation (e.g. 720 trials across classes)
+    sub_idx = []
+    for c in range(9):
+        c_idx = np.where(y == c)[0]
+        sub_idx.extend(c_idx[:80])
+    sub_idx = np.array(sub_idx)
 
-    print("[*] Innovation 1: Extracting Riemannian Tangent Space Spatial Covariance Features (105 descriptors)...")
-    riemann_feats = extract_riemannian_features(X)
-    print(f"[+] Riemannian Feature Matrix shape: {riemann_feats.shape}")
+    X_eval = fused_features[sub_idx]
+    y_eval = y[sub_idx]
 
-    # Concatenate features
-    fused_features = np.hstack([base_feats, riemann_feats])
-    print(f"[+] Total Fused Feature Matrix: {fused_features.shape[1]} features (322 Standard + 105 Riemannian)")
-
-    # 3. Train-Test Split (e.g. 60/40 Stratified)
+    # 3. Train-Test Split (e.g. 75/25 Stratified)
     X_train, X_test, y_train, y_test = train_test_split(
-        fused_features, y, test_size=test_size, random_state=42, stratify=y
+        X_eval, y_eval, test_size=test_size, random_state=42, stratify=y_eval
     )
-    print(f"[*] Dataset Partition: Train = {X_train.shape[0]} trials | Test = {X_test.shape[0]} trials")
+    print(f"[*] Dataset Partition: Train = {X_train.shape[0]} trials | Test = {X_test.shape[0]} trials (REAL EEG)")
 
     # 4. Normalization
     scaler = StandardScaler()
@@ -203,6 +212,12 @@ def run_improved_pipeline(data_dir: str = "data", save_dir: str = "results", n_g
         "n_original_features": int(fused_features.shape[1]),
         "n_selected_features": selected_count,
         "classification_method": "Soft-Voting Ensemble (RBF-SVM + HistGB + MLP)",
+        "aga_history": {
+            "fitness": [float(v) for v in aga.history_],
+            "diversity": [float(v) for v in aga.diversity_history_],
+            "mutation": [float(v) for v in aga.mutation_history_],
+            "active_features": [int(v) for v in aga.active_history_],
+        },
         "per_class": report_dict
     }
 

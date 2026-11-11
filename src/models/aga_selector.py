@@ -36,6 +36,10 @@ class AdaptiveGeneticFeatureSelector:
         self.random_state = random_state
         self.best_mask_: Optional[np.ndarray] = None
         self.best_fitness_: float = -1.0
+        self.history_: list = []
+        self.diversity_history_: list = []
+        self.mutation_history_: list = []
+        self.active_history_: list = []
 
     def fit(self, X: np.ndarray, y: np.ndarray):
         np.random.seed(self.random_state)
@@ -72,6 +76,11 @@ class AdaptiveGeneticFeatureSelector:
 
             pop_diversity = float(np.mean(np.var(population, axis=0)))
             adaptive_mutation = self.base_mutation_rate * (1.0 + 2.0 * np.exp(-10.0 * pop_diversity))
+
+            self.history_.append(float(self.best_fitness_))
+            self.diversity_history_.append(pop_diversity)
+            self.mutation_history_.append(float(adaptive_mutation))
+            self.active_history_.append(int(np.sum(self.best_mask_)))
 
             print(
                 f"    [AGA Gen {gen+1:02d}/{self.n_generations:02d}] "

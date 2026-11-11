@@ -63,11 +63,11 @@ slides_data = [
             <div>
                 <div class="card highlight-card">
                     <h3>Our Solution: Direct Imagined Speech BCI</h3>
-                    <p>Enables the patient to <em>directly imagine the acoustics and phonetics of words</em> without moving muscles. Decodes natural intent in under <strong>30 milliseconds</strong>.</p>
+                    <p>Enables the patient to <em>directly imagine the acoustics and phonetics of words</em> without moving muscles. Decodes real 1.0 s EEG epochs in <strong>95.6 ms mean latency</strong>.</p>
                     <div class="stat-grid">
                         <div class="stat-box"><strong>9 Classes</strong><span>Vocabulary Words</span></div>
                         <div class="stat-box"><strong>128 Hz</strong><span>EEG Acquisition</span></div>
-                        <div class="stat-box"><strong>< 30 ms</strong><span>Decision Latency</span></div>
+                        <div class="stat-box"><strong>95.6 ms</strong><span>Decision Latency</span></div>
                     </div>
                 </div>
             </div>
@@ -162,47 +162,47 @@ slides_data = [
                     <tr><td><strong>8</strong></td><td>Yes (Sí)</td><td>Patient Response</td><td>Frontal motor affirmative synchronization</td></tr>
                 </tbody>
             </table>
-            <p><strong>Trial Parameters:</strong> 1.0-second time window (T = 128 samples per channel). 90 trials across classes.</p>
+            <p><strong>Trial Parameters:</strong> 1.0-second time window (T = 128 samples per channel). <strong>4,044 real human trials</strong> across 10 subjects (balanced 720-trial cohort &amp; full 4,044-trial corpus).</p>
         </div>
         """,
-        "notes": "The vocabulary comprises 8 essential survival words plus an eyes-open rest state. Help and Pain are high-urgency classes. Hungry and Thirsty represent physical needs. Yes, No, and Thanks represent vital patient feedback. Each trial is a 1-second epoch."
+        "notes": "The vocabulary comprises 8 essential survival words plus an eyes-open rest state across all 4,044 real Mendeley EEGIS human trials. Help and Pain are high-urgency classes. Hungry and Thirsty represent physical needs. Yes, No, and Thanks represent vital patient feedback."
     },
     {
         "id": 6,
         "title": "Stage 1: Primary Research Baseline (Lara-Arellano et al., 2025)",
-        "subtitle": "Published Literature Ground Truth: 77.78% Accuracy on Real In-Vivo Human EEG Database",
+        "subtitle": "Replicating Static GA + SVM on Real Multi-Subject EEGIS Data (36.11% Accuracy)",
         "content": """
         <div class="two-col">
             <div>
                 <div class="card">
                     <h3>Primary Research Paper Architecture</h3>
                     <ol>
-                        <li><strong>Dataset:</strong> Official Mendeley EEGIS database (10 human participants, 14 channels at 128 Hz, DOI: 10.17632/73g4fw884c.1).</li>
+                        <li><strong>Dataset:</strong> Official Mendeley EEGIS database (4,044 trials, 10 human participants, 14 channels @ 128 Hz, DOI: 10.17632/73g4fw884c.1).</li>
                         <li><strong>Feature Extraction:</strong> 322 multi-domain descriptors (Statistical moments, Hjorth parameters, Welch PSD bands).</li>
-                        <li><strong>Feature Selection:</strong> Standard Genetic Algorithm with fixed mutation rate (pm = 0.08) and single-objective fitness.</li>
-                        <li><strong>Classifier:</strong> Single Support Vector Machine (RBF kernel, C = 2.0).</li>
+                        <li><strong>Feature Selection:</strong> Standard Genetic Algorithm with fixed mutation rate (Pm = 0.03) selecting 102/322 features.</li>
+                        <li><strong>Classifier:</strong> Single Support Vector Machine (RBF kernel).</li>
                     </ol>
                 </div>
             </div>
             <div>
                 <div class="card alert-card">
-                    <h3>Published Literature Results & Clinical Reality</h3>
+                    <h3>Literature Gap &amp; Real Multi-Subject Reality</h3>
                     <ul>
-                        <li><strong>Published Accuracy:</strong> 77.78% holdout accuracy on 82 selected features.</li>
-                        <li><strong>Macro F1-Score:</strong> 0.7692 across the 9 semantic vocabulary classes.</li>
-                        <li><strong>In-Vivo Clinical Noise Floor:</strong> Scalp EEG in real humans suffers from -10 dB SNR, eye blinks, skull volume conduction, and electrode impedance drift.</li>
-                        <li><strong>Single-Model Vulnerability:</strong> A single SVM decision boundary degrades quickly when real-world subject non-stationarity increases.</li>
+                        <li><strong>Paper Protocol:</strong> Up to 77.78% reported under isolated single-band/subject conditions.</li>
+                        <li><strong>Strict Multi-Subject 9-Class Replication:</strong> Achieves <strong>36.11% accuracy</strong> (0.3453 Macro F1, chance = 11.11%) on raw 1.0 s real epochs.</li>
+                        <li><strong>In-Vivo Clinical Noise Floor:</strong> Real scalp EEG exhibits &lt; -10 dB SNR, eye blinks, ~4,100 uV DC offset, and electrode drift.</li>
+                        <li><strong>Single-Model Vulnerability:</strong> Static GA misses cross-channel geometry and a single SVM degrades under subject non-stationarity.</li>
                     </ul>
                 </div>
             </div>
         </div>
         """,
-        "notes": "We begin from the published research literature: Lara-Arellano et al. (MDPI Eng, 2025) achieved 77.78% on real human EEG recordings from the Mendeley EEGIS database. Real clinical brain signals suffer from severe noise, skull attenuation, and electrode impedance drift, which naturally caps standard single-SVM pipelines around 78%."
+        "notes": "We begin from Lara-Arellano et al. (MDPI Eng, 2025). While isolated single-band or per-subject subsets can score higher, strictly replicating Static GA + SVM on multi-subject raw 1.0 s Mendeley EEGIS epochs yields 36.11% accuracy on 102 selected features."
     },
     {
         "id": 7,
         "title": "Critical Flaws & Limitations in the Baseline Paper",
-        "subtitle": "Why Standard GA + Single SVM Fails in Real-World Clinical Deployments",
+        "subtitle": "Why Standard GA + Single SVM Struggles on Raw Multi-Subject Scalp EEG",
         "content": """
         <div class="grid-4">
             <div class="card">
@@ -211,19 +211,19 @@ slides_data = [
             </div>
             <div class="card">
                 <h4>2. Genetic Drift</h4>
-                <p>Fixed mutation rate (pm = 0.08). Chromosomes become identical after 3-4 generations, trapping the GA in premature local minima.</p>
+                <p>Fixed mutation rate (pm = 0.03). Chromosomes lose phenotypic diversity quickly, trapping the GA in premature local minima.</p>
             </div>
             <div class="card">
                 <h4>3. Single-Point Failure</h4>
-                <p>A lone RBF-SVM is brittle. If an electrode slips or impedance spikes, the single decision hyperplane completely collapses.</p>
+                <p>A lone RBF-SVM is brittle. If an electrode slips or impedance spikes, the single decision hyperplane degrades.</p>
             </div>
             <div class="card">
-                <h4>4. Phonetic Confusion</h4>
-                <p>Confuses phonetically similar phonemes like Help vs. Hungry (/h/ burst) and Thirsty vs. Hungry.</p>
+                <h4>4. Phonetic &amp; SNR Noise</h4>
+                <p>Scalp volume conduction &lt; -10 dB SNR blurs phonological boundaries (e.g., Thirsty vs. Bathroom or Yes vs. Rest).</p>
             </div>
         </div>
         """,
-        "notes": "We identified 4 fatal flaws in the baseline paper: First, it looks at channels in isolation. Second, its GA suffers from genetic drift and gets trapped. Third, relying on a single SVM causes catastrophic failure if one electrode is noisy. Fourth, it confuses similar phonemes."
+        "notes": "We identified 4 flaws in the baseline paper: First, univariate features ignore spatial brain synchronization. Second, static GA suffers from genetic drift. Third, a single SVM is sensitive to scalp noise. Fourth, raw unfiltered 9-class scalp signals need spatial manifold invariants."
     },
     {
         "id": 8,
@@ -297,30 +297,30 @@ slides_data = [
             <div>
                 <div class="card">
                     <h3>Dynamic Population Diversity Monitoring</h3>
-                    <p>At each generation t, the AGA measures Hamming distance across all chromosomes in the population:</p>
+                    <p>At each generation t, the AGA computes mean bit-wise variance across all P = 24 candidate chromosomes:</p>
                     <div class="formula-box">
-                        Diversity(t) = (1 / (P*(P-1)*D)) * sum( HammingDist(c_i, c_j) )
+                        sigma(t) = mean( var(population, axis=0) )
                     </div>
-                    <p><strong>Adaptive Mutation Rule:</strong> If diversity drops, mutation rate pm automatically surges:</p>
+                    <p><strong>Adaptive Mutation Rule:</strong> As sigma(t) narrows (0.1821 &rarr; 0.1480), mutation Pm(t) rises (0.0397 &rarr; 0.0437):</p>
                     <div class="formula-box">
-                        p_m(t) = p_m,base * (1 + (1 - Diversity(t)) / 2)
+                        P_m(t) = P_m0 * (1 + 2.0 * exp(-10.0 * sigma(t))), &nbsp; P_m0 = 0.03
                     </div>
                 </div>
             </div>
             <div>
                 <div class="card alert-card">
-                    <h3>Optimization Results</h3>
+                    <h3>Optimization Results (Real EEGIS)</h3>
                     <ul>
-                        <li>Initial pool: <strong>427 features</strong></li>
-                        <li>Selected optimal subset: <strong>86 features</strong></li>
-                        <li><strong>Dimensionality Reduction: 79.9%</strong></li>
-                        <li>Eliminated 341 noisy, redundant sensors.</li>
+                        <li>Initial fused pool: <strong>427 features</strong> (322 + 105)</li>
+                        <li>Selected optimal subset: <strong>131 features</strong></li>
+                        <li><strong>Dimensionality Reduction: 69.3%</strong></li>
+                        <li>Eliminated 296 noisy/redundant descriptors; CV fitness climbed <strong>35.00% &rarr; 38.98%</strong>.</li>
                     </ul>
                 </div>
             </div>
         </div>
         """,
-        "notes": "Our second innovation is the Adaptive Genetic Algorithm. When chromosomes become too similar, traditional GA gets stuck. Our AGA calculates population diversity; when diversity drops, it automatically boosts the mutation rate, selecting the 86 most powerful features."
+        "notes": "Our second innovation is the Adaptive Genetic Algorithm. When chromosomes become too similar, traditional GA gets stuck. Our AGA tracks phenotypic variance sigma(t) and automatically boosts mutation rate Pm(t) from 0.0397 to 0.0437, pruning 69.3% of redundant features down to 131 optimal descriptors."
     },
     {
         "id": 12,
@@ -329,182 +329,185 @@ slides_data = [
         "content": """
         <div class="grid-3">
             <div class="card">
-                <h4>Model 1: RBF-SVM</h4>
-                <div class="badge">Weight: 2.0</div>
-                <p>Constructs maximal-margin non-linear hyperplanes using Gaussian Radial Basis Function kernel. Optimal for clean boundary separation.</p>
+                <h4>Model 1: RBF-SVM (C=2.5)</h4>
+                <div class="badge">Weight: 3.0 (60%)</div>
+                <p>Constructs maximal-margin non-linear hyperplanes using Gaussian Radial Basis Function kernel with Platt scaling.</p>
             </div>
             <div class="card">
                 <h4>Model 2: HistGB Trees</h4>
-                <div class="badge">Weight: 1.0</div>
-                <p>Histogram Gradient Boosted decision trees. Creates orthogonal step-function decision thresholds for non-Gaussian outliers.</p>
+                <div class="badge">Weight: 1.0 (20%)</div>
+                <p>Histogram Gradient Boosted decision trees (max_iter=80, lr=0.08) capturing orthogonal threshold splits.</p>
             </div>
             <div class="card">
                 <h4>Model 3: MLP Neural Net</h4>
-                <div class="badge">Weight: 1.0</div>
-                <p>2-layer Multi-Layer Perceptron (64-32 neurons) with ReLU activation. Learns distributed non-linear representations.</p>
+                <div class="badge">Weight: 1.0 (20%)</div>
+                <p>2-layer Multi-Layer Perceptron (64-32 neurons, ReLU, 200 iters) learning distributed representations.</p>
             </div>
         </div>
         <div class="card highlight-card mt-2">
-            <p class="text-center"><strong>Calibrated Soft-Voting Rule:</strong> y_pred = argmax_c sum( w_m * P_m(y = c | x) )</p>
+            <p class="text-center"><strong>Calibrated Soft-Voting Rule:</strong> y_pred = argmax_c ( 0.60*P_SVM(c|x) + 0.20*P_HGB(c|x) + 0.20*P_MLP(c|x) )</p>
         </div>
         """,
-        "notes": "Our third innovation is a 3-model committee: SVM for maximum margin, Gradient Boosted Trees for non-linear steps, and an MLP Neural Network for distributed representations. They vote with calibrated weights, making the system immune to single-electrode failure."
+        "notes": "Our third innovation is a 3-model committee: RBF-SVM (weight 3.0 / 60%), Histogram Gradient Boosted Trees (weight 1.0 / 20%), and an MLP Neural Network (weight 1.0 / 20%). Weighted soft-voting stabilizes noisy single-trial predictions."
     },
     {
         "id": 13,
-        "title": "Experimental Protocol & Academic Disclosure",
-        "subtitle": "Laboratory Bench Prototyping on 14-Channel Neurophysiologically-Modeled Signals",
+        "title": "Experimental Protocol & Zero-Override Integrity",
+        "subtitle": "Evaluated Exclusively on All 4,044 Real Mendeley EEGIS Human Trials",
         "content": """
         <div class="two-col">
             <div>
                 <div class="card">
-                    <h3>Laboratory Bench Protocol</h3>
+                    <h3>Real In-Vivo Evaluation Cohorts (N = 4,044)</h3>
                     <ul>
-                        <li><strong>Implementation Context:</strong> Due to local multi-gigabyte data repository constraints, the pipeline was developed and evaluated on a 14-channel neurophysiologically-modeled benchmark following the Emotiv 10-20 layout and ERD/ERS spectral activations across the 9 classes.</li>
-                        <li><strong>Partitioning:</strong> 60% Train (54 trials) / 40% Stratified Held-Out Test (36 trials).</li>
-                        <li><strong>3-Fold Cross-Validation:</strong> Nested within training partition for GA fitness scoring.</li>
-                        <li><strong>Signal Test Suite:</strong> 9 isolated real-time recordings (.csv and .npy) for clinical bedside simulation.</li>
+                        <li><strong>Zero Synthetic Data:</strong> Removed all synthetic generators and fallbacks (<code>dataset_loader.py</code> strictly enforces Mendeley EEGIS CSV/.npz ingestion).</li>
+                        <li><strong>Balanced 9-Class Cohort:</strong> 720 real trials (80/class) &rarr; Stratified 75/25 split (540 Train / 180 Unseen Test, 20/class).</li>
+                        <li><strong>Full Multi-Subject Corpus:</strong> All 4,044 trials across 10 participants &rarr; 3,033 Train / 1,011 Unseen Test.</li>
+                        <li><strong>Emergency Binary Pairs:</strong> All unfiltered real trials (Help vs Pain N=996; Help vs Rest N=960).</li>
                     </ul>
                 </div>
             </div>
             <div>
                 <div class="card highlight-card">
-                    <h3>Academic Integrity & Zero-Override Standard</h3>
+                    <h3>Academic Integrity &amp; Zero-Override Standard</h3>
                     <ul>
-                        <li><strong>100% Organic Model Predictions:</strong> All predictions in our codebase are pure inferences generated by <code>ensemble.predict()</code> and <code>clf.predict()</code>.</li>
-                        <li><strong>Zero Prediction Overrides:</strong> No hardcoded index flips or artificial score manipulation exists in the pipeline.</li>
-                        <li><strong>Full Methodological Honesty:</strong> Transparently distinguishing between published literature real-patient findings and our engineering bench evaluation.</li>
+                        <li><strong>100% Organic Inference:</strong> All predictions come strictly from <code>ensemble.predict()</code> and <code>clf.predict()</code> with zero prediction overrides or index flips.</li>
+                        <li><strong>DC Detrending &amp; Zero Leakage:</strong> Per-channel DC mean removal (~4,100 uV Emotiv offset) + StandardScaler/AGA fit strictly inside training folds.</li>
+                        <li><strong>Signal-Driven Bedside Suite:</strong> 9 raw real-EEGIS patient files (.csv/.npy) in <code>test_signals/</code> tested with no text hints.</li>
                     </ul>
                 </div>
             </div>
         </div>
         """,
-        "notes": "We adhere to strict academic honesty. For our engineering implementation, we evaluated our algorithms on a 14-channel neurophysiologically-modeled benchmark and 9 isolated test signals. Every single result in our code is a 100% organic model prediction with zero artificial overrides."
+        "notes": "In response to supervisor feedback, we removed all synthetic fallbacks and artificial prediction overrides. Every result comes strictly from the official 4,044-trial Mendeley EEGIS real human database with 100% organic model inference."
     },
     {
         "id": 14,
-        "title": "Comparative Benchmark Results & Literature Context",
-        "subtitle": "Transparent Multi-Tier Evaluation: Published Literature Ground Truth vs. Engineering Bench Results",
+        "title": "Comparative Real-EEGIS Results & Ablation Study",
+        "subtitle": "9-Class Balanced Holdout (180 Test), Full 4,044-Trial Mixed Split, and Emergency Binary Triage",
         "content": """
         <div class="two-col">
             <div>
                 <table class="pres-table">
                     <thead>
-                        <tr><th>Evaluation Tier</th><th>Architecture</th><th>Dataset Domain</th><th>Test Accuracy</th><th>Macro F1</th></tr>
+                        <tr><th>Real EEGIS Cohort &amp; Architecture</th><th>Feats</th><th>Test Acc</th><th>Macro F1</th><th>Improvement</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td><strong>Published Literature [MDPI 2025]</strong></td><td>Standard GA + Single SVM</td><td>Real Human Subjects (EEGIS)</td><td><strong>77.78%</strong></td><td>0.7692</td></tr>
-                        <tr><td><strong>Our Bench Baseline</strong></td><td>Standard GA + Single SVM</td><td>Modeled 14-Ch Benchmark</td><td><strong>100.00%</strong></td><td>1.0000</td></tr>
-                        <tr class="hl-row"><td><strong>Our Proposed Framework</strong></td><td>Riemannian + AGA + Stacking Ensemble</td><td>Modeled 14-Ch Benchmark</td><td><strong>97.22%</strong></td><td><strong>0.9718</strong></td></tr>
-                        <tr><td><strong>Isolated Signal Test Suite</strong></td><td>Proposed Stacking Ensemble</td><td>9 Bedside Test Files (.csv/.npy)</td><td><strong>100.0% (9/9)</strong></td><td>1.0000</td></tr>
+                        <tr><td>Balanced 9-Class: Random Chance</td><td>&mdash;</td><td>11.11%</td><td>0.111</td><td>Theoretical floor</td></tr>
+                        <tr><td>Balanced 9-Class: Classical Moments + LDA</td><td>322</td><td>25.00%</td><td>0.239</td><td>2.25x chance</td></tr>
+                        <tr><td>Balanced 9-Class: Static GA + SVM (Baseline Paper)</td><td>102</td><td>36.11%</td><td>0.345</td><td>Paper replication</td></tr>
+                        <tr class="hl-row"><td><strong>Balanced 9-Class: Proposed Dual-Stream + AGA + Ensemble</strong></td><td><strong>131</strong></td><td><strong>44.44%</strong></td><td><strong>0.439</strong></td><td><strong>+8.33% (-69.3% dim)</strong></td></tr>
+                        <tr><td>Balanced 9-Class: Stream 2 Riemannian Tangent Only</td><td>105</td><td><strong>46.11%</strong></td><td><strong>0.450</strong></td><td><strong>+10.00% (0.394 Kappa)</strong></td></tr>
+                        <tr><td>Full 4,044 Mixed Cohort: Moments SVM &rarr; Riemannian</td><td>322 &rarr; 105</td><td>20.08% &rarr; <strong>27.10%</strong></td><td>0.193 &rarr; <strong>0.269</strong></td><td><strong>+7.02% across 1,011 test</strong></td></tr>
+                        <tr><td>Emergency Binary: Help vs Rest (N=960) &amp; Pain (N=996)</td><td>322 &rarr; 427</td><td>63.3%/61.5% &rarr; <strong>67.9%/67.1%</strong></td><td>&mdash;</td><td><strong>+4.59% / +5.62% gain</strong></td></tr>
                     </tbody>
                 </table>
-                <p class="small text-muted" style="margin-top: 10px;"><em>*All bench metrics represent genuine, organic execution of the trained models with zero overrides.</em></p>
+                <p class="small text-muted" style="margin-top: 8px;"><em>*100% organic inference on official Mendeley EEGIS real human recordings (zero overrides).</em></p>
             </div>
             <div class="text-center">
-                <img src="results/baseline_vs_improved_comparison.png" alt="Comparison Charts" style="max-height: 380px; width: auto; border-radius: 8px;">
+                <img src="results/baseline_vs_improved_comparison.png" alt="Real EEGIS Comparison Charts" style="max-height: 385px; width: auto; border-radius: 8px;">
             </div>
         </div>
         """,
-        "notes": "Here is our transparent multi-tier evaluation. The published literature achieved 77.78% on real human subjects with high noise floors. On our controlled 14-channel bench benchmark, our baseline scores 100.0% and our proposed ensemble scores 97.22% with 0.9718 F1-score, and correctly classifies 9/9 isolated test signals."
+        "notes": "Here are our verified results across all 4,044 real Mendeley trials. On the 180-trial balanced test set, Static GA+SVM baseline scores 36.11%, whereas our Proposed Dual-Stream + AGA + Ensemble lifts accuracy to 44.44% (+8.33%) while cutting 69.3% of features, and Riemannian geometry alone peaks at 46.11%. Across all 4,044 trials, Riemannian features gain +7.02% (20.08% to 27.10%), and emergency binary Help vs Rest/Pain reaches 67.92% and 67.07%."
     },
     {
         "id": 15,
-        "title": "Per-Word Error Analysis & Confusion Matrix Breakdown",
-        "subtitle": "Organic Decision Boundaries on the 9-Class Held-Out Test Set",
+        "title": "Per-Word Error Analysis & Real Confusion Matrices",
+        "subtitle": "Organic Decision Boundaries on Balanced 9-Class Real EEGIS Holdout (180 Test Trials)",
         "content": """
         <div class="two-col">
             <div class="text-center">
-                <h4>Baseline SVM (100.00%)</h4>
-                <img src="results/confusion_matrix_baseline.png" alt="Baseline CM" style="max-height: 340px; width: auto; border-radius: 8px;">
-                <p class="small text-muted">Clean linear separation on single-model RBF hyperplane.</p>
+                <h4>Baseline Paper: Static GA + SVM (36.11%)</h4>
+                <img src="results/confusion_matrix_baseline.png" alt="Baseline CM" style="max-height: 335px; width: auto; border-radius: 8px;">
+                <p class="small text-muted">102 scalar features; Help recall 75.0%, Macro F1 = 0.3453.</p>
             </div>
             <div class="text-center">
-                <h4>Proposed Multi-Model Ensemble (97.22%)</h4>
-                <img src="results/confusion_matrix_improved.png" alt="Improved CM" style="max-height: 340px; width: auto; border-radius: 8px;">
-                <p class="small text-success">100% recall on emergency tokens ('Help', 'Pain') with multi-model consensus!</p>
+                <h4>Proposed: Dual-Stream + AGA + Ensemble (44.44%)</h4>
+                <img src="results/confusion_matrix_improved.png" alt="Improved CM" style="max-height: 335px; width: auto; border-radius: 8px;">
+                <p class="small text-success">131 features; Help recall <strong>80.0% (0.696 F1)</strong>, 4.0x chance (0.4392 F1)!</p>
             </div>
         </div>
         """,
-        "notes": "Looking at the confusion matrices from authentic model inference: both pipelines demonstrate high discriminability. The proposed ensemble achieves 100% recall on life-critical words Help and Pain, fulfilling our medical safety requirement."
+        "notes": "Inspecting the organic confusion matrices on the 180 real holdout trials: the baseline achieves 36.11% while the proposed Dual-Stream + AGA + Ensemble reaches 44.44% overall and 80.0% recall (0.696 F1) on the critical Help emergency token."
     },
     {
         "id": 16,
-        "title": "Real-Time Signal-Driven Testing & Bedside Feasibility",
-        "subtitle": "Direct Ingestion of Raw 14-Channel Microvolt Signals (.csv / .npy) with Zero Text Prompts",
+        "title": "Real-Time Signal-Driven Testing & Bedside Oscilloscope",
+        "subtitle": "Direct Ingestion of Raw Real-EEGIS Microvolt Files (.csv / .npy) with Zero Text Prompts",
         "content": """
         <div class="two-col">
             <div>
                 <div class="card">
-                    <h3>Latency Budget Breakdown</h3>
+                    <h3>Measured Real-Time Latency &amp; CLI Benchmark</h3>
                     <table class="pres-table">
                         <thead>
-                            <tr><th>Processing Pipeline Stage</th><th>Execution Time</th><th>Hardware Target</th></tr>
+                            <tr><th>Bedside Evaluation Metric</th><th>Observed Result</th><th>Clinical Note</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>1. Multi-Domain & Riemannian Extraction</td><td>~16.5 ms</td><td>Intel i7 / Cortex A72</td></tr>
-                            <tr><td>2. StandardScaler & Active Feature Mask</td><td>~0.4 ms</td><td>RAM Vector Operation</td></tr>
-                            <tr><td>3. Stacking Ensemble Soft-Voting</td><td>~8.1 ms</td><td>Multi-Threaded CPU</td></tr>
-                            <tr class="hl-row"><td><strong>Total End-to-End Latency</strong></td><td><strong>~25.0 ms</strong></td><td><strong>Real-Time Feasible</strong></td></tr>
+                            <tr><td>Batch Signal Suite (<code>predict.py --all</code>)</td><td><strong>5 / 9 Exact (55.6%)</strong></td><td><strong>5.0x</strong> random chance (11.11%)</td></tr>
+                            <tr><td>Sample <code>eeg_signal_03.csv</code> Prediction</td><td><strong>Hungry (Hambre)</strong></td><td>71.9% softmax confidence</td></tr>
+                            <tr><td>Feature Extraction + Riemannian Logm</td><td>~90 ms / epoch</td><td>Dual-stream 427-dim vector</td></tr>
+                            <tr class="hl-row"><td><strong>Mean End-to-End CPU Latency</strong></td><td><strong>95.6 ms / epoch</strong></td><td><strong>&gt;10x faster</strong> than 1.0 s window</td></tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="card highlight-card">
-                    <h3>Authentic Signal-Driven Evaluation</h3>
+                    <h3>Authentic Signal-Driven Verification</h3>
                     <ul>
-                        <li><strong>Raw Voltage Ingestion:</strong> Ingests unlabeled 14-channel files (e.g. <code>eeg_signal_01.csv</code>) with zero manual text hints.</li>
-                        <li><strong>Interactive Clinical GUI:</strong> Desktop app (<code>eeg_gui_tester.py</code>) displays real-time 14-channel brainwave traces and one-click decoding.</li>
+                        <li><strong>Zero Text Prompts:</strong> Ingests unlabeled 14-channel microvolt recordings (<code>test_signals/eeg_signal_01..09.csv</code>).</li>
+                        <li><strong>Interactive Oscilloscope GUI:</strong> Desktop app (<code>eeg_gui_tester.py</code>) renders dynamic 14-channel traces and one-click organic decoding.</li>
                     </ul>
                 </div>
             </div>
             <div class="text-center">
-                <img src="results/live_decoded_signal.png" alt="Decoded Signal" style="max-height: 360px; width: auto; border-radius: 8px;">
+                <img src="results/live_decoded_signal.png" alt="Decoded Real Signal 03" style="max-height: 365px; width: auto; border-radius: 8px;">
             </div>
         </div>
         """,
-        "notes": "Our testing is 100% signal-driven. We provide raw 14-channel EEG recordings without any text labels. The system reads the microvolt voltages, extracts features, and decodes the thought in just 25.0 milliseconds, as shown in both our terminal tool and our interactive desktop GUI."
+        "notes": "Our bedside suite runs 100% signal-driven tests on 9 real EEGIS patient recordings with no text prompts, achieving 5/9 (55.6%, 5.0x chance) accuracy at a measured 95.6 ms mean latency per 1-second epoch, shown here decoding eeg_signal_03.csv as Hungry at 71.9% confidence."
     },
     {
         "id": 17,
-        "title": "Academic Integrity & The Clinical Translation Gap",
-        "subtitle": "Addressing the Disparity Between Engineering Benchmarks and In-Vivo Clinical Deployment",
+        "title": "Academic Integrity & Real-Dataset Empirical Insights",
+        "subtitle": "Understanding Multi-Subject 9-Class EEG Limits vs. Published Single-Band Literature",
         "content": """
         <div class="grid-3">
             <div class="card alert-card">
-                <h4>1. The Simulated-to-Clinical Gap</h4>
-                <p><strong>Literature: 77.78% | Bench: ~97-100%</strong><br>
-                Simulated bench signals model distinct class harmonics in controlled conditions. In real patients, skull volume conduction, ocular micro-saccades, and impedance drift degrade raw signal SNR to below -10 dB.</p>
+                <h4>1. Why Multi-Subject Raw EEG Is Hard</h4>
+                <p><strong>Chance: 11.11% | Proposed: 44.44%-46.11%</strong><br>
+                Unfiltered 9-class scalp EEG across 10 participants exhibits &lt; -10 dB SNR, ~4,100 uV hardware DC offsets, eye blinks, and cross-subject non-stationarity, unlike isolated single-band/subject protocols.</p>
             </div>
             <div class="card highlight-card">
-                <h4>2. Mathematical Architecture Rationale</h4>
-                <p><strong>Why Our Innovations Matter for Real EEG:</strong><br>
-                • <em>Riemannian Manifolds:</em> $Sym^+_n$ projection is invariant to channel voltage scaling.<br>
-                • <em>Adaptive GA ($P_m$):</em> Eliminates feature redundancy traps.<br>
-                • <em>Stacking Ensemble:</em> Multi-model consensus prevents single-SVM collapse.</p>
+                <h4>2. Why Riemannian Geometry Gains +7% to +10%</h4>
+                <p><strong>Consistent Gain Across Every Scale:</strong><br>
+                &bull; <em>Balanced 9-class:</em> +8.33% (Proposed) / +10.00% (Riemannian)<br>
+                &bull; <em>Full 4,044 Mixed Cohort:</em> +7.02% (20.08% &rarr; 27.10%)<br>
+                &bull; <em>Emergency Binary:</em> +4.59% to +5.62%</p>
             </div>
             <div class="card">
-                <h4>3. Full Academic Transparency</h4>
-                <p><strong>Honest Scientific Reporting:</strong><br>
-                Rather than artificially manipulating code to force arbitrary numbers, we disclose experimental conditions openly: the algorithm was validated on a neurophysiologically-modeled benchmark with 100% organic model inference.</p>
+                <h4>3. Honest Scientific Standards</h4>
+                <p><strong>Zero Shortcuts Verified:</strong><br>
+                No synthetic fallback (raises <code>FileNotFoundError</code> if absent), zero leaked scalers, and zero hardcoded index overrides. Every metric matches reproducible scripts in this repo.</p>
             </div>
         </div>
         """,
-        "notes": "Here is our honest technical critique. The difference between the 77.78% reported on real patients and our bench results highlights the classic clinical translation gap. Our Riemannian and Adaptive GA formulations are specifically mathematically designed to combat that real-world noise when deployed on live patient hardware."
+        "notes": "Honest scientific reporting strengthens our project. Across real multi-subject unfiltered 9-class EEG, achieving 44.44% to 46.11% (more than 4x random chance of 11.11%) with consistent +7% to +10% Riemannian gains validates our algorithmic thesis without any unverified numbers."
     },
     {
         "id": 18,
         "title": "Conclusion, Key Contributions & Future Roadmap",
-        "subtitle": "Advancing Assistive Brain-Computer Interfaces at NIT Warangal",
+        "subtitle": "Advancing Honest, Reproducible Assistive BCIs at NIT Warangal (CS26001)",
         "content": """
         <div class="two-col">
             <div>
                 <div class="card highlight-card">
-                    <h3>Summary of Contributions</h3>
+                    <h3>Verified Real-Dataset Contributions</h3>
                     <ul>
-                        <li><strong>Literature Baseline Benchmark:</strong> Analyzed Lara-Arellano et al. (MDPI Eng 2025, 77.78% on real EEGIS data).</li>
-                        <li><strong>Algorithmic Innovations:</strong> Riemannian tangent space covariance (105 features) + Adaptive GA + Soft-Voting Stacking Ensemble.</li>
-                        <li><strong>Authentic Bench Execution:</strong> 97.22% organic accuracy (0.9718 F1) with 100% recall on emergency tokens ('Help', 'Pain').</li>
-                        <li><strong>Bedside Feasibility:</strong> 9/9 (100%) on isolated signal files with 25.0 ms real-time CPU latency.</li>
+                        <li><strong>100% Real EEGIS Pipeline:</strong> Zero synthetic fallbacks across all 4,044 Mendeley trials (10 subjects, 9 classes).</li>
+                        <li><strong>Substantial Algorithmic Gains:</strong> +8.33% over Static GA+SVM baseline (36.11% &rarr; 44.44%), peaking at 46.11% via Riemannian tangent covariance, with 69.3% feature pruning (131/427).</li>
+                        <li><strong>Emergency Readiness:</strong> 80.0% recall (0.696 F1) on critical alert 'Help'; 67.92% on unfiltered Help vs Rest binary triage.</li>
+                        <li><strong>Real-Time Bedside Suite:</strong> 5/9 (55.6%) accuracy on isolated raw CSV trials at 95.6 ms CPU latency.</li>
                     </ul>
                 </div>
             </div>
@@ -512,19 +515,19 @@ slides_data = [
                 <div class="card">
                     <h3>Future Roadmap</h3>
                     <ul>
-                        <li><strong>Clinical In-Vivo Validation:</strong> Validate the Riemannian+AGA pipeline on raw multi-session human EEG.</li>
-                        <li><strong>Cross-Subject Transfer:</strong> Implement Euclidean Space Alignment (EA) for zero-calibration patient use.</li>
-                        <li><strong>Embedded Deployment:</strong> Flash calibrated weights onto Raspberry Pi / Cortex-A for bedside wheelchair mounting.</li>
+                        <li><strong>Riemannian Procrustes Alignment (RPA):</strong> Affine-invariant transfer alignment across subjects to close cross-patient shifts.</li>
+                        <li><strong>Dynamic Stopping (SPRT):</strong> Sequential confidence termination under 500 ms for urgent commands.</li>
+                        <li><strong>Edge Embedded Port:</strong> Quantize ensemble &amp; Riemannian extractor onto Intel NPU / Cortex-A hardware.</li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="text-center mt-3">
-            <h3>Thank You! Questions & Discussion</h3>
-            <p>Team: Saurabh Bharrdwaj (Lead) | Badvath Jaipal | Saurabh Kumar — NIT Warangal</p>
+            <h3>Thank You! Questions &amp; Discussion</h3>
+            <p>Team: Saurabh Bharrdwaj (Lead) | Badvath Jaipal | Saurabh Kumar &mdash; NIT Warangal (CS26001)</p>
         </div>
         """,
-        "notes": "In conclusion, our framework successfully beats the state-of-the-art research baseline by 5.55% while cutting dimensionality by 80% for real-time edge use. We thank our guide and professors, and are now ready for your questions."
+        "notes": "In conclusion, on the full 4,044-trial Mendeley EEGIS database with zero synthetic data or overrides, our Riemannian + Adaptive GA + Ensemble pipeline improves 9-class decoding from 36.11% to 44.44% (and 46.11% Riemannian peak), hits 80% recall on Help, and decodes bedside trials in 95.6 ms. Thank you!"
     }
 ]
 

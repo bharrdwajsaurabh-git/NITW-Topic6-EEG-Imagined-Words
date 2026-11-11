@@ -146,7 +146,7 @@ def load_raw_eeg_file(file_path: str) -> np.ndarray:
 def load_best_model():
     """
     Loads the trained model:
-    Prioritizes the 83.33% proposed pipeline (best_improved_ensemble.pkl).
+    Prioritizes the proposed AGA-Riemannian Ensemble (best_improved_ensemble.pkl).
     Falls back to best_ml_pipeline.pkl.
     """
     improved_path = os.path.join(curr_dir, "results", "best_improved_ensemble.pkl")
@@ -189,7 +189,7 @@ def predict_signal(signal: np.ndarray, model_pkg: dict, model_type: str):
         # 3. Concatenate (427)
         f_fused = np.hstack([base_f, riem_f])
 
-        # 4. Scale & AGA feature selection (pruned to 86 optimal features)
+        # 4. Scale & AGA feature selection (pruned optimal feature mask)
         f_scaled = scaler.transform(f_fused)
         f_opt = aga.transform(f_scaled)
 
@@ -221,7 +221,9 @@ def plot_prediction_result(signal: np.ndarray, pred_word: str, confidence: float
 
     n_channels, n_samples = signal.shape
     t = np.linspace(0, 1.0, n_samples)
-    offsets = np.arange(n_channels) * 4.0
+    ch_span = float(np.median(np.ptp(signal, axis=1)))
+    step = max(25.0, ch_span * 1.15)
+    offsets = np.arange(n_channels) * step
 
     # 1. 14-Channel Oscilloscope Waveforms
     for ch in range(n_channels):
@@ -256,28 +258,53 @@ def plot_prediction_result(signal: np.ndarray, pred_word: str, confidence: float
     plt.close()
 
 
+def load_ground_truth_registry(reg_path: str = None) -> dict:
+    """Loads ground truth registry mapping filename to word."""
+    if reg_path is None:
+        reg_path = os.path.join(curr_dir, "test_signals", "ground_truth_registry.json")
+    registry = {}
+    if not os.path.exists(reg_path):
+        return registry
+    try:
+        with open(reg_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        if isinstance(data, list):
+            for item in data:
+                word = item.get("true_word", item.get("word", "Unknown"))
+                csv_b = os.path.basename(item.get("file_csv", ""))
+                npy_b = os.path.basename(item.get("file_npy", ""))
+                if csv_b:
+                    registry[csv_b] = word
+                if npy_b:
+                    registry[npy_b] = word
+                if "signal_id" in item:
+                    registry[item["signal_id"] + ".csv"] = word
+                    registry[item["signal_id"] + ".npy"] = word
+        elif isinstance(data, dict):
+            for k, v in data.items():
+                if isinstance(v, dict):
+                    registry[k] = v.get("true_word", v.get("word", "Unknown"))
+                elif isinstance(v, str):
+                    registry[k] = v
+    except Exception:
+        pass
+    return registry
+
+
 def print_single_prediction(file_path: str, model_pkg: dict, model_type: str):
     """Loads signal, runs prediction, and displays clean output."""
     signal = load_raw_eeg_file(file_path)
     pred_word, confidence, probs, latency_ms = predict_signal(signal, model_pkg, model_type)
 
     # Check ground truth registry if available
-    ground_truth = None
-    reg_path = os.path.join(curr_dir, "test_signals", "ground_truth_registry.json")
-    if os.path.exists(reg_path):
-        try:
-            with open(reg_path, "r", encoding="utf-8") as f:
-                reg = json.load(f)
-            base_name = os.path.basename(file_path)
-            if base_name in reg:
-                ground_truth = reg[base_name].get("word")
-        except Exception:
-            pass
+    registry = load_ground_truth_registry()
+    base_name = os.path.basename(file_path)
+    ground_truth = registry.get(base_name)
 
     # Print Clean Signal Telemetry & Output
     print("\n" + "=" * 76)
     print("      NIT WARANGAL — CS26001: ADVANCED ALGORITHMS (TOPIC 6)")
-    print(f"      Model Engine: {model_pkg.get('type', 'Proposed 83.33% AGA-Riemannian Ensemble')}")
+    print(f"      Model Engine: {model_pkg.get('type', 'Proposed 44.44% AGA-Riemannian Ensemble (Real EEGIS)')}")
     print("=" * 76)
     print(f"[*] Input File:             {file_path}")
     print(f"[*] Electrodes Ingested:    14 channels (AF3, F7, F3, FC5, T7, P7, O1, O2, P8, T8, FC6, F4, F8, AF4)")
@@ -293,7 +320,7 @@ def print_single_prediction(file_path: str, model_pkg: dict, model_type: str):
     else:
         print(f"[>] Model Decoded Output:   '{pred_word}' ({confidence:.2f}% Confidence)")
 
-    print(f"[*] Total Inference Latency: {latency_ms:.1f} ms  (> 40x faster than 1.0 s acquisition)")
+    print(f"[*] Total Inference Latency: {latency_ms:.1f} ms  (> 10x faster than 1.0 s acquisition)")
     print("-" * 76)
 
     # Print Probability Bars
@@ -325,17 +352,7 @@ def evaluate_all_test_signals(model_pkg: dict, model_type: str):
         print("[!] No .csv files found in 'test_signals/'.")
         return
 
-    reg_path = os.path.join(sig_dir, "ground_truth_registry.json")
-    registry = {}
-    if os.path.exists(reg_path):
-        try:
-            with open(reg_path, "r", encoding="utf-8") as f:
-                data = json.load(f)
-            for fname_k, info_v in data.items():
-                if isinstance(info_v, dict) and "word" in info_v:
-                    registry[fname_k] = info_v["word"]
-        except Exception:
-            pass
+    registry = load_ground_truth_registry()
 
     print("\n" + "=" * 80)
     print("     NIT WARANGAL — CS26001: ADVANCED ALGORITHMS (BENCHMARK EVALUATION)")

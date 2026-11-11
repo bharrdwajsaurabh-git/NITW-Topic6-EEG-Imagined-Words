@@ -1,82 +1,82 @@
 {
     "model_name": "Paper Baseline (GA + Single SVM)",
-    "train_test_split": "60/40",
-    "train_samples": 54,
-    "test_samples": 36,
-    "accuracy": 1.0,
-    "precision": 1.0,
-    "recall": 1.0,
-    "macro_f1": 1.0,
+    "train_test_split": "75/25",
+    "train_samples": 540,
+    "test_samples": 180,
+    "accuracy": 0.3611111111111111,
+    "precision": 0.35468513678232344,
+    "recall": 0.36111111111111105,
+    "macro_f1": 0.34533757804011644,
     "n_original_features": 322,
-    "n_selected_features": 82,
+    "n_selected_features": 102,
     "classification_method": "Single RBF SVM",
     "per_class": {
         "Rest": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 4.0
+            "precision": 0.3333333333333333,
+            "recall": 0.4,
+            "f1-score": 0.36363636363636365,
+            "support": 20.0
         },
         "Help (Ayuda)": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 4.0
+            "precision": 0.5,
+            "recall": 0.75,
+            "f1-score": 0.6,
+            "support": 20.0
         },
         "Bathroom (Ba\u00f1o)": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 4.0
+            "precision": 0.391304347826087,
+            "recall": 0.45,
+            "f1-score": 0.4186046511627907,
+            "support": 20.0
         },
         "Pain (Dolor)": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 4.0
+            "precision": 0.38461538461538464,
+            "recall": 0.25,
+            "f1-score": 0.30303030303030304,
+            "support": 20.0
         },
         "Thanks (Gracias)": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 4.0
+            "precision": 0.21428571428571427,
+            "recall": 0.15,
+            "f1-score": 0.17647058823529413,
+            "support": 20.0
         },
         "Hungry (Hambre)": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 4.0
+            "precision": 0.23529411764705882,
+            "recall": 0.4,
+            "f1-score": 0.2962962962962963,
+            "support": 20.0
         },
         "No": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 4.0
+            "precision": 0.3333333333333333,
+            "recall": 0.2,
+            "f1-score": 0.25,
+            "support": 20.0
         },
         "Thirsty (Sed)": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 4.0
+            "precision": 0.5,
+            "recall": 0.5,
+            "f1-score": 0.5,
+            "support": 20.0
         },
         "Yes (S\u00ed)": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 4.0
+            "precision": 0.3,
+            "recall": 0.15,
+            "f1-score": 0.2,
+            "support": 20.0
         },
-        "accuracy": 1.0,
+        "accuracy": 0.3611111111111111,
         "macro avg": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 36.0
+            "precision": 0.35468513678232344,
+            "recall": 0.36111111111111105,
+            "f1-score": 0.34533757804011644,
+            "support": 180.0
         },
         "weighted avg": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 36.0
+            "precision": 0.35468513678232344,
+            "recall": 0.3611111111111111,
+            "f1-score": 0.34533757804011644,
+            "support": 180.0
         }
     }
 }

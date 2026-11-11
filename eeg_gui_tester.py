@@ -277,7 +277,9 @@ class EEGDecoderGUI:
         self.ax_eeg.clear()
         n_channels, n_samples = self.current_signal.shape
         t = np.linspace(0, 1.0, n_samples)
-        offsets = np.arange(n_channels) * 4.0
+        ch_span = float(np.median(np.ptp(self.current_signal, axis=1)))
+        step = max(25.0, ch_span * 1.15)
+        offsets = np.arange(n_channels) * step
 
         for ch in range(n_channels):
             self.ax_eeg.plot(t, self.current_signal[ch] + offsets[ch], lw=1.2, color="#38bdf8")
@@ -359,15 +361,24 @@ class EEGDecoderGUI:
 
         if os.path.exists(reg_path):
             try:
-                with open(reg_path, "r") as f:
+                with open(reg_path, "r", encoding="utf-8") as f:
                     reg = json.load(f)
-                if base_name in reg:
-                    info = reg[base_name]
-                    true_word = info["word"]
-                    cat = info.get("category", "Medical")
-                    cortex = info.get("active_cortex", "Cortical Area")
+                matched = None
+                if isinstance(reg, list):
+                    for item in reg:
+                        csv_b = os.path.basename(item.get("file_csv", ""))
+                        npy_b = os.path.basename(item.get("file_npy", ""))
+                        if base_name in (csv_b, npy_b, item.get("signal_id", "") + ".csv", item.get("signal_id", "") + ".npy"):
+                            matched = item
+                            break
+                elif isinstance(reg, dict) and base_name in reg:
+                    matched = reg[base_name]
+
+                if matched is not None:
+                    true_word = matched.get("true_word", matched.get("word", "Unknown"))
+                    src_p = matched.get("patient_source", matched.get("category", "Mendeley EEGIS"))
                     self.lbl_verify_text.config(
-                        text=f"Verified Ground Truth: {true_word}\nCategory: {cat} | Active Area: {cortex}",
+                        text=f"Verified Ground Truth: {true_word}\nSource: {src_p}",
                         fg=self.accent_green
                     )
                     return
