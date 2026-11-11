@@ -120,4 +120,103 @@ class AdaptiveGeneticFeatureSelector:
         return self
 
     def transform(self, X: np.ndarray) -> np.ndarray:
+        if self.best_mask_ is None:
+            raise ValueError("AdaptiveGeneticFeatureSelector must be fitted before transform().")
         return X[:, self.best_mask_ == 1]
+
+
+class AdaptiveBandWeightGA:
+    """
+    Adaptive Genetic Algorithm for 6-Band Filter-Bank Riemannian Manifold Weighting.
+    Evolves continuous weights over ['raw', 'delta', 'theta', 'alpha', 'beta', 'gamma']
+    while preserving symmetric positive definite (SPD) geometry within every 105-dim block.
+    """
+    def __init__(
+        self,
+        n_bands: int = 6,
+        band_dim: int = 105,
+        n_population: int = 20,
+        n_generations: int = 8,
+        cv_splits: int = 3,
+        k_neighbors: int = 3,
+        metric: str = "cosine",
+        random_state: int = 42,
+    ):
+        self.n_bands = n_bands
+        self.band_dim = band_dim
+        self.n_population = n_population
+        self.n_generations = n_generations
+        self.cv_splits = cv_splits
+        self.k_neighbors = k_neighbors
+        self.metric = metric
+        self.random_state = random_state
+        self.best_weights_: Optional[np.ndarray] = None
+        self.best_fitness_: float = -1.0
+        self.history_: list = []
+        self.diversity_history_: list = []
+        self.mutation_history_: list = []
+        self.weights_history_: list = []
+
+    def apply_weights(self, X: np.ndarray, weights: Optional[np.ndarray] = None) -> np.ndarray:
+        w = self.best_weights_ if weights is None else weights
+        out = X.copy()
+        for b in range(self.n_bands):
+            out[:, b * self.band_dim : (b + 1) * self.band_dim] *= float(w[b])
+        return out
+
+    def fit(self, X_scaled: np.ndarray, y: np.ndarray):
+        from sklearn.model_selection import cross_val_score
+        from sklearn.neighbors import KNeighborsClassifier
+
+        rng = np.random.RandomState(self.random_state)
+        pop = rng.uniform(0.3, 2.0, size=(self.n_population, self.n_bands))
+        skf = StratifiedKFold(n_splits=self.cv_splits, shuffle=True, random_state=self.random_state)
+
+        for gen in range(self.n_generations):
+            fits = []
+            for w in pop:
+                Xw = self.apply_weights(X_scaled, w)
+                knn = KNeighborsClassifier(
+                    n_neighbors=self.k_neighbors, weights="distance", metric=self.metric, n_jobs=-1
+                )
+                cv_acc = float(np.mean(cross_val_score(knn, Xw, y, cv=skf, n_jobs=-1)))
+                fits.append(cv_acc)
+
+            fits = np.array(fits)
+            best_idx = int(np.argmax(fits))
+            if fits[best_idx] > self.best_fitness_:
+                self.best_fitness_ = float(fits[best_idx])
+                self.best_weights_ = (pop[best_idx] / (np.max(pop[best_idx]) + 1e-8)).copy()
+
+            pop_diversity = float(np.mean(np.std(pop, axis=0)))
+            adaptive_pm = float(0.20 * (1.0 + np.exp(-3.0 * pop_diversity)))
+
+            self.history_.append(float(self.best_fitness_))
+            self.diversity_history_.append(pop_diversity)
+            self.mutation_history_.append(adaptive_pm)
+            self.weights_history_.append(self.best_weights_.tolist())
+
+            print(
+                f"    [AGA BandGen {gen+1:02d}/{self.n_generations:02d}] "
+                f"CV Acc: {self.best_fitness_*100:.2f}% | "
+                f"Div: {pop_diversity:.4f} | Pm: {adaptive_pm:.4f} | "
+                f"Weights: {np.round(self.best_weights_, 3).tolist()}"
+            )
+
+            elite_idx = np.argsort(fits)[-2:]
+            new_pop = [pop[elite_idx[1]].copy(), pop[elite_idx[0]].copy()]
+            while len(new_pop) < self.n_population:
+                i1, i2 = rng.choice(self.n_population, 2, replace=False)
+                pa = pop[i1] if fits[i1] > fits[i2] else pop[i2]
+                i3, i4 = rng.choice(self.n_population, 2, replace=False)
+                pb = pop[i3] if fits[i3] > fits[i4] else pop[i4]
+                child = np.clip(0.5 * (pa + pb) + rng.randn(self.n_bands) * adaptive_pm * 0.35, 0.05, 2.5)
+                new_pop.append(child)
+            pop = np.array(new_pop)
+
+        return self
+
+    def transform(self, X_scaled: np.ndarray) -> np.ndarray:
+        if self.best_weights_ is None:
+            raise ValueError("AdaptiveBandWeightGA must be fitted before transform().")
+        return self.apply_weights(X_scaled, self.best_weights_)

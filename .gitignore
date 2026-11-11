@@ -50,6 +50,8 @@ venv.bak/
 Thumbs.db
 desktop.ini
 
-# Raw extracted Mendeley CSVs (compiled in data/eegis_real_dataset.npz)
+# Raw extracted Mendeley CSVs & large >40MB derived caches (rebuilt from dataset/)
 data/eegis_raw/
+data/eegis_6band_real.npz
+data/eegis_6band_features.npz
 dataset/

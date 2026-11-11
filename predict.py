@@ -34,7 +34,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 from dataset_loader import CLASS_MAP, CHANNEL_NAMES
-from eeg_features import extract_trial_features
+from eeg_features import extract_trial_features, extract_single_trial_6band_from_raw
 from improved_pipeline import extract_riemannian_features
 
 
@@ -109,6 +109,8 @@ def load_raw_eeg_file(file_path: str) -> np.ndarray:
         data = df.apply(pd.to_numeric, errors="coerce").dropna().values
         if data.size == 0:
             data = np.genfromtxt(file_path, delimiter=sep)
+        if data.ndim == 2 and data.shape[1] == 15 and data.shape[0] >= 128:
+            data = data[:, 1:]
 
         # Handle orientations
         if data.shape[0] == 14 and data.shape[1] >= 128:
@@ -175,26 +177,29 @@ def predict_signal(signal: np.ndarray, model_pkg: dict, model_type: str):
 
     if model_type == "improved":
         scaler = model_pkg["scaler"]
-        aga = model_pkg["aga"]
         ensemble = model_pkg["ensemble"]
 
-        # 1. Multi-domain statistical/spectral features (322)
-        base_f, _ = extract_trial_features(signal, CHANNEL_NAMES, fs=128)
-        base_f = base_f.reshape(1, -1)
-
-        # 2. Riemannian tangent space covariance features (105)
-        trial_batch = signal[np.newaxis, :, :]  # (1, 14, 128)
-        riem_f = extract_riemannian_features(trial_batch)
-
-        # 3. Concatenate (427)
-        f_fused = np.hstack([base_f, riem_f])
-
-        # 4. Scale & AGA feature selection (pruned optimal feature mask)
-        f_scaled = scaler.transform(f_fused)
-        f_opt = aga.transform(f_scaled)
-
-        # 5. Stacking Ensemble Inference
-        probs = ensemble.predict_proba(f_opt)[0]
+        if model_pkg.get("mode") == "fb_riemannian_6band":
+            # 6-Band Filter-Bank Riemannian extraction via 4th-order Butterworth filtfilt (630D)
+            f_riem = extract_single_trial_6band_from_raw(signal, fs=128)
+            f_scaled = scaler.transform(f_riem)
+            band_w = model_pkg.get("band_weights")
+            if band_w is not None:
+                f_opt = f_scaled.copy()
+                for b_idx, w in enumerate(band_w):
+                    f_opt[:, b_idx * 105 : (b_idx + 1) * 105] *= float(w)
+            else:
+                f_opt = f_scaled
+            probs = ensemble.predict_proba(f_opt)[0]
+        else:
+            aga = model_pkg["aga"]
+            base_f, _ = extract_trial_features(signal, CHANNEL_NAMES, fs=128)
+            base_f = base_f.reshape(1, -1)
+            riem_f = extract_riemannian_features(signal[np.newaxis, :, :])
+            f_fused = np.hstack([base_f, riem_f])
+            f_scaled = scaler.transform(f_fused)
+            f_opt = aga.transform(f_scaled)
+            probs = ensemble.predict_proba(f_opt)[0]
     else:
         scaler = model_pkg["scaler"]
         selector = model_pkg.get("selector")
@@ -304,7 +309,7 @@ def print_single_prediction(file_path: str, model_pkg: dict, model_type: str):
     # Print Clean Signal Telemetry & Output
     print("\n" + "=" * 76)
     print("      NIT WARANGAL — CS26001: ADVANCED ALGORITHMS (TOPIC 6)")
-    print(f"      Model Engine: {model_pkg.get('type', 'Proposed 44.44% AGA-Riemannian Ensemble (Real EEGIS)')}")
+    print(f"      Model Engine: {model_pkg.get('type', 'Proposed MDRC-AGA v2: 6-Band FB-Riemannian Consensus')}")
     print("=" * 76)
     print(f"[*] Input File:             {file_path}")
     print(f"[*] Electrodes Ingested:    14 channels (AF3, F7, F3, FC5, T7, P7, O1, O2, P8, T8, FC6, F4, F8, AF4)")

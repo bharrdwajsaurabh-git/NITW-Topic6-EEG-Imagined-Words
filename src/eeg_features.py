@@ -173,6 +173,53 @@ def extract_dataset_features(
     return feat_matrix, feat_names
 
 
+def _spd_tangent_vector(sig_ch_by_t: np.ndarray, reg: float = 1e-4) -> np.ndarray:
+    """
+    Computes trace-normalized SPD Log-Euclidean Riemannian tangent vector for a (14, T) trial.
+    Returns 105-dim L2-normalized upper-triangular tangent representation.
+    """
+    n_ch = sig_ch_by_t.shape[0]
+    cov = np.cov(sig_ch_by_t.astype(np.float64)) + reg * np.eye(n_ch)
+    cov_norm = cov / (np.trace(cov) / float(n_ch) + 1e-8)
+    evals, evecs = np.linalg.eigh(cov_norm)
+    evals = np.maximum(evals, 1e-6)
+    log_c = (evecs * np.log(evals)) @ evecs.T
+    iu = np.triu_indices(n_ch)
+    vec = log_c[iu].copy()
+    vec[iu[0] != iu[1]] *= np.sqrt(2.0)
+    vec = vec / (np.linalg.norm(vec) + 1e-12)
+    return vec.astype(np.float32)
+
+
+def extract_6band_riemannian_features(X_6band: np.ndarray) -> np.ndarray:
+    """
+    Extracts Filter-Bank Log-Euclidean Riemannian Tangent Space features across all 6 neural bands
+    (raw, delta, theta, alpha, beta, gamma) for tensor shape (N, 6, 14, 128) -> (N, 630).
+    """
+    n_trials, n_bands, _, _ = X_6band.shape
+    out = np.zeros((n_trials, n_bands * 105), dtype=np.float32)
+    for i in range(n_trials):
+        for b in range(n_bands):
+            out[i, b * 105 : (b + 1) * 105] = _spd_tangent_vector(X_6band[i, b])
+    return np.nan_to_num(out)
+
+
+def extract_single_trial_6band_from_raw(raw_signal: np.ndarray, fs: int = 128) -> np.ndarray:
+    """
+    Computes 6-band Filter-Bank Riemannian features (1, 630) on-the-fly from a raw (14, 128) EEG trial
+    using 4th-order zero-phase Butterworth bandpass filters matching Mendeley EEGIS cutoffs.
+    """
+    sig_raw = raw_signal.astype(np.float64)
+    sig_raw = sig_raw - np.mean(sig_raw, axis=1, keepdims=True)
+    bands_cutoffs = [(0.5, 4.0), (4.0, 8.0), (8.0, 13.0), (13.0, 30.0), (30.0, 40.0)]
+    vecs = [_spd_tangent_vector(sig_raw)]
+    for lo, hi in bands_cutoffs:
+        b_coef, a_coef = signal.butter(4, [lo, hi], btype="band", fs=float(fs))
+        sig_band = signal.filtfilt(b_coef, a_coef, sig_raw, axis=1)
+        vecs.append(_spd_tangent_vector(sig_band))
+    return np.concatenate(vecs).reshape(1, -1).astype(np.float32)
+
+
 if __name__ == "__main__":
     print("=" * 65)
     print("       EEG FEATURE EXTRACTION ENGINE TEST (14 CHANNELS)       ")
