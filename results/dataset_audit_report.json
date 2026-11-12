@@ -1,0 +1,33 @@
+{
+  "loader": "load_eegis_6band_with_provenance",
+  "code_version": "2.0.0-audit-remediated",
+  "dataset_doi": "10.17632/73g4fw884c.1",
+  "mendeley_root": "D:\\EEG_Imagined_Speech\\dataset\\EEGIS - Electroencephalogram Imagined Speech dataset",
+  "accepted_trials": 4044,
+  "n_blocks": 337,
+  "subject_ids_recoverable": false,
+  "subject_ids_note": "No participant/subject identifiers exist in Mendeley EEGIS; zero synthetic subject IDs created.",
+  "per_class_counts": {
+    "Rest": 456,
+    "Help (Ayuda)": 504,
+    "Bathroom (Ba\u00f1o)": 372,
+    "Pain (Dolor)": 492,
+    "Thanks (Gracias)": 444,
+    "Hungry (Hambre)": 444,
+    "No": 480,
+    "Thirsty (Sed)": 408,
+    "Yes (S\u00ed)": 444
+  },
+  "overlap_diagnostics": {
+    "overlap_samples": 48,
+    "stride_samples": 80,
+    "continuous_block_samples": 1008,
+    "within_block_pairs": 3707,
+    "within_block_max_abs_diff": 0.0,
+    "within_block_nonzero_discontinuities": 0,
+    "between_block_mean_abs_diff": 197.39788455054872
+  },
+  "manifest_sha256": "80413e0a2c3533112fdf29192ff40039133447bfadeeb81546ea35ef2a38b3e5",
+  "rejected_count": 0,
+  "rejected_files": []
+}

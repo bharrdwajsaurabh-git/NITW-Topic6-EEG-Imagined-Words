@@ -20,18 +20,18 @@ slides_data = [
             <div class="team-grid">
                 <div class="team-member">
                     <strong>Saurabh Bharrdwaj</strong>
-                    <span>Roll No: 26CSM2R20 (Lead)</span>
-                    <small>Architecture, Riemannian Geometry & Evaluation</small>
+                    <span>Team Lead</span>
+                    <small>Architecture, Riemannian Geometry &amp; Dual-Protocol Audit</small>
                 </div>
                 <div class="team-member">
                     <strong>Badvath Jaipal</strong>
-                    <span>Roll No: 26CSM2R04</span>
-                    <small>Signal Ingestion, Filtering & Multi-Domain Features</small>
+                    <span>Team Member</span>
+                    <small>Signal Ingestion, Filtering &amp; Multi-Domain Features</small>
                 </div>
                 <div class="team-member">
                     <strong>Saurabh Kumar</strong>
-                    <span>Roll No: 26CSM2R20</span>
-                    <small>Adaptive GA Optimization & Stacking Ensemble</small>
+                    <span>Team Member</span>
+                    <small>Adaptive GA Optimization &amp; Calibrated Stacking</small>
                 </div>
             </div>
             <div class="supervisor-box">
@@ -62,12 +62,12 @@ slides_data = [
             </div>
             <div>
                 <div class="card highlight-card">
-                    <h3>Our Solution: Direct Imagined Speech BCI</h3>
-                    <p>Enables the patient to <em>directly imagine the acoustics and phonetics of words</em> without moving muscles. Decodes real 1.0 s EEG epochs in <strong>43.4 ms mean CPU latency</strong>.</p>
+                    <h3>Our Prototype: Dual-Protocol EEG Speech Decoding</h3>
+                    <p>Explores covert imagined speech decoding across 9 words using multi-scale Riemannian covariance and GA selection, evaluated at <strong>31.8 ms/epoch</strong> offline workstation CPU compute.</p>
                     <div class="stat-grid">
                         <div class="stat-box"><strong>9 Classes</strong><span>Vocabulary Words</span></div>
                         <div class="stat-box"><strong>13 Bands</strong><span>Multi-Scale + Speech-10</span></div>
-                        <div class="stat-box"><strong>43.4 ms</strong><span>CPU Latency (&gt;20x rt)</span></div>
+                        <div class="stat-box"><strong>31.8 ms</strong><span>Offline CPU Compute</span></div>
                     </div>
                 </div>
             </div>
@@ -162,7 +162,7 @@ slides_data = [
                     <tr><td><strong>8</strong></td><td>Yes (Sí)</td><td>Patient Response</td><td>Frontal motor affirmative synchronization</td></tr>
                 </tbody>
             </table>
-            <p><strong>Trial Parameters:</strong> 1.0-second time window (T = 128 samples per channel). <strong>4,044 real human trials</strong> across 10 subjects (balanced 720-trial cohort &amp; full 4,044-trial corpus).</p>
+            <p><strong>Trial Parameters:</strong> 1.0-second epochs (T = 128 samples/channel @ 128 Hz). <strong>4,044 real epochs</strong> across <strong>337 continuous 8s blocks</strong> (12 chunks/block, 48-sample overlap; participant IDs unrecoverable in Mendeley source).</p>
         </div>
         """,
         "notes": "The vocabulary comprises 8 essential survival words plus an eyes-open rest state across all 4,044 real Mendeley EEGIS human trials. Help and Pain are high-urgency classes. Hungry and Thirsty represent physical needs. Yes, No, and Thanks represent vital patient feedback."
@@ -197,7 +197,7 @@ slides_data = [
                     <h3>Research Gap Bridged by Our Project</h3>
                     <ul>
                         <li><strong>Primary Paper Scope Limit:</strong> Binary Yes/No only via univariate channel moments; no 9-class evaluation or inter-channel SPD phase covariance.</li>
-                        <li><strong>Our Two-Stage Upgrade:</strong> Stage 1 matches 96% Yes/No via 6B SPD + Rank-GA; Stage 2 MDRC-AGA v3 hits <strong>91.97% 9-Class</strong> &amp; <strong>96.22%-97.73% Yes/No</strong>.</li>
+                        <li><strong>Our Two-Stage Upgrade:</strong> Under Exploratory Chunk 5-CV matching Lara et al., Stage 1 hits <strong>90.02% / 96.11% Yes/No</strong> &amp; Stage 2 Vote reaches <strong>91.84% / 95.67% Yes/No</strong>; Block-Disjoint 5-CV remains ~<strong>10.14%-11.41%</strong>.</li>
                     </ul>
                 </div>
             </div>
@@ -208,339 +208,340 @@ slides_data = [
     {
         "id": 7,
         "title": "Stage 1: Primary Research Baseline (Lara-Arellano et al., 2025)",
-        "subtitle": "Matching 96.0% Binary Yes/No (95.14% Holdout / 96.86% 5-CV) & 88.88% 9-Class on Real EEGIS",
+        "subtitle": "Dual-Protocol Audit: Exploratory Chunk 5-CV (90.02% / 96.11% Yes/No) vs Block-Disjoint (10.01% / 45.11%)",
         "content": """
         <div class="two-col">
             <div>
                 <div class="card highlight-card">
-                    <h3>Stage 1 Primary Paper Pipeline (Verified Match)</h3>
+                    <h3>Stage 1 Primary Paper Pipeline (Nested Fit, N_ref=3,936)</h3>
                     <ol>
-                        <li><strong>Published Paper Target:</strong> Binary <strong>/Si/ vs /No/</strong> (<strong>924 trials</strong>: 444 Si + 480 No, 80/20 split) with Rank-GA + kNN reaching <strong>96.0%</strong>.</li>
-                        <li><strong>Our Stage 1 Paper Reproduction:</strong> <code>PaperRankGeneticSelector</code> (Rank Selection + Bit-Flip, <code>620/630</code> active 6-band SPD dims) + heuristic <code>kNN (k=1)</code> hits <strong>95.14% Holdout / 96.86% 5-Fold CV</strong> on Yes/No!</li>
-                        <li><strong>Full 9-Class Stage 1 Baseline:</strong> <strong>88.88% Holdout</strong> (<code>0.8895</code> F1), <strong>90.43% 5-CV</strong>, and <strong>8/9 (88.9%)</strong> unseen bedside CSVs.</li>
+                        <li><strong>Published Paper Target:</strong> Binary <strong>/Si/ vs /No/</strong> (<strong>924 trials</strong>, 80/20 split) with Rank-GA + kNN reaching <strong>96.0%</strong>.</li>
+                        <li><strong>Exploratory Chunk 5-CV (*Overlap Boundary):</strong> <code>PaperRankGeneticSelector</code> (nested per-fold, 6B SPD) + <code>kNN (k=1)</code> hits <strong>96.11%</strong> on Yes/No and <strong>90.02%</strong> (9-class, F0 Holdout <strong>91.62%</strong>)!</li>
+                        <li><strong>Leakage-Safe Block-Disjoint 5-CV (328 Blocks):</strong> Drops honestly to <strong>10.01%</strong> (9-class) and <strong>45.11%</strong> (Yes/No), proving chunk overlap drove k=1 accuracy.</li>
                     </ol>
                 </div>
             </div>
             <div>
                 <div class="card alert-card">
-                    <h3>Why Scalar Stats Alone Collapse (Without SPD)</h3>
+                    <h3>Classical &amp; Neural Baselines (Block-Disj | Chunk 5-CV*)</h3>
                     <ul>
-                        <li><strong>6-Band Scalar Moments + RBF-SVM (9-Class):</strong> Drops to <strong>20.52%</strong> (<code>Yes/No = 63.78%</code>).</li>
-                        <li><strong>6-Band Scalar Moments + kNN (k=7, 9-Class):</strong> Only <strong>26.58%</strong> (<code>Yes/No = 63.24%</code>).</li>
-                        <li><strong>Paper Scalar Rank-GA + kNN7 (Yes/No, 584D):</strong> Reaches <strong>69.73%</strong> without cross-channel covariance.</li>
-                        <li><strong>Core Motivation for Stage 2:</strong> Stage 1 matches 96% binary via 6-band SPD; MDRC-AGA v3 pushes BOTH 9-class and binary even higher!</li>
+                        <li><strong>Scalar 322 Stats + RBF-SVM:</strong> <strong>10.34%</strong> Blk-Disj | <strong>19.39%</strong> Chunk 5-CV.</li>
+                        <li><strong>Scalar 322 Stats + kNN (k=7):</strong> <strong>10.16%</strong> Blk-Disj | <strong>18.22%</strong> Chunk 5-CV.</li>
+                        <li><strong>FBCSP + Calibrated SVM / MDM 6B:</strong> <strong>9.96% / 8.74%</strong> Blk-Disj | <strong>19.46% / 16.11%</strong> Chunk 5-CV.</li>
+                        <li><strong>True Fold-Tangent LogReg / EEGNet F0:</strong> <strong>10.72% / 11.24%</strong> Blk-Disj | <strong>20.78% / 16.62%</strong> Chunk 5-CV.</li>
                     </ul>
                 </div>
             </div>
         </div>
         """,
-        "notes": "In Stage 1 we reproduced Lara-Arellano et al.'s Rank-GA + heuristic kNN methodology. Without spatial covariance, scalar stats stall at 20.52% to 69.73%. Paired with 6-band SPD covariance (620/630 dims), Stage 1 matches the paper's 96.0% binary benchmark (95.14% Holdout, 96.86% 5-CV) and reaches 88.88% on 9 classes."
+        "notes": "Stage 1 reproduces Lara-Arellano et al.'s Rank-GA + heuristic kNN inside strict nested folds across N_ref=3,936. Under Exploratory Chunk 5-CV it hits 96.11% Yes/No and 90.02% 9-class, whereas under Leakage-Safe Block-Disjoint GroupKFold it sits at 10.01% (9-class) and 45.11% (Yes/No), exposing within-block chunk overlap."
     },
     {
         "id": 8,
-        "title": "Critical Bottlenecks Beyond Stage 1 (Motivating MDRC-AGA v3)",
-        "subtitle": "From Coarse 6-Band Global Covariance (88.88%) to Multi-Scale 13-Band + Speech-10 (91.97%)",
+        "title": "Architectural Improvements & Forensic Audit Fixes Beyond Stage 1",
+        "subtitle": "Fixing 32 Audit Flaws: Fold-Strict C_ref, Multi-Scale Geometry, Calibrated Heads & Calibration Metrics",
         "content": """
         <div class="grid-4">
             <div class="card">
-                <h4>1. Univariate Scalar Collapse</h4>
-                <p>Channel-by-channel moments ignore inter-electrode phase synchrony between Broca (F7, F3) and Wernicke (T7, T8), stalling at 20.5%-26.6%.</p>
+                <h4>1. Fold-Strict Tangent Fit</h4>
+                <p>Removed full-dataset tangent leakage: precomputes per-trial SPDs once, then fits Log-Euclidean Frechet mean <code>C_ref</code> strictly inside each training fold.</p>
             </div>
             <div class="card">
-                <h4>2. Coarse 6-Band Pooling</h4>
-                <p>Wide Alpha (8-12 Hz) &amp; Beta (12-30 Hz) blur Mu idling (8-10.5 Hz) with motor planning (13-20 Hz) and high-beta articulatory bursts (20-30 Hz).</p>
+                <h4>2. Coarse 6-Band to 13-Band + Speech-10</h4>
+                <p>Adds causal Butterworth 7 fine non-overlapping sub-bands (4-45 Hz) + 10-channel Broca-Wernicke Speech-10 sub-montage (<strong>1,695D</strong> total).</p>
             </div>
             <div class="card">
-                <h4>3. Occipital Visual Clutter</h4>
-                <p>Unweighted 14-channel global covariance mixes language nodes with posterior visual channels (P7, O1, O2, P8), diluting speech geometry.</p>
+                <h4>3. Calibrated Stacker &amp; Metrics</h4>
+                <p>Upgrades binary Stacker bases to LogReg(C=0.1), PCA-LDA, Platt-Ridge(alpha=100) + Soft Vote with <strong>Brier</strong>, <strong>10-bin ECE</strong>, and block-bootstrap 95% CIs.</p>
             </div>
             <div class="card">
-                <h4>4. Slow Drift vs High-Freq Cues</h4>
-                <p>Delta (22.5%) &amp; Alpha (23.0%) carry ocular drift; fine Theta-Gamma sub-bands (735D = 90.98%) and Speech-10 (w=1.3093) unlock >91.9%.</p>
+                <h4>4. Block-Disjoint Primary Audit</h4>
+                <p>Excludes all <strong>108 sibling chunks</strong> of the 9 <code>test_signals/</code> blocks (<code>N_ref=3,936</code>) and evaluates Block-Disjoint 5-CV alongside Chunk 5-CV.</p>
             </div>
         </div>
         """,
-        "notes": "To surpass Stage 1's 88.88% 9-class benchmark, MDRC-AGA v3 resolves four bottlenecks: univariate scalar collapse, coarse 6-band frequency pooling, posterior visual channel clutter, and unweighted slow ocular drift."
+        "notes": "Beyond Stage 1, Stage 2 fixes all pipeline leakage: fold-strict C_ref tangent projection, 1,695D multi-scale SPD features, vectorized Block-AGA, calibrated stacking with Brier and ECE, and exclusion of all 108 sibling test_signals chunks."
     },
     {
         "id": 9,
-        "title": "Proposed System Architecture: Stage 1 vs MDRC-AGA v3",
-        "subtitle": "Parallel Paper Baseline Benchmark & 1,695D Multi-Scale Manifold Consensus Pipeline",
+        "title": "Proposed System Architecture: Stage 1 vs Stage 2 MDRC-AGA",
+        "subtitle": "Parallel Paper Baseline Benchmark & Audited 1,695D Multi-Scale Manifold Pipeline",
         "content": """
         <div class="card text-center">
             <img src="results/architecture_flow_diagram.png" alt="Architecture Flow Diagram" style="max-height: 480px; width: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
         </div>
         """,
-        "notes": "Here is our Stage 1 Paper Rank-GA vs Stage 2 MDRC-AGA v3 end-to-end architecture diagram. Real 14-channel trials flow through 13-band + Speech-10 SPD projection (1,695D), MultiScaleBlockAGA weighting, and Fast BLAS Consensus at 42.9 ms CPU latency."
+        "notes": "Here is our Stage 1 Paper Rank-GA vs Stage 2 MDRC-AGA end-to-end architecture diagram showing fold-strict C_ref projection, PCA-LDA + Platt-Ridge stacking, and side-by-side dual-protocol evaluation."
     },
     {
         "id": 10,
         "title": "Stage 2 Multi-Scale Filter-Bank & Broca-Wernicke Speech-10",
-        "subtitle": "Extending Canonical 6-Band EEGIS with Fine 7-Band Sub-Splits & Localized Speech Montage",
+        "subtitle": "Combining 6-Band EEGIS, Fine 7-Band Sub-Splits (4-45 Hz) & Localized Montages",
         "content": """
         <div class="card">
             <table class="pres-table">
                 <thead>
-                    <tr><th>Manifold Scale / Band Group</th><th>Frequency &amp; Channels</th><th>Neurophysiological Speech Role</th><th>Alone 9-Class Acc</th><th>MDRC-AGA v3 Weight</th></tr>
+                    <tr><th>Manifold Block / Montage View</th><th>Channels &amp; Bands</th><th>Dims</th><th>MDRC-AGA Weight (Blk / Chk*)</th><th>Fold 0 / Protocol Insight</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td><strong>Canonical Slow Bands</strong></td><td>Raw, Delta (0.5-4), Theta (4-8), Alpha (8-12)</td><td>Broadband composite + ocular/memory baseline</td><td>22.5% - 40.4%</td><td rowspan="2" style="vertical-align:middle;"><strong>Block A (630D): w = 0.7223</strong></td></tr>
-                    <tr><td><strong>Canonical High Bands</strong></td><td>Beta (12-30 Hz), Gamma (30-60 Hz)</td><td>Speech motor planning &amp; phonetic binding</td><td><strong>65.39% / 56.12%</strong></td></tr>
-                    <tr class="hl-row"><td><strong>Block B: Fine 7-Band Splits</strong></td><td>Theta1/2, Mu, HiAlpha, Lo/HiBeta, LoGamma (14 Ch)</td><td>Isolates Mu (8-10.5 Hz) &amp; Low/High Beta (735D)</td><td><strong>90.98% (Peak Scale)</strong></td><td><strong>w = 0.9684</strong></td></tr>
-                    <tr class="hl-row"><td><strong>Block C: Speech-10 Montage</strong></td><td>AF3, F7, F3, FC5, T7, T8, FC6, F4, F8, AF4 (6B)</td><td>Focuses Broca-Wernicke loops, strips O1/O2 (330D)</td><td><strong>76.14% (10-Ch Only)</strong></td><td><strong>w = 1.3093 (Dominant)</strong></td></tr>
-                    <tr><td><strong>Unified MDRC-AGA v3 Manifold</strong></td><td>1,695D Multi-Scale SPD Concatenation</td><td>Global + Fine Spectral + Cortical Spatial Fusion</td><td><strong>91.97% Holdout</strong></td><td><strong>92.95% 5-Fold CV</strong></td></tr>
+                    <tr><td><strong>Block A: Mendeley 6-Band SPD</strong></td><td>14 Ch Global (Raw, &delta;, &theta;, &alpha;, &beta;, &gamma;)</td><td>630D</td><td><strong>w = 0.8493 / 1.2962</strong></td><td>All-14 Fold 0: 12.63% Blk LogReg / 92.26% Chk Vote</td></tr>
+                    <tr class="hl-row"><td><strong>Block B: Fine 7-Band Splits</strong></td><td>14 Ch (Theta1/2, Mu, HiAlpha, Lo/HiBeta, LoGamma)</td><td>735D</td><td><strong>w = 0.6632 / 0.9847</strong></td><td>Non-overlapping 4-45 Hz sub-bands</td></tr>
+                    <tr class="hl-row"><td><strong>Block C: Speech-10 Montage</strong></td><td>10 Ch (AF3,F7,F3,FC5,T7,T8,FC6,F4,F8,AF4)</td><td>330D</td><td><strong>w = 1.4875 / 0.7192</strong></td><td>Speech-10 F0: 11.24% Blk / 82.49% Chk</td></tr>
+                    <tr><td><strong>Montage Control: Left-7 / Occ-4</strong></td><td>7 Left-Hemi Ch / 4 Occipital Ch</td><td>168 / 60D</td><td>Ablation only</td><td>Left-7: <strong>13.38%</strong> Blk / 60.41% Chk | Occ-4: 9.85% / 26.90%</td></tr>
+                    <tr><td><strong>Unified MDRC-AGA 1,695D</strong></td><td>Concatenated Fold-Safe SPD Tangent Vector</td><td><strong>1,695D</strong></td><td><strong>[3:2:1:1] Vote &amp; Stacker</strong></td><td><strong>Blk: 9.68%-11.41% | Chunk 5-CV*: 91.84%</strong></td></tr>
                 </tbody>
             </table>
         </div>
         """,
-        "notes": "MDRC-AGA v3 fuses three complementary scales: canonical 6-band global covariance (630D, w=0.7223), 7 fine spectral splits from 4 to 45 Hz (735D, 90.98% alone, w=0.9684), and the 10-channel Broca-Wernicke Speech-10 montage (330D, w=1.3093)."
+        "notes": "MDRC-AGA combines three SPD views totaling 1,695 features: 630D global 6-band, 735D non-overlapping fine 7-band (4-45 Hz), and 330D Speech-10, plus Left-7 (13.38% Blk LogReg) and Occipital-4 montage controls."
     },
     {
         "id": 11,
         "title": "Innovation 1: Multi-Scale 13-Band + Speech-10 SPD Tangent Mapping",
-        "subtitle": "Per-Band Trace-Normalized SPD Covariance & L2-Normalized Tangent Concatenation (1,695D)",
+        "subtitle": "Precomputed Trial SPDs & Fold-Strict Log-Euclidean C_ref Tangent Projection (1,695D)",
         "content": """
         <div class="two-col">
             <div>
                 <div class="card">
-                    <h3>SPD Covariance &amp; Fast Eigen-Log</h3>
-                    <p>For every scale <em>s</em> and band <em>b</em>, Z-scored channel epochs form a trace-normalized SPD matrix:</p>
+                    <h3>SPD Covariance &amp; Fold-Strict Tangent Projection</h3>
+                    <p>Trace-normalized SPD covariances are precomputed once per trial:</p>
                     <div class="formula-box">
                         C_{s,b} = C0 / tr(C0) + 1e-4 * I
                     </div>
-                    <p>Symmetric eigendecomposition (<code>eigh</code>) computes <em>S = V diag(log(&lambda;)) V^T</em> with &radic;2 off-diagonal scaling and per-band L2 normalization.</p>
+                    <p>Inside each outer CV fold, Log-Euclidean Frechet mean <code>C_ref</code> is fit <strong>only on training trials</strong>, projecting test folds via <code>C_ref^{-1/2} logm(...) C_ref^{1/2}</code> + Band-L2.</p>
                 </div>
             </div>
             <div>
                 <div class="card highlight-card">
                     <h3>3-Scale Geometric Feature Space (1,695D)</h3>
                     <ul>
-                        <li><strong>Block A (Mendeley 6B, 14-Ch):</strong> 6 &times; 105 = <strong>630D</strong> (Alone: 88.50%)</li>
-                        <li><strong>Block B (Fine 7B, 4-45 Hz, 14-Ch):</strong> 7 &times; 105 = <strong>735D</strong> (Alone: 90.98%)</li>
-                        <li><strong>Block C (Speech-10, 10-Ch 6B):</strong> 6 &times; 55 = <strong>330D</strong> (Alone: 76.14%)</li>
+                        <li><strong>Block A (Mendeley 6B, 14-Ch):</strong> 6 &times; 105 = <strong>630D</strong></li>
+                        <li><strong>Block B (Fine 7B, 4-45 Hz, 14-Ch):</strong> 7 &times; 105 = <strong>735D</strong></li>
+                        <li><strong>Block C (Speech-10, 10-Ch 6B):</strong> 6 &times; 55 = <strong>330D</strong></li>
                     </ul>
-                    <div class="badge-success">Total Manifold Vector: z_k &isin; R^1695 (Zero Synthetic Data)</div>
+                    <div class="badge-success">Total Manifold Vector: z_k &isin; R^1695 (Zero Fold Leakage)</div>
                 </div>
             </div>
         </div>
         """,
-        "notes": "Innovation 1 projects all three cortical and spectral views onto the Log-Euclidean SPD Riemannian manifold using fast eigendecomposition and per-band L2 unit scaling, forming a 1,695D geometry-preserving vector per trial."
+        "notes": "Innovation 1 precomputes per-trial regularized SPDs and fits the Log-Euclidean reference centroid C_ref strictly inside each training fold, producing a 1,695D zero-leakage multi-scale tangent representation."
     },
     {
         "id": 12,
-        "title": "Innovation 2: Stage 1 Paper Rank-GA vs Stage 2 MultiScaleBlockAGA",
-        "subtitle": "Comparing Feature Bit-Selection (Stage 1) with Manifold-Safe Block Evolution (Stage 2)",
+        "title": "Innovation 2: Stage 1 Rank-GA vs Stage 2 MultiScaleBlockAGA",
+        "subtitle": "Vectorized Float32 Block Evolution (14.15 s/fold) & 5-Seed Mutation Stability Audit",
         "content": """
         <div class="two-col">
             <div>
                 <div class="card">
                     <h3>Stage 1 vs Stage 2 Evolutionary Design</h3>
                     <ul>
-                        <li><strong>Stage 1 (<code>PaperRankGeneticSelector</code>):</strong> Replicates Lara-Arellano et al.'s Rank Selection, Homogeneous Crossover, Bit-Flip Mutation, and CV heuristic kNN (retaining <strong>620/630</strong> 6B dims, <strong>k=1</strong>).</li>
-                        <li><strong>Stage 2 (<code>MultiScaleBlockAGA</code>):</strong> Evolves block-level scale multipliers <em>w = [w_6B, w_7B, w_Sp10]</em> via precomputed block-normalized dot-product Train 5-CV kernels without breaking SPD symmetry.</li>
+                        <li><strong>Stage 1 (<code>PaperRankGeneticSelector</code>):</strong> Replicates Lara-Arellano et al.'s Rank Selection, Homogeneous Crossover, Bit-Flip Mutation, and inner heuristic kNN inside each nested fold.</li>
+                        <li><strong>Stage 2 (<code>MultiScaleBlockAGA</code>):</strong> Vectorized <code>float32 tensordot</code> kernel evolves <em>w = [w_6B, w_7B, w_Sp10]</em> across inner 3-fold CV (3.5x faster).</li>
                     </ul>
                     <div class="formula-box">
-                        P_m(t): 0.2353 &rarr; 0.3233 | &sigma;: 0.3936 &rarr; 0.0761 | Train 5-CV: 82.20% &rarr; 82.32%
+                        Blk-Disj Mean w = [0.8493, 0.6632, 1.4875] | Chunk w = [1.2962, 0.9847, 0.7192]
                     </div>
                 </div>
             </div>
             <div>
                 <div class="card highlight-card">
-                    <h3>Learned Multi-Scale Weights (Zero Test Leakage)</h3>
+                    <h3>5-Seed Mutation Control (Fold 0) &amp; Ablation Honesty</h3>
                     <ul>
-                        <li><strong>Block C (Broca-Wernicke Speech-10):</strong> <code>w = 1.3093</code> (Up-weighted speech loop)</li>
-                        <li><strong>Block B (Fine 7-Band Sub-Splits):</strong> <code>w = 0.9684</code> (High-res Mu/Beta/Gamma)</li>
-                        <li><strong>Block A (Mendeley 6-Band Global):</strong> <code>w = 0.7223</code> (Down-weighted slow/occipital)</li>
+                        <li><strong>Block-Disjoint Holdout F0 (5 seeds):</strong> Fixed <strong>11.52% &plusmn; 0.22%</strong> vs Div-Adapt <strong>11.49% &plusmn; 0.20%</strong> vs Div-Stag <strong>11.49% &plusmn; 0.08%</strong>.</li>
+                        <li><strong>Exploratory Chunk F0 (5 seeds):</strong> Fixed <strong>93.58% &plusmn; 0.21%</strong> vs Div-Adapt <strong>93.45% &plusmn; 0.13%</strong> vs Div-Stag <strong>93.50% &plusmn; 0.20%</strong>.</li>
+                        <li><strong>Scientific Takeaway:</strong> Adaptive &amp; fixed mutation remain equivalent within random-seed variance (&le;0.22%).</li>
                     </ul>
-                    <p class="mt-2 small">Weighting all 1,695D organically inside training folds gives Stage 2 a +3.09% 9-class holdout gain over Stage 1.</p>
                 </div>
             </div>
         </div>
         """,
-        "notes": "Stage 1 reproduces the primary paper's Rank-GA feature selector over 6-band SPD geometry (620/630 active dims). Stage 2 upgrades to MultiScaleBlockAGA on 5-Fold Train CV, learning w = [0.7223, 0.9684, 1.3093] that emphasizes localized Broca-Wernicke speech channels and fine sub-bands."
+        "notes": "Stage 2 vectorizes MultiScaleBlockAGA (14.15 s/fold) and evaluates a 5-seed mutation control, honestly showing that adaptive and fixed mutation match within 0.22% seed standard deviation."
     },
     {
         "id": 13,
-        "title": "Innovation 3: BLAS-Accelerated Multi-Metric Manifold Consensus",
-        "subtitle": "Soft [3 : 2 : 1 : 1] Geodesic Voting at 43.4 ms Mean CPU Inference Latency",
+        "title": "Innovation 3: Calibrated Stacker & BLAS Manifold Consensus",
+        "subtitle": "PCA-LDA + Platt-Ridge OOF Stacking vs Soft [3:2:1:1] Vote with Brier & ECE Audit",
         "content": """
         <div class="grid-3">
             <div class="card">
-                <h4>Nearest-Manifold Angular (Cos + Corr k=1)</h4>
-                <div class="badge">Soft Weights: 3 (Cos) + 2 (Corr)</div>
-                <p>Matches test tangent rays against <code>N_ref=4,035</code> training manifolds via vectorized BLAS dot products in ~43 ms.</p>
+                <h4>Calibrated OOF Stacker</h4>
+                <div class="badge">LogReg + PCA-LDA + Platt-Ridge + Vote</div>
+                <p>Zero convergence warnings via <code>max_iter=2000</code>, <code>PCA(64)+LDA</code>, and sigmoid-calibrated <code>Ridge(alpha=100)</code>. Achieves <strong>ECE = 0.100</strong> (Brier <strong>0.913</strong>) on Block-Disjoint 5-CV.</p>
             </div>
             <div class="card">
-                <h4>Local Neighborhood Smoothing (Cos + Corr k=3)</h4>
-                <div class="badge">Soft Weights: 1 (Dist-Cos) + 1 (Dist-Corr)</div>
-                <p>Adds inverse-distance k=3 neighborhood stabilization to calibrate confidence without suppressing peak sharpness.</p>
+                <h4>[3:2:1:1] BLAS Soft Vote</h4>
+                <div class="badge">Cosine + Correlation (k=1 &amp; k=3)</div>
+                <p>Matches geometric angular rays across training manifolds: reaches <strong>91.84%</strong> (<code>F1=0.9180</code>, <code>Brier=0.156</code>, <strong>ECE=0.037</strong>) on Exploratory Chunk 5-CV.</p>
             </div>
             <div class="card highlight-card">
-                <h4>Stage 2 Verified Performance Gains</h4>
-                <div class="badge-success">Beats Stage 1 &amp; Paper Everywhere</div>
-                <p><strong>91.97% 9-Cl Holdout</strong> (+3.09% vs Stage 1) | <strong>92.95% 5-CV</strong> (+2.52%) | <strong>96.22%-97.73% Yes/No</strong> | <strong>9/9 (100%) Unseen CSVs</strong>!</p>
+                <h4>Linear / SVM Head Comparison</h4>
+                <div class="badge-success">PCA(256) + Calibrated RBF-SVM</div>
+                <p>On Block-Disjoint 5-CV, <code>PCA(256)+Calibrated_RBF_SVM</code> hits <strong>11.41%</strong> (<strong>ECE = 0.022</strong>, Brier <strong>0.889</strong>) vs Soft Vote (10.14%) and Stacker (9.68%).</p>
             </div>
         </div>
         <div class="card mt-2">
-            <p class="text-center"><strong>Consensus Rule:</strong> <code>FastManifoldConsensusClassifier</code> pre-normalizes unit L2 &amp; centered matrices, accelerating CPU inference ~9x (397 ms &rarr; <strong>43.4 ms</strong>).</p>
+            <p class="text-center"><strong>Offline Epoch Timing:</strong> <strong>31.77 ms / epoch</strong> on workstation CPU (<code>14.75 ms</code> load + <code>0.04 ms</code> preproc + <code>9.59 ms</code> feat + <code>7.40 ms</code> cls &mdash; offline compute, NOT clinical DAC hardware).</p>
         </div>
         """,
-        "notes": "Innovation 3 is our BLAS-accelerated Multi-Metric Manifold Consensus Classifier combining soft [3:2:1:1] votes across k=1 and k=3 Cosine and Correlation similarities. It cuts latency 9x down to 43.4 ms while lifting 9-class accuracy to 91.97% Holdout and 92.95% 5-Fold CV."
+        "notes": "Stage 2 evaluates calibrated OOF stacking (ECE=0.100 on block-disjoint), BLAS soft voting (91.84%, ECE=0.037 on exploratory chunk), and PCA+Calibrated RBF-SVM (11.41%, ECE=0.022 on block-disjoint)."
     },
     {
         "id": 14,
         "title": "Experimental Protocol & Zero-Leakage Audit",
-        "subtitle": "All 4,044 Real Mendeley Trials x 6 Bands + Transparent Temporal Slicing Disclosure",
+        "subtitle": "All 4,044 Real Mendeley Trials (337 Blocks) + Sibling-Excluded N_ref = 3,936 Verification",
         "content": """
         <div class="two-col">
             <div>
                 <div class="card">
-                    <h3>Complete 6-Band Real Dataset (N = 4,044 &times; 6)</h3>
+                    <h3>Forensic Dataset Audit (<code>dataset_audit_report.json</code>)</h3>
                     <ul>
-                        <li><strong>Zero Synthetic Data:</strong> Reads directly from <code>dataset/</code> containing all 24,264 real CSV files across Raw, Delta, Theta, Alpha, Beta, and Gamma (zero fallback generators).</li>
-                        <li><strong>Standard 80/20 Evaluation:</strong> 3,235 Train / 809 Unseen Test (9 classes) + 5-Fold Stratified CV across all 4,044 trials.</li>
-                        <li><strong>Primary Paper Binary Match:</strong> <code>Yes (Si, 444) vs No (480)</code> = 924 real trials (80/20: 739 Train / 185 Test).</li>
+                        <li><strong>Zero Synthetic Data:</strong> Reads directly from <code>dataset/</code> (all 24,264 real CSVs, <strong>0 rejected</strong>).</li>
+                        <li><strong>Continuous 8s Blocks:</strong> <strong>337 blocks &times; 12 chunks</strong> with <strong>48-sample (37.5%) overlap</strong> (within-block max abs diff <code>0.0 uV</code>; between-block mean diff <code>197.40 uV</code>).</li>
+                        <li><strong>Missing Participant IDs:</strong> <code>subject_ids_recoverable = false</code> in Mendeley source CSVs.</li>
                     </ul>
                 </div>
             </div>
             <div>
                 <div class="card highlight-card">
-                    <h3>Academic Integrity &amp; Zero-Leakage Standard</h3>
+                    <h3>Sibling Exclusion &amp; Dual Evaluation Protocol</h3>
                     <ul>
-                        <li><strong>Zero Overrides:</strong> 100% organic manifold predictions; bedside deployment <code>.pkl</code> explicitly excludes all 9 <code>test_signals/</code> matches (<code>N_ref=4,035</code>).</li>
-                        <li><strong>Transparent Window Audit:</strong> Mendeley slices 337 8s blocks into 12 overlapping 128-frame epochs (48-frame overlap). Standard 80/20 gives <strong>91.97%-97.73%</strong>; strict non-overlapping chunks give <strong>18.40%</strong> and block-disjoint splits give <strong>12.01%</strong>.</li>
+                        <li><strong>Strict Sibling Exclusion:</strong> Removes ALL <strong>9 blocks (108 sibling chunks)</strong> matching <code>test_signals/</code>, leaving <strong>N_ref = 3,936</strong> (328 blocks).</li>
+                        <li><strong>Equal-Emphasis Side-by-Side Protocol:</strong> Always pairs <strong>Primary Block-Disjoint Nested GroupKFold (5-CV)</strong> with <strong>Exploratory Chunk Nested 5-CV (*overlap)</strong>.</li>
                     </ul>
                 </div>
             </div>
         </div>
         """,
-        "notes": "Every experiment executes exclusively on all 4,044 real 6-band trials from dataset/ with zero synthetic data, zero overrides, exclusion of all 9 test signals from deployment training, and transparent reporting of overlapping vs block-disjoint splits."
+        "notes": "Our dataset audit confirms 337 continuous 8s blocks with 48-sample overlap and unrecoverable subject IDs. Removing all 108 sibling chunks matching test_signals yields N_ref=3,936 across 328 disjoint blocks."
     },
     {
         "id": 15,
-        "title": "Cross-Architecture Benchmark: Stage 1 Paper vs MDRC-AGA v3",
-        "subtitle": "Full 4,044-Trial 9-Class Evaluation & Primary Paper Binary Replication (80/20 Split & 5-CV)",
+        "title": "Cross-Architecture Benchmark: Block-Disjoint Primary vs Chunk 5-CV*",
+        "subtitle": "Complete N_ref=3,936 Audit with 95% Block-Bootstrap CIs, Brier Score & ECE",
         "content": """
         <div class="two-col">
             <div>
                 <table class="pres-table">
                     <thead>
-                        <tr><th>Method / Real EEGIS Cohort</th><th>Feats</th><th>Holdout</th><th>5-Fold CV</th><th>Key Comparison</th></tr>
+                        <tr><th>Method (N_ref = 3,936, 328 Blks)</th><th>Blk-Disj 5-CV</th><th>Blk ECE</th><th>Chunk 5-CV*</th><th>Calibration / Notes</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td>Random Chance (9 Classes)</td><td>&mdash;</td><td>11.11%</td><td>&mdash;</td><td>Theoretical floor</td></tr>
-                        <tr><td>Scalar 6B SVM / kNN7 (9-Class)</td><td>322 / 1008</td><td>20.52% / 26.58%</td><td>&mdash;</td><td>Yes/No = 63.8% / 63.2%</td></tr>
-                        <tr><td>Paper Scalar Rank-GA + kNN7 (Yes/No)</td><td>584</td><td>69.73%</td><td>&mdash;</td><td>Without SPD geometry</td></tr>
-                        <tr><td><strong>Stage 1 Paper (9-Class, 6B Rank-GA)</strong></td><td><strong>620</strong></td><td><strong>88.88%</strong></td><td><strong>90.43%</strong></td><td><strong>0.8895 F1 | Unseen 8/9</strong></td></tr>
-                        <tr><td><strong>Stage 1 Paper (Yes/No, N=924)</strong></td><td><strong>620</strong></td><td><strong>95.14%</strong></td><td><strong>96.86%</strong></td><td><strong>Matches Paper 96.0%</strong></td></tr>
-                        <tr class="hl-row"><td><strong>Stage 2 MDRC-AGA v3 (9-Class)</strong></td><td><strong>1,695</strong></td><td><strong>91.97%</strong></td><td><strong>92.95%</strong></td><td><strong>+3.09% / +2.52% vs Stage 1</strong></td></tr>
-                        <tr class="hl-row"><td><strong>Stage 2 MDRC-AGA v3 (Yes/No)</strong></td><td><strong>1,695</strong></td><td><strong>96.22%</strong></td><td><strong>97.73%</strong></td><td><strong>Beats Stage 1 &amp; Paper 96%!</strong></td></tr>
-                        <tr class="hl-row"><td><strong>Stage 2 Emergency (Help vs Pain)</strong></td><td><strong>1,695</strong></td><td><strong>99.00%</strong></td><td><strong>97.19%</strong></td><td><strong>Yes vs Help: 97.89%</strong></td></tr>
+                        <tr><td>Random Chance (9 Classes)</td><td>11.11%</td><td>&mdash;</td><td>11.11%</td><td>9 semantic command words</td></tr>
+                        <tr><td>Scalar 322 SVM / kNN7</td><td>10.34% / 10.16%</td><td>&mdash;</td><td>19.39% / 18.22%</td><td>Univariate baseline</td></tr>
+                        <tr><td>FBCSP + SVM / MDM 6B</td><td>9.96% / 8.74%</td><td>0.049 / &mdash;</td><td>19.46% / 16.11%</td><td>FBCSP Brier = 0.895 blk</td></tr>
+                        <tr><td>True Tangent LogReg / EEGNet F0</td><td>10.72% / 11.24%</td><td>0.667 / 0.103</td><td>20.78% / 16.62%</td><td>Fold-strict C_ref / CNN</td></tr>
+                        <tr><td><strong>Stage 1 Paper (6B Rank-GA+kNN)</strong></td><td><strong>10.01%</strong></td><td>0.327</td><td><strong>90.02%</strong></td><td>Yes/No: <strong>45.11% blk / 96.11% chk</strong></td></tr>
+                        <tr class="hl-row"><td><strong>Stage 2 MDRC-AGA Stacker</strong></td><td><strong>9.68%</strong></td><td><strong>0.100</strong></td><td><strong>74.67%</strong></td><td>Yes/No: <strong>46.33% blk / 93.89% chk</strong></td></tr>
+                        <tr class="hl-row"><td><strong>Stage 2 MDRC-AGA Soft Vote</strong></td><td><strong>10.14%</strong></td><td>0.728</td><td><strong>91.84%</strong></td><td>Chk Brier=<strong>0.156</strong>, ECE=<strong>0.037</strong>; Y/N <strong>95.67%</strong></td></tr>
+                        <tr class="hl-row"><td><strong>Stage 2 PCA(256)+Cal.RBF-SVM</strong></td><td><strong>11.41%</strong></td><td><strong>0.022</strong></td><td>20.17%</td><td>Best Blk-Disj acc &amp; lowest ECE</td></tr>
                     </tbody>
                 </table>
             </div>
             <div class="text-center">
-                <img src="results/baseline_vs_improved_comparison.png" alt="Real EEGIS Comparison Charts" style="max-height: 385px; width: auto; border-radius: 8px;">
+                <img src="results/baseline_vs_improved_comparison.png" alt="Dual Protocol Benchmark Charts" style="max-height: 385px; width: auto; border-radius: 8px;">
             </div>
         </div>
         """,
-        "notes": "Stage 1 matches the paper's 96.0% binary benchmark at 95.14% Holdout and 96.86% 5-Fold CV while achieving 88.88% on 9 classes. Stage 2 MDRC-AGA v3 outperforms Stage 1 on every benchmark: 91.97% 9-class Holdout, 92.95% 5-CV, 96.22% Yes/No Holdout, 97.73% Yes/No 5-CV, and 99.00% Help vs Pain."
+        "notes": "Here are BOTH protocols side by side across all 3,936 sibling-excluded trials: under Block-Disjoint 5-CV all models cluster near 11.11% chance with PCA+RBF-SVM at 11.41% (ECE 0.022) and Stacker ECE 0.100; under Exploratory Chunk 5-CV Stage 2 Vote reaches 91.84% and Stage 1 hits 90.02%."
     },
     {
         "id": 16,
-        "title": "Error Analysis: 809-Trial 9-Class Confusion Matrices",
-        "subtitle": "Stage 1 Paper Baseline (88.88%) vs Improved Stage 2 MDRC-AGA v3 (91.97%)",
+        "title": "Error Analysis: Dual-Protocol Confusion Matrices",
+        "subtitle": "Block-Disjoint Primary (9.68% / 11.11% Holdout) vs Exploratory Chunk 5-CV* (91.84%)",
         "content": """
         <div class="two-col">
             <div class="text-center">
-                <h4>Stage 1 Paper Baseline (88.88%)</h4>
+                <h4>Stage 1 Dual Confusion Matrix</h4>
                 <img src="results/confusion_matrix_baseline.png" alt="Baseline CM" style="max-height: 335px; width: auto; border-radius: 8px;">
-                <p class="small text-muted">620/630 active 6B Rank-GA + heuristic kNN; Macro F1 = 0.8895 | 8/9 unseen CSVs.</p>
+                <p class="small text-muted">Stage 1 Rank-GA+kNN: Blk-Disj <strong>10.01%</strong> (Yes/No 45.11%) vs Chunk 5-CV* <strong>90.02%</strong> (Yes/No 96.11%).</p>
             </div>
             <div class="text-center">
-                <h4>Stage 2 Improved MDRC-AGA v3 (91.97%)</h4>
+                <h4>Stage 2 Dual Confusion Matrix</h4>
                 <img src="results/confusion_matrix_improved.png" alt="Improved CM" style="max-height: 335px; width: auto; border-radius: 8px;">
-                <p class="small text-success">Help recall <strong>91.1%</strong> | Pain recall <strong>93.9%</strong> | Thanks <strong>96.6%</strong> | Kappa <strong>0.9095</strong> | 9/9 unseen!</p>
+                <p class="small text-success">Stage 2 MDRC-AGA: Blk-Disj Stacker <strong>9.68%</strong> (ECE=0.100) vs Chunk Vote* <strong>91.84%</strong> (Macro F1=<strong>0.9180</strong>, K=<strong>0.9082</strong>).</p>
             </div>
         </div>
         """,
-        "notes": "Comparing the 809-trial organic confusion matrices: Stage 1 Paper achieves 88.88% (0.8895 F1), while Stage 2 MDRC-AGA v3 tightens the diagonal to 91.97% overall, 91.1% Help recall, 93.9% Pain recall, 96.6% Thanks recall, and 0.9095 Cohen Kappa."
+        "notes": "Side-by-side dual confusion matrices show uniform chance behavior across blocks on the left panel of each plot, and crisp diagonal alignment under overlapping chunk CV on the right panels."
     },
     {
         "id": 17,
-        "title": "Real-Time Bedside Oscilloscope & Signal Verification",
-        "subtitle": "Zero-Leakage Deployment Achieving 9/9 (100.0%) Excluded CSVs at 43.4 ms CPU Latency",
+        "title": "Offline Verification, Continuous 8s Diagnostics & GUI",
+        "subtitle": "Sibling-Excluded 0/9 Honest OOB Result & Workstation 31.77 ms/epoch Compute Breakdown",
         "content": """
         <div class="two-col">
             <div>
                 <div class="card">
-                    <h3>Measured Real-Time Latency &amp; CLI Benchmark</h3>
+                    <h3>Offline Verification &amp; Continuous 8s Controls</h3>
                     <table class="pres-table">
                         <thead>
-                            <tr><th>Bedside Evaluation Metric</th><th>Observed Result</th><th>Clinical Note</th></tr>
+                            <tr><th>Verification / Diagnostic</th><th>Observed Metric</th><th>Honest Interpretation</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>Batch Signal Suite (<code>predict.py --all</code>)</td><td><strong>9 / 9 Exact (100.0%)</strong></td><td>Beats Stage 1 (8/9 = 88.9%)</td></tr>
-                            <tr><td>Sample <code>eeg_signal_01.csv</code> Prediction</td><td><strong>Help (Ayuda)</strong></td><td>82.9% Consensus Confidence</td></tr>
-                            <tr><td>On-the-Fly 13-Band + Speech-10 SPD</td><td>Butterworth + <code>eigh</code> + BLAS</td><td>Exact vectorized cosine/corr engine</td></tr>
-                            <tr class="hl-row"><td><strong>Mean End-to-End CPU Latency</strong></td><td><strong>43.4 ms / epoch</strong></td><td><strong>&gt;20x faster</strong> than 1.0 s window</td></tr>
+                            <tr><td>Batch CSVs (<code>predict.py --all</code>)</td><td><strong>0 / 9 (0.0%)</strong></td><td>ALL 108 sibling chunks excluded</td></tr>
+                            <tr><td>Sample <code>eeg_signal_01.csv</code></td><td><strong>Bathroom (Ba&ntilde;o) 13.8%</strong></td><td>Honest calibrated OOB posterior</td></tr>
+                            <tr><td>Continuous 8s Window (328 blks)</td><td><code>1s=11.28%</code> | <code>2s=10.26%</code> | <code>8s=10.06%</code></td><td>Aggregated 1s=11.89%, 2s=12.20%</td></tr>
+                            <tr class="hl-row"><td><strong>Offline CPU Epoch Compute</strong></td><td><strong>31.77 ms / epoch</strong></td><td>14.75 I/O + 0.04 filt + 9.59 feat + 7.40 cls</td></tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="card highlight-card">
-                    <h3>Authentic Signal-Driven Verification</h3>
+                    <h3>GUI &amp; Input Validation Guards</h3>
                     <ul>
-                        <li><strong>Zero Leakage Verified:</strong> Deployment artifact removes all 9 matching <code>test_signals/</code> trials (<code>N_ref=4,035</code>).</li>
-                        <li><strong>Interactive Oscilloscope GUI:</strong> Desktop app (<code>eeg_gui_tester.py</code>) renders 14-channel traces with one-click organic decoding.</li>
+                        <li><strong>Zero Overrides &amp; Rate Guard:</strong> Rejects unsupported <code>fs != 128 Hz</code> via <code>ValueError</code>; PyQt5 GUI displays live waveforms &amp; calibrated probabilities.</li>
                     </ul>
                 </div>
             </div>
             <div class="text-center">
-                <img src="results/live_decoded_signal.png" alt="Decoded Real Signal 01" style="max-height: 365px; width: auto; border-radius: 8px;">
+                <img src="results/sample_prediction.png" alt="Honest Offline Sample Prediction" style="max-height: 365px; width: auto; border-radius: 8px;">
             </div>
         </div>
         """,
-        "notes": "Our bedside deployment model removes all 9 matching test signals from training (N_ref=4,035), extracts 13-band + Speech-10 SPD features on-the-fly, and decodes all 9 out of 9 (100.0%) excluded test CSVs at 43.4 ms mean CPU latency — over 20x faster than real-time EEG acquisition."
+        "notes": "After removing all 108 sibling chunks of the 9 test_signals files, offline generalization sits honestly at 0/9 (sample 01 predicts Bathroom at 13.8% calibrated confidence), alongside workstation offline compute timing of 31.77 ms/epoch."
     },
     {
         "id": 18,
-        "title": "Academic Integrity & Window-Overlap Transparency",
-        "subtitle": "Understanding Standard Stratified Protocols vs. Block-Disjoint Clinical Transfer",
+        "title": "Academic Integrity, Binary Pairs & Overlap Transparency",
+        "subtitle": "Every Binary Task Evaluated Side-by-Side Under Both Block-Disjoint & Overlapping Protocols",
         "content": """
         <div class="grid-3">
             <div class="card highlight-card">
-                <h4>1. Why Stage 1 &amp; Stage 2 Hit 88.9%-97.7%</h4>
-                <p><strong>Standard 80/20 Protocol (All 4,044):</strong><br>
-                Stage 1 hits <strong>88.88%</strong> (9-Cl) and <strong>95.14%-96.86%</strong> (Yes/No matching 96.0%). Stage 2 MDRC-AGA v3 lifts this to <strong>91.97%-92.95%</strong> (9-Cl) and <strong>96.22%-97.73%</strong> (Yes/No).</p>
+                <h4>1. Exploratory Chunk* Pairs (N=828-972)</h4>
+                <p><strong>Same Overlap Protocol as Lara et al.:</strong><br>
+                &bull; Yes/No: Stage 1 <strong>96.11%</strong> | Stage 2 Vote <strong>95.67%</strong><br>
+                &bull; Help/Rest: Stage 2 Vote <strong>97.44%</strong><br>
+                &bull; Help/Pain: <strong>96.50%</strong> | Yes/Help: <strong>96.86%</strong></p>
             </div>
             <div class="card alert-card">
-                <h4>2. Honest Overlap Disclosure</h4>
-                <p><strong>337 Blocks &rarr; 4,044 Overlapping Chunks:</strong><br>
-                Mendeley slices each 8s block into 12 chunks with 48-sample overlap. Removing adjacent chunks gives <strong>18.40%</strong> (0-overlap); strict block-disjoint splits give <strong>12.01%</strong> (9-class).</p>
+                <h4>2. Block-Disjoint Primary Pairs</h4>
+                <p><strong>Strict 69-81 Disjoint 8s Blocks:</strong><br>
+                &bull; Yes/No: Stage 1 <strong>45.11%</strong> | Stage 2 Stk <strong>46.33%</strong><br>
+                &bull; Help/Rest: <strong>48.08%</strong> | Help/Pain: <strong>46.40%</strong><br>
+                &bull; Hungry/Thirsty Vote: <strong>49.88%</strong> (near 50%)</p>
             </div>
             <div class="card">
-                <h4>3. Zero Shortcuts Verified</h4>
-                <p><strong>Supervisor Audit Clean:</strong><br>
-                Zero synthetic generators, zero prediction overrides, zero test leakage in deployment <code>.pkl</code>. Every metric reproduces cleanly from scripts in this repo.</p>
+                <h4>3. Full Audit Remediation Verified</h4>
+                <p><strong>32 Flaws Fixed + 8 Unit Tests Pass:</strong><br>
+                Fold-strict <code>C_ref</code>, zero convergence warnings, IIR filter transient &amp; sub-band overlap checks, zero fabricated IDs, and honest sample-rate rejection.</p>
             </div>
         </div>
         """,
-        "notes": "Honest scientific reporting strengthens our defense. Under standard 80/20 splits used in the literature, Stage 1 matches the 96.0% paper benchmark and MDRC-AGA v3 hits 91.97%-97.73%. We also transparently report strict zero-overlap (18.40%) and block-disjoint (12.01%) splits."
+        "notes": "Reporting binary benchmarks and 9-class accuracies side by side under both Block-Disjoint and Exploratory Chunk protocols proves our results are fully reproducible, calibrated, and leakage-audited."
     },
     {
         "id": 19,
-        "title": "Conclusion, Key Contributions & Future Roadmap",
-        "subtitle": "Advancing Honest, High-Accuracy Assistive BCIs at NIT Warangal (CS26001)",
+        "title": "Conclusion, Key Takeaways & Future Roadmap",
+        "subtitle": "Audit-Remediated Honest Benchmarking at NIT Warangal (CS26001)",
         "content": """
         <div class="two-col">
             <div>
                 <div class="card highlight-card">
-                    <h3>Verified Real-Dataset Contributions</h3>
+                    <h3>Key Scientific &amp; Engineering Takeaways</h3>
                     <ul>
-                        <li><strong>Primary Paper Match + Stage 2 Enhancement:</strong> Stage 1 matches 96% binary (<strong>95.14%</strong> Holdout / <strong>96.86%</strong> 5-CV) and <strong>88.88%</strong> 9-Cl; Stage 2 MDRC-AGA v3 advances to <strong>91.97%</strong> 9-Cl Holdout, <strong>92.95%</strong> 5-CV, <strong>96.22%-97.73%</strong> Yes/No!</li>
-                        <li><strong>Multi-Scale Neurophysiological AGA:</strong> Evolved <code>w = [0.7223, 0.9684, 1.3093]</code> emphasizing Broca-Wernicke Speech-10 &amp; Fine 7-Band sub-rhythms.</li>
-                        <li><strong>Emergency Readiness:</strong> <strong>91.1%</strong> Help &amp; <strong>93.9%</strong> Pain recall (0.9200 F1); <strong>99.00%</strong> Help vs Pain.</li>
-                        <li><strong>Real-Time Bedside Suite:</strong> <strong>9/9 (100.0%)</strong> excluded raw CSV accuracy at <strong>43.4 ms</strong> CPU latency.</li>
+                        <li><strong>Dual-Protocol Benchmark:</strong> Exploratory Chunk 5-CV hits <strong>90.02%</strong> (Stage 1) and <strong>91.84%</strong> (Stage 2 Vote, ECE 0.037, Yes/No 95.67%), whereas Block-Disjoint 5-CV sits at <strong>9.68%-11.41%</strong> (PCA+RBF-SVM 11.41%, ECE 0.022).</li>
+                        <li><strong>Zero Leakage &amp; Calibration:</strong> All <strong>108 test_signals/</strong> sibling chunks excluded (N_ref=3,936); Stacker cuts Block-Disjoint ECE to <strong>0.100</strong> with 0 warnings.</li>
+                        <li><strong>Honest Scope &amp; Compute:</strong> <strong>31.77 ms/epoch</strong> offline CPU compute; <code>subject_ids_recoverable=false</code> explicitly disclosed.</li>
                     </ul>
                 </div>
             </div>
@@ -548,9 +549,9 @@ slides_data = [
                 <div class="card">
                     <h3>Future Roadmap</h3>
                     <ul>
-                        <li><strong>Riemannian Procrustes Alignment (RPA):</strong> Affine-invariant transfer alignment across blocks/subjects to close the block-disjoint gap (12.01%).</li>
-                        <li><strong>Dynamic Stopping (SPRT):</strong> Sequential confidence termination under 500 ms for urgent commands.</li>
-                        <li><strong>Edge Embedded Port:</strong> Quantize BLAS manifold &amp; SPD extractor onto Intel NPU / ARM Cortex-A.</li>
+                        <li><strong>Subject-Indexed Recording Protocol:</strong> Collect new 14-Ch/64-Ch data with explicit participant &amp; session IDs for true cross-subject LOSO testing.</li>
+                        <li><strong>Riemannian Procrustes Alignment (RPA):</strong> Affine-invariant domain alignment to lift cross-block transfer beyond 11.4% chance.</li>
+                        <li><strong>Prospective Online BCI Integration:</strong> Add real-time hardware acquisition, artifact rejection, and SPRT stopping once transfer succeeds.</li>
                     </ul>
                 </div>
             </div>
@@ -560,7 +561,7 @@ slides_data = [
             <p>Team: Saurabh Bharrdwaj (Lead) | Badvath Jaipal | Saurabh Kumar &mdash; NIT Warangal (CS26001)</p>
         </div>
         """,
-        "notes": "In conclusion, evaluated on all 4,044 real 6-band Mendeley trials with zero synthetic data or overrides, Stage 1 matches Lara-Arellano et al.'s 96.0% benchmark (95.14% Holdout / 96.86% 5-CV) and Stage 2 MDRC-AGA v3 surpasses it across every benchmark: 91.97% 9-class Holdout, 92.95% 5-CV, 96.22%-97.73% Yes vs No, and 9/9 excluded test signals at 43.4 ms latency. Thank you!"
+        "notes": "In summary, we remediated all audit flaws, removed sibling leakage, evaluated Block-Disjoint Primary and Exploratory Chunk 5-CV side by side with calibration and bootstrap CIs, and verified 8 unit tests and honest CLI/GUI inference. Thank you!"
     }
 ]
 
@@ -865,11 +866,26 @@ html_template += f"""
 </html>
 """
 
+import base64
+import re
 import shutil
 
-deck_path = "c:/Users/st983/Downloads/ml/imagined_speech_eeg/NITW_Topic6_Presentation.html"
+base_dir = "c:/Users/st983/Downloads/ml/imagined_speech_eeg"
+
+def _inline_local_pngs(html_str: str) -> str:
+    """Embed referenced local results/*.png as base64 data URIs so HTML is standalone."""
+    def _repl(match):
+        rel = match.group(1)
+        p = os.path.join(base_dir, rel)
+        if os.path.exists(p):
+            b64 = base64.b64encode(open(p, "rb").read()).decode("ascii")
+            return f'src="data:image/png;base64,{b64}"'
+        return match.group(0)
+    return re.sub(r'src="(results/[^"]+\.png)"', _repl, html_str)
+
+deck_path = os.path.join(base_dir, "NITW_Topic6_Presentation.html")
 with open(deck_path, "w", encoding="utf-8") as f:
-    f.write(html_template)
+    f.write(_inline_local_pngs(html_template))
 print(f"[+] Successfully generated interactive slide deck at '{deck_path}'")
 
 root_deck = r"c:\Users\st983\Downloads\ml\NITW_Topic6_Presentation.html"

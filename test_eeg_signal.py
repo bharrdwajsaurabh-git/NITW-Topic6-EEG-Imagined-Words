@@ -1,7 +1,7 @@
 """
 test_eeg_signal.py
 ==================
-Signal-Driven Real-Time Inference Tester for EEG Imagined Words BCI.
+Offline Signal-Driven Inference Tester for EEG Imagined Words BCI (pre-recorded 1s epochs).
 Designed for NIT Warangal BCI Project Topic 6.
 
 Demonstrates model prediction directly from raw biological EEG signals:

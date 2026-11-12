@@ -1,0 +1,86 @@
+{
+  "code_version": "2.0.0-audit-remediated",
+  "dataset_doi": "10.17632/73g4fw884c.1",
+  "sampling_rate_hz": 128,
+  "samples_per_epoch": 128,
+  "channel_names": [
+    "AF3",
+    "F7",
+    "F3",
+    "FC5",
+    "T7",
+    "P7",
+    "O1",
+    "O2",
+    "P8",
+    "T8",
+    "FC6",
+    "F4",
+    "F8",
+    "AF4"
+  ],
+  "band_names": [
+    "raw",
+    "delta",
+    "theta",
+    "alpha",
+    "beta",
+    "gamma"
+  ],
+  "band_cutoffs": {
+    "delta": [
+      0.5,
+      4.0
+    ],
+    "theta": [
+      4.0,
+      8.0
+    ],
+    "alpha": [
+      8.0,
+      13.0
+    ],
+    "beta": [
+      13.0,
+      30.0
+    ],
+    "gamma": [
+      30.0,
+      40.0
+    ]
+  },
+  "subject_ids_recoverable": false,
+  "subject_ids_policy": "Mendeley EEGIS contains no participant/subject IDs in directories, filenames, or CSV headers; all entries are tagged 'anonymized_unrecoverable'.",
+  "npz_sha256": "ade4e20454c41c1c55258380100b0e6a965d81ce0ffdf465f2ed9f237cbb1194",
+  "shape": [
+    4044,
+    6,
+    14,
+    128
+  ],
+  "n_trials": 4044,
+  "n_blocks": 337,
+  "chunks_per_block": 12,
+  "per_class_counts": {
+    "Rest": 456,
+    "Help (Ayuda)": 504,
+    "Bathroom (Ba\u00f1o)": 372,
+    "Pain (Dolor)": 492,
+    "Thanks (Gracias)": 444,
+    "Hungry (Hambre)": 444,
+    "No": 480,
+    "Thirsty (Sed)": 408,
+    "Yes (S\u00ed)": 444
+  },
+  "overlap_diagnostics": {
+    "overlap_samples": 48,
+    "stride_samples": 80,
+    "continuous_block_samples": 1008,
+    "within_block_pairs": 3707,
+    "within_block_max_abs_diff": 0.0,
+    "within_block_nonzero_discontinuities": 0,
+    "between_block_mean_abs_diff": 197.39788455054872
+  },
+  "manifest_sha256": "80413e0a2c3533112fdf29192ff40039133447bfadeeb81546ea35ef2a38b3e5",
+  "rejected_count": 0
+}

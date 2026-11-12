@@ -1,136 +1,107 @@
-# EEG Imagined Words Recognition Engine (Brain-Computer Interface)
-### CS26001: Advanced Algorithms — Course Project: Topic 6
-> **"Prediction of imagined words (Rest, Help, Bathroom, Pain, Thanks, Hungry, No, Thirsty, Yes) by using Brain EEG signals."**  
-> **Department of Computer Science and Engineering, National Institute of Technology Warangal**  
-> **Team:** Saurabh Bharrdwaj (26CSM2R20, Lead) • Badvath Jaipal (26CSM2R04) • Saurabh Kumar (26CSM2R20)  
-> **Date:** November 2026
+# EEG-Based Imagined Words Decoding via Multi-Scale Riemannian Manifold & Nested Adaptive GA (CS26001)
+
+> **NIT Warangal — Course Project (Topic 6): Deep & Evolutionary Frameworks for EEG-Based Imagined Speech Decoding**  
+> **Team:** Saurabh Bharrdwaj (Lead) • Badvath Jaipal • Saurabh Kumar  
+> **Scope Notice:** Offline Signal-Driven BCI Research Prototype on pre-recorded 1.0 s 14-channel 128 Hz epochs (NOT a real-time clinical streaming controller or hardware DAC system).  
+> **Primary Research Reference:** Lara-Arellano, E., Takacs, T. A., Tovar-Arriaga, S., & Rodriguez-Resendiz, J. (2025). *"Feature Generation with Genetic Algorithms for Imagined Speech Electroencephalogram Signal Classification."* **Eng (MDPI)**, 6(4), 75. DOI: `10.3390/eng6040075`.  
+> **Dataset Source:** Official Real 6-Band **EEGIS Mendeley Corpus** (DOI: `10.17632/73g4fw884c.1`) — `4,044` 1.0 s trials × 6 canonical bands (`24,264` CSVs) reconstructed from **`337` continuous 8 s (1,008-sample) recording blocks** (`overlap = 48 samples / 37.5%`, `stride = 80 samples`, `within_block_max_abs_diff = 0.0 uV`, `between_block_mean_abs_diff = 197.40 uV`). Participant IDs are absent in the distributed Mendeley archive and explicitly marked `anonymized_unrecoverable` (`subject_ids_recoverable = false`).
 
 ---
 
-## 1. Real Mendeley EEGIS Evaluation & Academic Integrity Disclosure
-* **Real Dataset Used (Zero Synthetic Fallbacks)**: Evaluated exclusively on all **4,044 real 6-band human EEG recordings** (`raw`, `delta`, `theta`, `alpha`, `beta`, `gamma` — 24,264 total CSVs across 10 participants and 9 classes) from the user's `dataset/` folder / official Mendeley EEGIS Database ([DOI: 10.17632/73g4fw884c.1](https://data.mendeley.com/datasets/73g4fw884c/1)). `dataset_loader.py` raises `FileNotFoundError` if real recordings are absent.
-* **Stage 1: Primary Research Paper Method (`baseline_paper.py`)**: *Feature Generation with Genetic Algorithms for Imagined Speech Electroencephalogram Signal Classification* (Lara-Arellano, Tovar-Arriaga, Takács, Rodríguez-Reséndiz, *Eng* MDPI, vol. 6, art. 75, Apr. 2025). [DOI: 10.3390/eng6040075](https://doi.org/10.3390/eng6040075)
-  * *Paper Published Method & Target*: Evaluated binary **`/Sí/` vs `/No/`** (**`924` trials**: `444` Sí, `480` No, **80/20 split** chosen for tractable GA evolution). Encoded **14 electrode bits + 214 statistical/spectral features** across 6 bands into a **228-bit binary genome** (`P = 100`, `G = 100`) using **Rank Selection, Homogeneous Crossover, Bit-Flip Mutation**, and **heuristic `k` optimization** across SVM, Random Forest, Decision Tree, and kNN. Baseline pre-GA kNN scored **`<70%`**, whereas evolved **Rank-GA + kNN** selected **8 electrodes (`AF3, T7, O1, O2, P8, T8, F4, F8`)** and **103 features** to reach **`96.0%` binary accuracy (`0.97` Recall, `0.94` F1-score)**.
-  * *Scalar-Only Collapse (Without Spatial Covariance)*: Applying univariate stats on all 4,044 real trials yields only **`20.52%`** (RBF-SVM, `63.78%` Yes/No), **`26.58%`** (6-Band `kNN k=7`, `63.24%` Yes/No), and **`69.73%`** (Paper Scalar Rank-GA + `kNN7`, `584` features on Yes/No).
-  * *Stage 1 Reproduction (`6-Band Spatial-Covariance + PaperRankGeneticSelector + Heuristic kNN`, `620/630` active dims, `k=1`)*: Matches the published paper benchmark at **`95.14%` Holdout** (`0.9513` F1) and **`96.86%` 5-Fold CV** on `Yes (Sí) vs No`, **`88.88%` Holdout** (`0.8895` F1) / **`90.43%` 5-Fold CV** on full 9-class EEGIS, **`97.50%`** on `Help vs Pain`, **`95.31%`** on `Help vs Rest`, and **`8/9 (88.9%)`** on excluded bedside `test_signals/`.
-* **Stage 2: Proposed Improved Method — `MDRC-AGA v3` (`improved_pipeline.py`)**:
-  1. *Multi-Scale 13-Band + Speech-10 SPD Manifold (`1,695D`)*: Combines canonical **Mendeley 6-Band Global covariance (`630D`, 14-Ch)** with **7 Fine Spectral Splits (`735D`, 4–45 Hz across Theta1/2, Mu, HighAlpha, Low/HighBeta, LowGamma; `90.98%` alone)** and localized **Broca-Wernicke Speech-10 6-Band Montage (`330D`, 10 electrodes stripping posterior visual clutter; `76.14%` alone)** via trace-normalized `eigh` Log-Euclidean tangent mapping + per-band L2 scaling.
-  2. *Multi-Scale Block Adaptive GA (`MultiScaleBlockAGA`)*: Evolves continuous scale weights on 5-Fold Train CV (`0.2353 -> 0.3233` adaptive mutation as diversity narrows `0.3936 -> 0.0761`, Train 5-CV `82.20% -> 82.32%`) without distorting SPD symmetry, learning **`Mendeley 6B = 0.7223`**, **`Fine 7B = 0.9684`**, **`Speech-10 = 1.3093`**.
-  3. *BLAS-Accelerated Manifold Consensus (`FastManifoldConsensusClassifier`)*: Vectorized `[3 : 2 : 1 : 1]` soft committee over `k=1` Cosine (`3`), `k=1` Correlation (`2`), `k=3` Distance-Weighted Cosine (`1`), and `k=3` Distance-Weighted Correlation (`1`) — cutting single-trial inference ~9x (`~397 ms -> 43.4 ms`).
-* **Verified Real-EEGIS Improvements Across Every Benchmark (Zero Synthetic Data, Zero Overrides)**:
-  * **Full 4,044-Trial 9-Class Holdout (3,235 train / 809 unseen test; chance = 11.11%)**: **`91.97%`** accuracy (**+3.09% over Stage 1 `88.88%`**, **8.3x random chance**, `0.9200` Macro F1, `0.9095` Cohen Kappa, **`91.1%` Help recall**, **`93.9%` Pain recall**, **`96.6%` Thanks recall**) and **`92.95% ± 1.09%`** 5-Fold Stratified CV (**+2.52% over Stage 1 `90.43%`**).
-  * **Primary Paper Binary Target (`Yes (Sí) vs No`, `N = 924`)**: **`96.22%` Holdout** (`0.9621` F1, beats Stage 1 `95.14%` & Paper `96.0%`) and **`97.73%` 5-Fold CV** (**+0.87% over Stage 1 `96.86%`**, **+1.73% over Paper `96.0%`**).
-  * **Emergency Clinical Binary Pairs (`80/20` / `5-Fold CV`)**: `Help vs Pain`: **`99.00%`** (`97.19%` CV, `99.50%` k=1); `Yes vs Help`: **`97.89%`** (`97.79%` CV); `Hungry vs Thirsty`: **`97.08%`** (`97.18%` CV); `Help vs Rest`: **`94.27%`** (`96.15%` CV).
-  * **Window-Overlap Transparency Disclosure**: Structurally, Mendeley slices `337` 8s (`1024`-sample) blocks into `12` overlapping 128-frame epochs (`48`-sample overlap). Standard 80/20 evaluation reaches `91.97%–97.73%`, whereas strict zero-overlap chunking yields `18.40%` and block-disjoint `GroupShuffleSplit` yields `12.01%`.
-  * **Zero-Leakage Bedside Signal Test Suite (`predict.py --all`)**: Deployment `.pkl` excludes all `9` matching `test_signals/` files (`N_ref = 4,035`), achieving **`9/9 (100.0%)`** exact 9-class accuracy on unseen raw CSVs at **`43.4 ms`** benchmark latency (`>20x` faster than 1.0 s acquisition; `eeg_signal_01.csv` -> `Help (Ayuda)` at `82.9%` confidence).
+## 1. Audited Dual-Protocol Evaluation Methodology (Zero Leakage & Zero Overrides)
+
+To eliminate split leakage and present transparent, mathematically defensible evidence, all models (`Stage 1` primary paper reproduction + classical/DL baselines and `Stage 2` MDRC-AGA) exclude ALL **9 complete `test_signals/` recording blocks (`108` overlapping sibling chunks)** from the modeling pool, leaving **`N_ref = 3,936` reference epochs across `328` disjoint 8 s blocks**, and report **both** evaluation protocols side by side:
+
+1. **Primary Unbiased Protocol — Leakage-Safe Block-Disjoint Nested 5-Fold CV (`328` disjoint blocks, Fold 0 = 20% locked block holdout):**  
+   `set(train_blocks).isdisjoint(set(test_blocks))` across every outer and inner fold (`GroupKFold`). Preprocessing, fold-fitted Riemannian tangent reference $\mathbf{C}_{\text{ref}} = \exp(\text{mean}(\log \mathbf{C}_{\text{train}}))$, scaling, `MultiScaleBlockAGA` weights, and calibration fit strictly inside outer training folds.
+2. **Secondary Exploratory Protocol — Overlapping-Chunk Nested 5-Fold CV (`3,936` chunks):**  
+   ***Exploratory Leakage Disclosure:*** Because Mendeley slices each 8 s recording into 12 overlapping 1 s windows (`48`-sample / `37.5%` overlap) and omits subject IDs, chunk-level CV shares temporal context across train/test splits and measures **within-block temporal memorization**, NOT unseen-block or unseen-subject generalization.
 
 ---
 
-## 2. Signal-Driven Testing (Zero Text Typing)
+## 2. Stage 1 vs Stage 2 Dual-Protocol Results & Reproducible Baselines
 
-In compliance with clinical committee evaluation standards, the system accepts **raw 14-channel microvolt signals** directly without typing text labels.
+All accuracies, balanced accuracies, Cohen's $\kappa$, block-cluster bootstrap 95% CIs, multiclass Brier scores, and 10-bin Expected Calibration Errors (ECE) are generated directly from [`baseline_paper.py`](baseline_paper.py) and [`improved_pipeline.py`](improved_pipeline.py) (`code_version = 2.0.0-audit-remediated`, zero hardcoded predictions, zero prediction overrides):
 
-### Option A: Test by Number Shortcut (1 to 9)
+### A. 9-Class Imagined Vocabulary Benchmarks (`N_ref = 3,936`, Chance = `11.11%`)
+
+| Architecture / Pipeline | Primary Block-Disjoint 5-CV (328 blks) | Bal. Acc / Kappa | Brier / ECE (Blk-Disj.) | Exploratory Chunk 5-CV (*Overlap Leak*) |
+| :--- | :---: | :---: | :---: | :---: |
+| Random Uniform Chance | 11.11% | 11.11% / 0.000 | — | 11.11% |
+| Scalar 322D Moments + RBF-SVM | 10.34% `[8.54, 11.89]` | 9.87% / -0.013 | — | 19.39% |
+| Scalar 322D Moments + kNN (`k=7`) | 10.16% `[8.87, 11.38]` | 9.98% / -0.012 | — | 18.22% |
+| FBCSP + Calibrated SVM | 9.96% `[8.36, 11.74]` | 9.62% / -0.018 | 0.895 / 0.049 | 19.46% |
+| Log-Euclidean MDM (6-Band SPD) | 8.74% `[6.63, 10.65]` | 8.82% / -0.025 | — | 16.11% |
+| True Fold-Tangent LogReg (6-Band) | 10.72% `[9.55, 11.81]` | 10.58% / -0.005 | 1.474 / 0.667 | 20.78% |
+| `EEGNetAttention` (PyTorch 40 ep, Fold 0) | 11.24% `[7.20, 15.15]` | 10.74% / -0.000 | 0.913 / 0.103 | 16.62% |
+| **Stage 1: Paper 6B Rank-GA + kNN** | **10.01%** `[8.66, 11.46]` | 9.93% / -0.013 | 1.131 / 0.327 | **90.02%** (`k=1`, H0: 91.62%) |
+| **Stage 2: MDRC-AGA `MultiMetricSoftVote`** | **10.14%** `[8.79, 11.23]` | 10.00% / -0.012 | 1.520 / 0.728 | **91.84%** (`ECE = 0.037`, H0: 93.78%) |
+| **Stage 2: MDRC-AGA `CalibratedStacker`** | **9.68%** `[8.33, 10.80]` | 9.31% / -0.021 | **0.913 / 0.100** | 74.67% (`Brier = 0.418, ECE = 0.178`) |
+
+> **Critical Audit Finding:** Across ALL architectures (classical, deep `EEGNetAttention`, FBCSP, MDM, Stage 1 GA, and Stage 2 MDRC-AGA), true cross-block generalization on `328` disjoint blocks hovers near random chance (**`8.74%–11.41%`** for 9-class and **`44.44%–49.88%`** for binary subtasks; max binary **`49.88%`** Hungry vs Thirsty, **`46.33%`** Stage 2 Stacker on Yes vs No). Meanwhile, offline 9-file format check accuracy drops cleanly from synthetic/leaked sibling matches to **`0/9 (0.0%)`** once all `108` overlapping sibling chunks of the `9` test blocks are excluded. Removing overlapping siblings reveals that the ~90–97% accuracy reported under chunk-random splits in prior literature is driven by within-block 37.5% window overlap rather than block-independent speech decoding.
+
+### B. Binary Subtasks (`Yes vs No` Paper Task + Clinical Emergency Pairs, 5-CV)
+
+| Binary Subtask | Block-Disjoint 5-CV (Stage 1 GA) | Block-Disjoint 5-CV (Stage 2 Stacker / Vote) | Exploratory Chunk 5-CV (Stage 1 GA) | Exploratory Chunk 5-CV (Stage 2 Stacker / Vote) |
+| :--- | :---: | :---: | :---: | :---: |
+| **Yes (`Sí`) vs No** (`N=900, 75 blks`) | 45.11% `[39.00, 51.23]` | **46.33%** / 44.44% | **96.11%** | 93.89% / **95.67%** |
+| **Help vs Rest** (`N=936, 78 blks`) | 47.33% | **48.08%** / 47.65% | **97.12%** | 92.84% / **97.44%** |
+| **Help vs Pain** (`N=972, 81 blks`) | **46.91%** | 46.40% / 46.40% | 96.19% | 93.83% / **96.50%** |
+| **Hungry vs Thirsty** (`N=828, 69 blks`) | 47.34% | 44.57% / **49.88%** | 95.41% | 90.58% / **96.38%** |
+| **Yes vs Help** (`N=924, 77 blks`) | **49.35%** | 47.84% / 47.29% | 96.00% | 94.37% / **96.86%** |
+
+---
+
+## 3. Controlled Scientific Ablations & Offline Profiling (`improved_pipeline.py`)
+
+- **Geometry Comparison (`tangent_fold` vs `log_euclid_identity`):** Under Block-Disjoint 5-CV: Identity `10.34%` vs Fold-Tangent Vote `10.14%` / Stacker `9.68%` (Exploratory Chunk: `91.77%` vs `91.84%`). Individual Fold 0 head comparison under Block-Disjoint 5-CV spans `Calibrated_RBF_SVM = 11.41%` (`ECE = 0.022, Brier = 0.889`), `Multinomial_LogReg = 10.57%`, `Shrinkage_LDA = 10.39%`, `Weighted_Vote_3211 = 10.14%`, `Cosine_kNN_k3_Dist = 9.78%`, `Calibrated_OOF_Stacker = 9.68%` (`ECE = 0.100, Brier = 0.913`).
+- **5-Seed Mutation Mode Control (Holdout Fold 0, 10 pop / 6 gen):** Block-Disjoint `fixed = 11.52% ± 0.22%`, `diversity_adaptive = 11.49% ± 0.20%`, `diversity_stagnation = 11.49% ± 0.08%` (Exploratory Chunk: `93.58% ± 0.21%`, `93.45% ± 0.13%`, `93.50% ± 0.20%`). All 1,695 dimensions remain active under 3-block scalar weighting (`active_feature_count = 1695`, mean fold weights `w = [0.8493, 0.6632, 1.4875]` block-disjoint vs `[1.2962, 0.9847, 0.7192]` exploratory chunk).
+- **Mutually Exclusive vs Overlapping Fine 7-Band Splits:** Non-overlapping `[4-6, 6-8, 8-10.5, 10.5-13, 13-20, 20-30, 30-40 Hz]` yields `10.14%` block-disjoint / `91.84%` chunk vs overlapping `9.71%` block-disjoint / `92.51%` chunk.
+- **Electrode Montage Topology (Fold 0):** Block-Disjoint local LogReg accuracy: `left7` (168D) `13.38%`, `all14` (630D) `12.63%`, `speech10` (330D) `11.24%`, `occipital4` (60D) `9.85%`. Exploratory Chunk Vote: `all14` `92.26%`, `speech10` `82.49%`, `left7` `60.41%`, `occipital4` `26.90%`.
+- **Continuous 8 s Filtering & Window-Length Diagnostics (`328` continuous 1,008-sample blocks):**
+  - *IIR Edge Transient (`filter-continuous-before-slice` vs `filter-isolated-1s`):* `edge16_mean_abs_diff = 0.0175 uV` (`max = 3.3181 uV`), `interior_mean_abs_diff = 0.2401 uV`.
+  - *Continuous Window Lengths (Block-Disjoint LogReg):* `1s (128 pts)`: `11.28%` window / `11.89%` block-agg; `2s (256 pts)`: `10.26%` / `12.20%`; `4s (512 pts)`: `9.45%`; `8s (1,008 pts)`: `10.06%`.
+- **Offline Per-Epoch CPU Compute Latency (`latency_breakdown` on 9 CSVs):** Load + Validate = `14.75 ms`, Preprocess = `0.04 ms`, Feature Extraction (19-view tangent) = `9.59 ms`, Classification = `7.40 ms` → **`31.77 ms` total per isolated 1 s CSV** (excludes hardware EEG acquisition/DAC loop).
+
+---
+
+## 4. Remediated Codebase Structure
+
+| File / Module | Purpose & Key Audit Safeguards |
+| :--- | :--- |
+| [`eeg_preprocessing.py`](eeg_preprocessing.py) (+ [`src/eeg_preprocessing.py`](src/eeg_preprocessing.py)) | Single canonical ingestion & preprocessing (`14 x 128 @ 128 Hz`), unified `CANONICAL_BAND_CUTOFFS` (`8-13/13-30/30-40 Hz`), row-0 preservation on headerless CSVs, column reordering, strict rejection of `<128` samples, `NaN/Inf`, wrong channels, and non-128 Hz sampling rates. |
+| [`dataset_loader.py`](dataset_loader.py) (+ [`src/dataset_loader.py`](src/dataset_loader.py)) | Audited 6-band Mendeley parser (no silent `except: continue`), explicit `anonymized_unrecoverable` subject tag, continuous 8 s overlap diagnostics, SHA-256 `.npz.meta.json` validation, `results/dataset_audit_report.json` & `results/dataset_manifest.json`. |
+| [`eeg_features.py`](eeg_features.py) (+ [`src/eeg_features.py`](src/eeg_features.py)) | Fold-fitted `RiemannianTangentSpace(fit/transform)`, `MultiScaleTangentExtractor` (with fast per-trial cov precomputation), `MDMClassifier`, `FilterBankCSP`, and unified `extract_trial_features`. |
+| [`models/ga_feature_selector.py`](models/ga_feature_selector.py) & [`models/aga_selector.py`](models/aga_selector.py) (+ `src/models/`) | `GroupKFold`-aware inner CV (`groups`), `PaperRankGeneticSelector`, `AdaptiveScalarGeneticSelector`, `MultiScaleBlockAGA`, `MultiMetricSoftVotingClassifier`, `CalibratedManifoldStacker`, and block-bootstrap CI + Brier/ECE metrics. |
+| [`baseline_paper.py`](baseline_paper.py) & [`improved_pipeline.py`](improved_pipeline.py) | End-to-end Stage 1 & Stage 2 side-by-side nested CV suites saving `results/full4044_splits.npz`, `results/baseline_paper_metrics.json`, `results/comparison_baselines.json`, `results/improved_pipeline_metrics.json`, `results/best_improved_ensemble.pkl`. |
+| [`predict.py`](predict.py) & [`eeg_gui_tester.py`](eeg_gui_tester.py) | Offline signal-driven CLI & Tkinter waveform inspector displaying calibrated posterior distributions, mismatch disclosure vs registry labels, and strict `--fs` / format validation. |
+| [`compare_models.py`](compare_models.py) & [`draw_architecture.py`](draw_architecture.py) | Dynamically populated dual-protocol charts and architecture diagram reading directly from `results/*.json`. |
+| [`build_nitw_12page_report.py`](build_nitw_12page_report.py) & [`build_presentation_deck.py`](build_presentation_deck.py) | Generates exact 12-page [`NITW_Topic6_Imagined_Words_Final_Report.pdf`](NITW_Topic6_Imagined_Words_Final_Report.pdf), `.docx` mirror, and interactive HTML slide deck [`NITW_Topic6_Presentation.html`](NITW_Topic6_Presentation.html). |
+| [`requirements.txt`](requirements.txt) & [`tests/test_audit_fixes.py`](tests/test_audit_fixes.py) | Pinned runtime dependencies and 8 automated unit/integration tests covering preprocessing parity, input validation, cache `.meta.json` tamper checks, fold-only tangent fitting, and block-exclusion invariants (`python -m unittest tests/test_audit_fixes.py -v`). |
+| [`results/legacy_720_archive/`](results/legacy_720_archive/PROVENANCE.md) | Quarantined superseded 720-trial artifacts from `2026-10-28` with provenance documentation. |
+
+---
+
+## 5. Quick Reproduction & Verification Commands
+
 ```bash
-python predict.py 1       # Tests signal 1 (Help / Ayuda)
-python predict.py 2       # Tests signal 2 (Pain / Dolor)
-python predict.py 3       # Tests signal 3 (Hungry / Hambre)
-python predict.py 4       # Tests signal 4 (Thirsty / Sed)
-python predict.py 5       # Tests signal 5 (Bathroom / Baño)
-```
+# 1. Install pinned dependencies & verify all 8 audit remediation tests
+pip install -r requirements.txt
+python -m unittest tests/test_audit_fixes.py -v
 
-### Option B: Test by Signal File Path
-```bash
-# Pass any CSV, NPY, or TSV signal file (relative or absolute)
-python predict.py test_signals/eeg_signal_01.csv
-python predict.py test_signals/eeg_signal_04.npy
-python predict.py "C:\path\to\patient_record.csv"
-```
+# 2. Rebuild verified dataset cache, run Stage 1 & Stage 2 audited pipelines
+python dataset_loader.py
+python baseline_paper.py
+python improved_pipeline.py
 
-### Option C: Batch Evaluate All Test Signals
-```bash
+# 3. Regenerate dynamic visual charts & run offline CLI / GUI demos
+python compare_models.py
+python draw_architecture.py
 python predict.py --all
-```
-*Outputs a complete scorecard comparing organic MDRC-AGA v3 predictions against ground truth across all 9 excluded real EEGIS test signals (**9/9 = 100.0%**, zero leakage, **43.4 ms** benchmark CPU latency).*
-
-### Option D: Interactive Mode
-```bash
-python predict.py
-```
-*Displays an interactive menu listing all available test recordings to select from.*
-
----
-
-## 3. Bedside Real-Time Oscilloscope GUI
-
-Launch the interactive desktop interface designed for committee demonstrations:
-
-```bash
+python predict.py 1
 python eeg_gui_tester.py
-```
 
-* **Live 14-Channel Oscilloscope**: Visualizes continuous EEG scalp waveforms in real-time with per-channel DC detrending.
-* **One-Click Neural Decoding**: Runs 13-band Butterworth decomposition + Speech-10 1,695D SPD tangent projection and outputs calibrated probability bars in ~43 ms.
-* **Browse Signal Button**: Load any `.csv` or `.npy` file from anywhere on your PC.
-* **Ground-Truth Audit**: Reveals patient ground truth to demonstrate decoding fidelity.
-
----
-
-## 4. Academic Reports & Presentation Deck
-
-The project includes submission-ready documents matching NIT Warangal standards:
-
-1. **12-Page PDF Report**: `NITW_Topic6_Imagined_Words_Final_Report.pdf` (Strictly matches the reference layout, typography, booktabs tables, and citations).
-2. **Word Report (.docx)**: `NITW_Topic6_Imagined_Words_Final_Report.docx` (Fully editable Microsoft Word document).
-3. **19-Slide Presentation Deck**: `NITW_Topic6_Presentation.html` (Interactive, dark clinical presentation with charts and animations).
-
-To re-compile the report:
-```bash
+# 4. Rebuild exact 12-page PDF/DOCX report & HTML slide deck
 python build_nitw_12page_report.py
-```
-
----
-
-## 5. Clean Project Structure
-
-```
-imagined_speech_eeg/
-├── data/
-│   ├── eegis_6band_real.npz              # 4,044 real 6-band 14-ch EEG trials (Mendeley EEGIS)
-│   └── eegis_v3_features.npz             # Cached 1,695D 13-Band + Speech-10 SPD manifold features
-├── models/
-│   ├── aga_selector.py                   # MultiScaleBlockAGA & FastManifoldConsensusClassifier
-│   ├── ga_feature_selector.py            # PaperRankGeneticSelector & GeneticFeatureSelector
-│   └── eegnet_attention.py               # PyTorch EEGNet neural network
-├── results/
-│   ├── best_improved_ensemble.pkl        # Zero-leakage Stage 2 MDRC-AGA v3 model (N_ref=4,035)
-│   ├── best_ml_pipeline.pkl              # Legacy scalar baseline pipeline
-│   ├── baseline_paper_metrics.json       # Stage 1 Paper Rank-GA + scalar benchmark metrics
-│   ├── improved_pipeline_metrics.json    # Stage 2 MDRC-AGA v3 holdout, CV & binary metrics
-│   ├── architecture_flow_diagram.png     # Figure 1: Stage 1 vs Stage 2 MDRC-AGA v3 architecture
-│   ├── fig2_aga_optimization.png         # Figure 2: MultiScaleBlockAGA convergence & scale weights
-│   ├── fig3_accuracy_comparison.png      # Figure 3: Cross-architecture benchmark chart (Stage 1 vs v3)
-│   ├── baseline_vs_improved_comparison.png # Combined 4-panel Stage 1 vs Stage 2 visual suite
-│   ├── confusion_matrix_baseline.png     # Stage 1 Paper 9-Class confusion matrix (88.88%)
-│   ├── confusion_matrix_improved.png     # Figure 4: Stage 2 MDRC-AGA v3 confusion matrix (91.97%)
-│   ├── live_decoded_signal.png           # Figure 5: 14-Channel oscilloscope waveform (82.9% Help)
-│   └── sample_prediction.png             # Latest decoded signal waveform & confidence plot
-├── src/                                  # Mirrored modular source code
-├── test_signals/                         # 9 Real 14-channel EEGIS test recordings (CSV & NPY)
-│   ├── eeg_signal_01.csv to 09.csv
-│   ├── eeg_signal_01.npy to 09.npy
-│   └── ground_truth_registry.json        # Medical ground truth registry
-├── dataset_loader.py                     # Real-only 6-band Mendeley EEGIS loader (reads dataset/)
-├── baseline_paper.py                     # Stage 1 Primary Paper Rank-GA + scalar baseline benchmark
-├── improved_pipeline.py                  # Stage 2 Proposed MDRC-AGA v3 (91.97%-97.73% | 9/9 unseen)
-├── compare_models.py                     # Side-by-side chart generation from real JSON metrics
-├── predict.py                            # Real-time predictor (on-the-fly 13-band SPD, zero overrides)
-├── test_eeg_signal.py                    # Signal-driven test script
-├── eeg_gui_tester.py                     # Real-time oscilloscope desktop GUI
-├── build_nitw_12page_report.py           # Pure-Python 12-page PDF & Word builder
-├── build_presentation_deck.py            # Interactive 19-slide HTML presentation builder
-├── NITW_Topic6_Imagined_Words_Final_Report.pdf   # Final 12-page PDF report
-├── NITW_Topic6_Imagined_Words_Final_Report.docx  # Final Microsoft Word report
-├── NITW_Topic6_Presentation.html         # 19-slide interactive presentation deck
-└── README.md                             # Project documentation
+python build_presentation_deck.py
 ```

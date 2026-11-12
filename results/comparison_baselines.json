@@ -1,21 +1,35 @@
 {
-    "Scalar_SVM_RBF": {
-        "accuracy_9class": 0.2052,
-        "yes_no_acc": 0.6378
-    },
-    "Scalar_kNN_k7": {
-        "accuracy_9class": 0.2658,
-        "yes_no_acc": 0.6324
-    },
-    "Paper_Scalar_GA_kNN7": {
-        "yes_no_acc": 0.6973,
-        "active_feats": 584
-    },
-    "Stage1_Paper_Matched_6B_GA_kNN": {
-        "yes_no_holdout": 0.9514,
-        "yes_no_5fold_cv": 0.9686,
-        "accuracy_9class": 0.8888,
-        "accuracy_9class_5cv": 0.9043,
-        "unseen_test_signals": "8/9"
-    }
+  "code_version": "2.0.0-audit-remediated",
+  "protocol_note": "Both Leakage-Safe Block-Disjoint Nested 5-CV (N_ref=3,936, 328 blocks) and Exploratory Chunk 5-CV computed cleanly from live scripts.",
+  "Scalar_322_SVM_RBF": {
+    "block_disjoint_9c": 0.1034,
+    "exploratory_chunk_9c": 0.1939
+  },
+  "Scalar_322_kNN7": {
+    "block_disjoint_9c": 0.1016,
+    "exploratory_chunk_9c": 0.1822
+  },
+  "FBCSP_Calibrated_SVM": {
+    "block_disjoint_9c": 0.0996,
+    "exploratory_chunk_9c": 0.1946
+  },
+  "MDM_LogEuclidean_6Band": {
+    "block_disjoint_9c": 0.0874,
+    "exploratory_chunk_9c": 0.1611
+  },
+  "True_Fold_Tangent_LogReg_6B": {
+    "block_disjoint_9c": 0.1072,
+    "exploratory_chunk_9c": 0.2078
+  },
+  "EEGNetAttention_40Epochs": {
+    "block_disjoint_holdout": 0.1124,
+    "exploratory_chunk_holdout": 0.1662
+  },
+  "Stage1_Paper_6B_RankGA_kNN": {
+    "block_disjoint_9c_5cv": 0.1001,
+    "block_disjoint_yes_no_5cv": 0.4511,
+    "exploratory_chunk_9c_5cv": 0.9002,
+    "exploratory_chunk_yes_no_5cv": 0.9611,
+    "unseen_demo_9": "0/9"
+  }
 }

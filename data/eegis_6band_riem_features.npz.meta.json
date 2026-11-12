@@ -1,0 +1,60 @@
+{
+  "code_version": "2.0.0-audit-remediated",
+  "dataset_doi": "10.17632/73g4fw884c.1",
+  "sampling_rate_hz": 128,
+  "samples_per_epoch": 128,
+  "channel_names": [
+    "AF3",
+    "F7",
+    "F3",
+    "FC5",
+    "T7",
+    "P7",
+    "O1",
+    "O2",
+    "P8",
+    "T8",
+    "FC6",
+    "F4",
+    "F8",
+    "AF4"
+  ],
+  "band_names": [
+    "raw",
+    "delta",
+    "theta",
+    "alpha",
+    "beta",
+    "gamma"
+  ],
+  "band_cutoffs": {
+    "delta": [
+      0.5,
+      4.0
+    ],
+    "theta": [
+      4.0,
+      8.0
+    ],
+    "alpha": [
+      8.0,
+      13.0
+    ],
+    "beta": [
+      13.0,
+      30.0
+    ],
+    "gamma": [
+      30.0,
+      40.0
+    ]
+  },
+  "subject_ids_recoverable": false,
+  "subject_ids_policy": "Mendeley EEGIS contains no participant/subject IDs in directories, filenames, or CSV headers; all entries are tagged 'anonymized_unrecoverable'.",
+  "npz_sha256": "e52d4a1526edec475f871c62a21bebd032d001e6044a723f564f4e8d6bc9c00b",
+  "shape": [
+    4044,
+    630
+  ],
+  "manifest_sha256": "80413e0a2c3533112fdf29192ff40039133447bfadeeb81546ea35ef2a38b3e5"
+}
