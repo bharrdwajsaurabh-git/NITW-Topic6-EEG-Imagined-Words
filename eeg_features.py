@@ -220,6 +220,79 @@ def extract_single_trial_6band_from_raw(raw_signal: np.ndarray, fs: int = 128) -
     return np.concatenate(vecs).reshape(1, -1).astype(np.float32)
 
 
+# Speech-motor (Broca-Wernicke + Premotor) 10-electrode montage indices inside CHANNEL_NAMES:
+# ["AF3", "F7", "F3", "FC5", "T7", "P7", "T8", "FC6", "F4", "F8"]
+SPEECH_10_IDX = [0, 1, 2, 3, 4, 5, 9, 10, 11, 12]
+SUB7_CUTOFFS = [
+    (4.0, 6.5), (6.5, 9.5), (9.5, 13.0),
+    (13.0, 20.0), (20.0, 30.0), (25.0, 35.0), (30.0, 42.0),
+]
+
+
+def _spd_tangent_batch(sig_n_c_t: np.ndarray, reg: float = 1e-4) -> np.ndarray:
+    """Fast vectorized-overhead SPD Log-Euclidean tangent batch for (N, C, T) -> (N, C*(C+1)//2)."""
+    n_trials, n_ch, _ = sig_n_c_t.shape
+    iu = np.triu_indices(n_ch)
+    off = iu[0] != iu[1]
+    s2 = np.sqrt(2.0)
+    eye = reg * np.eye(n_ch, dtype=np.float64)
+    out = np.empty((n_trials, len(iu[0])), dtype=np.float32)
+    for i in range(n_trials):
+        cov = np.cov(sig_n_c_t[i].astype(np.float64)) + eye
+        cov_n = cov / (np.trace(cov) / float(n_ch) + 1e-8)
+        ev, evec = np.linalg.eigh(cov_n)
+        ev = np.maximum(ev, 1e-6)
+        log_c = (evec * np.log(ev)) @ evec.T
+        v = log_c[iu].copy()
+        v[off] *= s2
+        v /= (np.linalg.norm(v) + 1e-12)
+        out[i] = v.astype(np.float32)
+    return out
+
+
+def extract_mdrc_v3_features(X_6band: np.ndarray, F_riem6: np.ndarray = None, fs: int = 128) -> np.ndarray:
+    """
+    Extracts Stage 2 MDRC-AGA v3 1695-dim Multi-Scale Riemannian features:
+      1) Mendeley 6-Band Global Log-SPD (630D = 6 x 105)
+      2) Fine 7-Band Sub-Spectral Log-SPD across Theta/Alpha/Beta/Gamma splits (735D = 7 x 105)
+      3) Broca-Wernicke 10-Electrode Speech-Motor 6-Band Log-SPD (330D = 6 x 55)
+    """
+    if F_riem6 is None:
+        F_riem6 = extract_6band_riemannian_features(X_6band)
+    raw0 = X_6band[:, 0].astype(np.float64)
+    raw0 = raw0 - np.mean(raw0, axis=-1, keepdims=True)
+    sub_parts = []
+    for lo, hi in SUB7_CUTOFFS:
+        b_coef, a_coef = signal.butter(4, [lo, hi], btype="band", fs=float(fs))
+        xb = signal.filtfilt(b_coef, a_coef, raw0, axis=-1)
+        sub_parts.append(_spd_tangent_batch(xb, reg=1e-4))
+    F_sub7 = np.hstack(sub_parts)
+    F_sp10 = np.hstack([_spd_tangent_batch(X_6band[:, b, SPEECH_10_IDX, :], reg=1e-4) for b in range(6)])
+    return np.nan_to_num(np.hstack([F_riem6, F_sub7, F_sp10])).astype(np.float32)
+
+
+def extract_single_trial_v3_from_raw(raw_signal: np.ndarray, fs: int = 128) -> np.ndarray:
+    """
+    Real-time single-trial extraction (<50 ms) matching extract_mdrc_v3_features() -> (1, 1695).
+    """
+    sig_raw = raw_signal.astype(np.float64)
+    sig_raw = sig_raw - np.mean(sig_raw, axis=1, keepdims=True)
+    mendeley_cutoffs = [(0.5, 4.0), (4.0, 8.0), (8.0, 13.0), (13.0, 30.0), (30.0, 40.0)]
+    bands_6 = [sig_raw]
+    for lo, hi in mendeley_cutoffs:
+        b_coef, a_coef = signal.butter(4, [lo, hi], btype="band", fs=float(fs))
+        bands_6.append(signal.filtfilt(b_coef, a_coef, sig_raw, axis=1))
+    v_6b = np.concatenate([_spd_tangent_vector(xb) for xb in bands_6])
+    v_sub7_parts = []
+    for lo, hi in SUB7_CUTOFFS:
+        b_coef, a_coef = signal.butter(4, [lo, hi], btype="band", fs=float(fs))
+        xb = signal.filtfilt(b_coef, a_coef, sig_raw, axis=1)
+        v_sub7_parts.append(_spd_tangent_vector(xb))
+    v_sub7 = np.concatenate(v_sub7_parts)
+    v_sp10 = np.concatenate([_spd_tangent_vector(xb[SPEECH_10_IDX, :]) for xb in bands_6])
+    return np.nan_to_num(np.concatenate([v_6b, v_sub7, v_sp10])).reshape(1, -1).astype(np.float32)
+
+
 if __name__ == "__main__":
     print("=" * 65)
     print("       EEG FEATURE EXTRACTION ENGINE TEST (14 CHANNELS)       ")

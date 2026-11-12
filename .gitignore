@@ -54,4 +54,5 @@ desktop.ini
 data/eegis_raw/
 data/eegis_6band_real.npz
 data/eegis_6band_features.npz
+data/eegis_v3_features.npz
 dataset/

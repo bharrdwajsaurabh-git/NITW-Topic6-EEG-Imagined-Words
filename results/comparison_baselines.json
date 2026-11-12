@@ -1,0 +1,21 @@
+{
+    "Scalar_SVM_RBF": {
+        "accuracy_9class": 0.2052,
+        "yes_no_acc": 0.6378
+    },
+    "Scalar_kNN_k7": {
+        "accuracy_9class": 0.2658,
+        "yes_no_acc": 0.6324
+    },
+    "Paper_Scalar_GA_kNN7": {
+        "yes_no_acc": 0.6973,
+        "active_feats": 584
+    },
+    "Stage1_Paper_Matched_6B_GA_kNN": {
+        "yes_no_holdout": 0.9514,
+        "yes_no_5fold_cv": 0.9686,
+        "accuracy_9class": 0.8888,
+        "accuracy_9class_5cv": 0.9043,
+        "unseen_test_signals": "8/9"
+    }
+}

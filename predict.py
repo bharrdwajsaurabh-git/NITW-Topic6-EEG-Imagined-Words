@@ -34,7 +34,11 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 from dataset_loader import CLASS_MAP, CHANNEL_NAMES
-from eeg_features import extract_trial_features, extract_single_trial_6band_from_raw
+from eeg_features import (
+    extract_trial_features,
+    extract_single_trial_6band_from_raw,
+    extract_single_trial_v3_from_raw,
+)
 from improved_pipeline import extract_riemannian_features
 
 
@@ -179,7 +183,21 @@ def predict_signal(signal: np.ndarray, model_pkg: dict, model_type: str):
         scaler = model_pkg["scaler"]
         ensemble = model_pkg["ensemble"]
 
-        if model_pkg.get("mode") == "fb_riemannian_6band":
+        if model_pkg.get("mode") == "mdrc_aga_v3_13b_speech10":
+            f_v3 = extract_single_trial_v3_from_raw(signal, fs=128)
+            f_scaled = scaler.transform(f_v3)
+            scale_w = model_pkg.get("scale_weights")
+            block_dims = model_pkg.get("block_dims", (630, 735, 330))
+            if scale_w is not None:
+                f_opt = f_scaled.copy()
+                s = 0
+                for dim, w in zip(block_dims, scale_w):
+                    f_opt[:, s : s + dim] *= float(w)
+                    s += dim
+            else:
+                f_opt = f_scaled
+            probs = ensemble.predict_proba(f_opt)[0]
+        elif model_pkg.get("mode") == "fb_riemannian_6band":
             # 6-Band Filter-Bank Riemannian extraction via 4th-order Butterworth filtfilt (630D)
             f_riem = extract_single_trial_6band_from_raw(signal, fs=128)
             f_scaled = scaler.transform(f_riem)
@@ -309,7 +327,12 @@ def print_single_prediction(file_path: str, model_pkg: dict, model_type: str):
     # Print Clean Signal Telemetry & Output
     print("\n" + "=" * 76)
     print("      NIT WARANGAL — CS26001: ADVANCED ALGORITHMS (TOPIC 6)")
-    print(f"      Model Engine: {model_pkg.get('type', 'Proposed MDRC-AGA v2: 6-Band FB-Riemannian Consensus')}")
+    default_engine = (
+        "Proposed MDRC-AGA v3: 13-Band + Speech-10 Riemannian Consensus"
+        if model_pkg.get("mode") == "mdrc_aga_v3_13b_speech10"
+        else "Proposed MDRC-AGA v2: 6-Band FB-Riemannian Consensus"
+    )
+    print(f"      Model Engine: {model_pkg.get('type', default_engine)}")
     print("=" * 76)
     print(f"[*] Input File:             {file_path}")
     print(f"[*] Electrodes Ingested:    14 channels (AF3, F7, F3, FC5, T7, P7, O1, O2, P8, T8, FC6, F4, F8, AF4)")
