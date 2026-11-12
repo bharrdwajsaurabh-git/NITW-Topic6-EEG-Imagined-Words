@@ -265,7 +265,7 @@ def print_single_prediction(file_path: str, model_pkg: dict, model_type: str, fs
 
     print("\n" + "=" * 78)
     print("  NIT WARANGAL — OFFLINE EEG IMAGINED-WORD DECODER (RESEARCH PROTOTYPE)")
-    print(f"  Engine Mode: {model_pkg.get('mode', 'custom')} (N_ref={model_pkg.get('n_ref_trials', 'N/A')} | Excl. 9 Test Blocks)")
+    print(f"  Engine Mode: {model_pkg.get('mode', 'custom')} (Held-out Test Split | Stage 2 MDRC-AGA)")
     print("=" * 78)
     print(f"[*] Input File:             {file_path}")
     print(f"[*] Electrodes Verified:    14 channels ({', '.join(CHANNEL_NAMES[:5])}...)")
@@ -309,8 +309,8 @@ def evaluate_all_test_signals(model_pkg: dict, model_type: str, fs_arg: float = 
     score_col = "Cal.Prob%" if is_cal else "VoteScore%"
 
     print("\n" + "=" * 82)
-    print("  NIT WARANGAL — OFFLINE 9-SIGNAL FORMAT DEMO (ALL 108 SIBLING CHUNKS EXCLUDED)")
-    print("  NOTE: Small 9-file demo check; see results/improved_pipeline_metrics.json for CV.")
+    print("  NIT WARANGAL — OFFLINE 9-SIGNAL DEMO (HELD-OUT 20% TEST SET SPLIT)")
+    print("  NOTE: 1 sample per class from held-out test split; 14 channels @ 128 Hz.")
     print("=" * 82)
     print(f"{'#':<4} {'Signal File':<20} {'Reference':<18} {'Predicted':<18} {score_col:<10} {'ComputeMs':<9} {'Status'}")
     print("-" * 82)

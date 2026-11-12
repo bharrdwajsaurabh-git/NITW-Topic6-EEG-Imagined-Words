@@ -1,0 +1,21 @@
+{
+  "task": "9-Class Imagined Words Decoding",
+  "dataset": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1)",
+  "train_samples": 3235,
+  "test_samples": 809,
+  "random_chance": 0.1111,
+  "stage1_paper_binary_accuracy": 0.96,
+  "stage2_9class_test_accuracy": 0.9085290482076638,
+  "stage2_stacker_test_accuracy": 0.7354758961681088,
+  "stage2_yes_no_test_accuracy": 0.8864864864864865,
+  "brier_score": 0.43428702565309113,
+  "ece_10bin": 0.1660840238141691,
+  "macro_f1": 0.7354785958338459,
+  "cohen_kappa": 0.7021149928421979,
+  "active_features": 1695,
+  "scale_weights": [
+    0.9261027018301718,
+    1.0729381186519729,
+    1.000959179514197
+  ]
+}

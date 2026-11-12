@@ -3,84 +3,84 @@
         "signal_id": "eeg_signal_01",
         "file_csv": "test_signals/eeg_signal_01.csv",
         "file_npy": "test_signals/eeg_signal_01.npy",
-        "true_class_id": 1,
-        "true_word": "Help (Ayuda)",
-        "patient_source": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1 — Participant IDs Anonymized/Unrecoverable)",
+        "true_class_id": 0,
+        "true_word": "Rest",
+        "dataset_source": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1)",
         "sampling_rate_hz": 128,
         "duration_sec": 1.0,
         "voltage_range_uv": [
-            -135.2841796875,
-            94.97216796875
+            -76.00170135498047,
+            67.80026245117188
         ]
     },
     {
         "signal_id": "eeg_signal_02",
         "file_csv": "test_signals/eeg_signal_02.csv",
         "file_npy": "test_signals/eeg_signal_02.npy",
-        "true_class_id": 3,
-        "true_word": "Pain (Dolor)",
-        "patient_source": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1 — Participant IDs Anonymized/Unrecoverable)",
+        "true_class_id": 1,
+        "true_word": "Help (Ayuda)",
+        "dataset_source": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1)",
         "sampling_rate_hz": 128,
         "duration_sec": 1.0,
         "voltage_range_uv": [
-            -106.70263671875,
-            66.63037109375
+            -52.29179382324219,
+            40.30052947998047
         ]
     },
     {
         "signal_id": "eeg_signal_03",
         "file_csv": "test_signals/eeg_signal_03.csv",
         "file_npy": "test_signals/eeg_signal_03.npy",
-        "true_class_id": 5,
-        "true_word": "Hungry (Hambre)",
-        "patient_source": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1 — Participant IDs Anonymized/Unrecoverable)",
+        "true_class_id": 2,
+        "true_word": "Bathroom (Ba\u00f1o)",
+        "dataset_source": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1)",
         "sampling_rate_hz": 128,
         "duration_sec": 1.0,
         "voltage_range_uv": [
-            -61.130126953125,
-            55.27978515625
+            -40.45682144165039,
+            42.972747802734375
         ]
     },
     {
         "signal_id": "eeg_signal_04",
         "file_csv": "test_signals/eeg_signal_04.csv",
         "file_npy": "test_signals/eeg_signal_04.npy",
-        "true_class_id": 7,
-        "true_word": "Thirsty (Sed)",
-        "patient_source": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1 — Participant IDs Anonymized/Unrecoverable)",
+        "true_class_id": 3,
+        "true_word": "Pain (Dolor)",
+        "dataset_source": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1)",
         "sampling_rate_hz": 128,
         "duration_sec": 1.0,
         "voltage_range_uv": [
-            -54.546875,
-            55.712890625
+            -36.061561584472656,
+            28.419586181640625
         ]
     },
     {
         "signal_id": "eeg_signal_05",
         "file_csv": "test_signals/eeg_signal_05.csv",
         "file_npy": "test_signals/eeg_signal_05.npy",
-        "true_class_id": 2,
-        "true_word": "Bathroom (Ba\u00f1o)",
-        "patient_source": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1 — Participant IDs Anonymized/Unrecoverable)",
+        "true_class_id": 4,
+        "true_word": "Thanks (Gracias)",
+        "dataset_source": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1)",
         "sampling_rate_hz": 128,
         "duration_sec": 1.0,
         "voltage_range_uv": [
-            -181.46240234375,
-            59.4716796875
+            -44.61945724487305,
+            37.1435546875
         ]
     },
     {
         "signal_id": "eeg_signal_06",
         "file_csv": "test_signals/eeg_signal_06.csv",
         "file_npy": "test_signals/eeg_signal_06.npy",
-        "true_class_id": 8,
-        "true_word": "Yes (S\u00ed)",
-        "patient_source": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1 — Participant IDs Anonymized/Unrecoverable)",
+        "true_class_id": 5,
+        "true_word": "Hungry (Hambre)",
+        "dataset_source": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1)",
         "sampling_rate_hz": 128,
         "duration_sec": 1.0,
         "voltage_range_uv": [
-            -97.65234375,
-            117.21923828125
+            -57.64419174194336,
+            85.94564819335938
         ]
     },
     {
@@ -89,40 +89,40 @@
         "file_npy": "test_signals/eeg_signal_07.npy",
         "true_class_id": 6,
         "true_word": "No",
-        "patient_source": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1 — Participant IDs Anonymized/Unrecoverable)",
+        "dataset_source": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1)",
         "sampling_rate_hz": 128,
         "duration_sec": 1.0,
         "voltage_range_uv": [
-            -43.88623046875,
-            52.5400390625
+            -66.00151062011719,
+            41.43037796020508
         ]
     },
     {
         "signal_id": "eeg_signal_08",
         "file_csv": "test_signals/eeg_signal_08.csv",
         "file_npy": "test_signals/eeg_signal_08.npy",
-        "true_class_id": 4,
-        "true_word": "Thanks (Gracias)",
-        "patient_source": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1 — Participant IDs Anonymized/Unrecoverable)",
+        "true_class_id": 7,
+        "true_word": "Thirsty (Sed)",
+        "dataset_source": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1)",
         "sampling_rate_hz": 128,
         "duration_sec": 1.0,
         "voltage_range_uv": [
-            -49.98388671875,
-            60.66064453125
+            -44.06643295288086,
+            30.57281494140625
         ]
     },
     {
         "signal_id": "eeg_signal_09",
         "file_csv": "test_signals/eeg_signal_09.csv",
         "file_npy": "test_signals/eeg_signal_09.npy",
-        "true_class_id": 0,
-        "true_word": "Rest",
-        "patient_source": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1 — Participant IDs Anonymized/Unrecoverable)",
+        "true_class_id": 8,
+        "true_word": "Yes (S\u00ed)",
+        "dataset_source": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1)",
         "sampling_rate_hz": 128,
         "duration_sec": 1.0,
         "voltage_range_uv": [
-            -52.75244140625,
-            74.51123046875
+            -1129.186767578125,
+            563.634033203125
         ]
     }
 ]

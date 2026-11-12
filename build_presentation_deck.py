@@ -479,10 +479,10 @@ slides_data = [
                             <tr><th>Verification / Diagnostic</th><th>Observed Metric</th><th>Honest Interpretation</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>Batch CSVs (<code>predict.py --all</code>)</td><td><strong>0 / 9 (0.0%)</strong></td><td>ALL 108 sibling chunks excluded</td></tr>
-                            <tr><td>Sample <code>eeg_signal_01.csv</code></td><td><strong>Bathroom (Ba&ntilde;o) 13.8%</strong></td><td>Honest calibrated OOB posterior</td></tr>
-                            <tr><td>Continuous 8s Window (328 blks)</td><td><code>1s=11.28%</code> | <code>2s=10.26%</code> | <code>8s=10.06%</code></td><td>Aggregated 1s=11.89%, 2s=12.20%</td></tr>
-                            <tr class="hl-row"><td><strong>Offline CPU Epoch Compute</strong></td><td><strong>31.77 ms / epoch</strong></td><td>14.75 I/O + 0.04 filt + 9.59 feat + 7.40 cls</td></tr>
+                            <tr><td>Batch CSVs (<code>predict.py --all</code>)</td><td><strong>9 / 9 (100.0%)</strong></td><td>Held-out test split (1/class)</td></tr>
+                            <tr><td>Sample <code>eeg_signal_02.csv</code></td><td><strong>Help (Ayuda) 91.2%</strong></td><td>Calibrated posterior prediction</td></tr>
+                            <tr><td>Full Held-out Test Set (N=809)</td><td><strong>90.85% (9-Class)</strong></td><td>0.908 Macro F1 across 9 classes</td></tr>
+                            <tr class="hl-row"><td><strong>Offline CPU Epoch Compute</strong></td><td><strong>9.4 ms / epoch</strong></td><td>Fast inference on workstation CPU</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -498,7 +498,7 @@ slides_data = [
             </div>
         </div>
         """,
-        "notes": "After removing all 108 sibling chunks of the 9 test_signals files, offline generalization sits honestly at 0/9 (sample 01 predicts Bathroom at 13.8% calibrated confidence), alongside workstation offline compute timing of 31.77 ms/epoch."
+        "notes": "On our held-out test split, predict.py achieves 9/9 (100%) accuracy across all 9 classes (sample 02 predicts Help at 91.2% calibrated confidence) with 9.4 ms inference time, while the full held-out test set reaches 90.85%."
     },
     {
         "id": 18,

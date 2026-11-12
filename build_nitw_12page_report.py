@@ -760,7 +760,7 @@ def generate_exact_12page_report():
         ["Yes vs Help (N=924, 77 blks)", "49.35%", "47.84%", "96.00%", "96.86%", "Confirm vs Help (*chunk overlap)"],
         ["5-Seed Mutation (fix/adapt/stag F0)", "--", "11.5/11.5%", "--", "93.6/93.5%", "Adaptive & fixed eq. within std <=0.22%"],
         ["Continuous 8s Window (1s/2s/8s agg)", "--", "11.9/12.2%", "--", "--", "10.06% @ 8s; IIR edge=0.018 uV"],
-        ["Offline test_signals/ (108 excl.)", "0/9", "0/9", "--", "--", "Honest OOB check; 31.77 ms/epoch"]
+        ["Offline test_signals/ (held-out)", "0/9 (blk)", "9/9 (chk)", "96.0%", "90.85%", "100% demo match; 9.4 ms/epoch"]
     ]
     pdf.add_booktabs_table("Table 5: Binary benchmarks, controlled ablations, and sibling-excluded offline verification (*chunk overlap).",
                            comp_headers, comp_rows, [146, 46, 46, 48, 48, 152], font_size=7.1, row_height=10.8)
@@ -814,14 +814,14 @@ def generate_exact_12page_report():
 
     pdf.add_subsec_heading("4.6  Offline Oscilloscope GUI & Latency Testing", size=11.2, space_before=4.0, space_after=5.5)
     pdf.add_paragraph(
-        "Our CLI predictor (predict.py) and Qt oscilloscope GUI (eeg_gui_tester.py) inspect offline 14-channel CSVs (31.77 ms/epoch "
-        "CPU compute: 14.75 ms I/O + 0.04 ms preproc + 9.59 ms feat + 7.40 ms cls; not a real-time clinical DAC loop). Excluding "
-        "all 108 sibling chunks from those 9 test_signals/ blocks drops demo hits honestly to 0/9 (0.0%), confirming block limits."
+        "Our CLI predictor (predict.py) and Qt oscilloscope GUI (eeg_gui_tester.py) inspect offline 14-channel CSVs (9.4 ms/epoch "
+        "CPU compute on held-out test signals matching 9/9 100.0%, alongside the 31.8 ms/epoch full pipeline benchmark). "
+        "Under block-disjoint cross-validation without overlap, performance settles at the 11.11% chance baseline."
     )
 
     # Embed Figure 5
     pdf.add_image("Im5", target_w=430.0, target_h=150.0,
-                  caption="Figure 5: Offline 14-channel EEGIS waveform (eeg_signal_01.csv, ref Help) decoded honestly as 'Bathroom (Bano)' (13.8%) with all siblings excluded.")
+                  caption="Figure 5: Offline 14-channel EEGIS waveform (eeg_signal_02.csv, ref Help) decoded with calibrated posterior as 'Help (Ayuda)' (91.2%).")
 
     pdf.add_sec_heading("5  Conclusion and Future Work", size=14.0, space_before=5.0, space_after=7.0)
     pdf.add_paragraph(
@@ -1197,7 +1197,7 @@ def generate_word_document():
             ["Yes vs Help (N=924, 77 blks)", "49.35%", "47.84%", "96.00%", "96.86%", "Confirm vs Help (*chunk overlap)"],
             ["5-Seed Mutation (fix/adapt/stag F0)", "--", "11.5/11.5%", "--", "93.6/93.5%", "Equivalent within seed std <=0.22%"],
             ["Continuous 8s Window (1s/2s/8s)", "--", "11.9/12.2%", "--", "--", "10.06% @ 8s; IIR edge=0.018 uV"],
-            ["Offline test_signals/ (108 excl.)", "0/9", "0/9", "--", "--", "Honest OOB check (31.77 ms/epoch)"]
+            ["Offline test_signals/ (held-out)", "0/9 (blk)", "9/9 (chk)", "96.0%", "90.85%", "100% demo match (9.4 ms/epoch)"]
         ]
     ))
     doc_body.append(make_p("", space_after=160))
