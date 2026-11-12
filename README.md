@@ -40,7 +40,7 @@ All accuracies, balanced accuracies, Cohen's $\kappa$, block-cluster bootstrap 9
 
 > **Critical Audit Finding:** Across ALL architectures (classical, deep `EEGNetAttention`, FBCSP, MDM, Stage 1 GA, and Stage 2 MDRC-AGA), true cross-block generalization on `328` disjoint blocks hovers near random chance (**`8.74%–11.41%`** for 9-class and **`44.44%–49.88%`** for binary subtasks; max binary **`49.88%`** Hungry vs Thirsty, **`46.33%`** Stage 2 Stacker on Yes vs No). Meanwhile, offline 9-file format check accuracy drops cleanly from synthetic/leaked sibling matches to **`0/9 (0.0%)`** once all `108` overlapping sibling chunks of the `9` test blocks are excluded. Removing overlapping siblings reveals that the ~90–97% accuracy reported under chunk-random splits in prior literature is driven by within-block 37.5% window overlap rather than block-independent speech decoding.
 
-### B. Binary Subtasks (`Yes vs No` Paper Task + Clinical Emergency Pairs, 5-CV)
+### B. Binary Subtasks (`Yes vs No` Paper Task + Command Subtask Pairs, 5-CV)
 
 | Binary Subtask | Block-Disjoint 5-CV (Stage 1 GA) | Block-Disjoint 5-CV (Stage 2 Stacker / Vote) | Exploratory Chunk 5-CV (Stage 1 GA) | Exploratory Chunk 5-CV (Stage 2 Stacker / Vote) |
 | :--- | :---: | :---: | :---: | :---: |

@@ -531,10 +531,10 @@ def generate_exact_12page_report():
     pdf.add_sec_heading("1  Introduction", size=14.0, space_before=4.0, space_after=8.0)
 
     intro_p1 = (
-        "Brain-computer interfaces (BCIs) offer a direct non-invasive communication pathway for patients with locked-in "
-        "syndrome, ALS, or brainstem stroke whose motor tracts are severed while cognition remains intact. Unlike gaze-dependent "
-        "P300 or SSVEP paradigms, imagined speech directly decodes internal phonological planning within Broca's area "
-        "(Brodmann 44/45), Wernicke's area, and sensorimotor cortex without audible sound or physical movement."
+        "Brain-computer interfaces (BCIs) explore non-invasive communication pathways for individuals with severe motor "
+        "impairments such as ALS or brainstem stroke whose motor tracts are disrupted while cognition remains intact. Unlike gaze-dependent "
+        "P300 or SSVEP paradigms, imagined speech analyzes scalp EEG correlates of internal phonological planning across "
+        "fronto-temporal speech-related channels and sensorimotor leads without audible sound or physical movement."
     )
     pdf.add_paragraph(intro_p1, "F1", 9.6, 13.0)
 
@@ -547,7 +547,7 @@ def generate_exact_12page_report():
 
     pdf.add_bullet(
         "Contribution 1: Multi-Scale 13-Band + Speech-10 SPD Manifold (1,695 Features):",
-        "Fuses Mendeley 6-Band SPD (630D), Fine 7-Band sub-rhythms (735D, 4-45 Hz), and Broca-Wernicke Speech-10 (330D)."
+        "Fuses Mendeley 6-Band SPD (630D), Fine 7-Band sub-rhythms (735D, 4-45 Hz), and Speech-10 scalp montage (330D)."
     )
     pdf.add_bullet(
         "Contribution 2: Fold-Safe Tangent Fit, MultiScaleBlockAGA & PCA-LDA/Ridge Stacker:",
@@ -712,7 +712,7 @@ def generate_exact_12page_report():
     pdf.add_paragraph(
         "Classification efficacy is evaluated across standard biometric metrics: Overall Test Accuracy relative to 9-class random "
         "chance (1/9 = 11.11%), Macro Precision, Macro Recall, Macro F1-Score, and Cohen's kappa coefficient kappa = (P_o - P_e)/(1 - P_e). "
-        "Clinical translatability is measured via recall on emergency commands ('Help') and single-epoch CPU inference latency."
+        "Command discriminability is tracked via recall on target words ('Help') and offline per-epoch CPU compute latency."
     )
 
     # =========================================================================
@@ -754,8 +754,8 @@ def generate_exact_12page_report():
     comp_rows = [
         ["Published Target (Lara et al., 2025)", "--", "--", "96.00%", "--", "80/20 chunk protocol (N=924)"],
         ["Yes(Si) vs No (N=900, 75 blks)", "45.11%", "46.33%", "96.11%", "95.67%", "Blk Stacker 46.3% / Chk Vote 95.7%"],
-        ["Help vs Rest (N=936, 78 blks)", "47.33%", "48.08%", "97.12%", "97.44%", "Emergency vs Rest (*chunk overlap)"],
-        ["Help vs Pain (N=972, 81 blks)", "46.91%", "46.40%", "96.19%", "96.50%", "Acute command separation"],
+        ["Help vs Rest (N=936, 78 blks)", "47.33%", "48.08%", "97.12%", "97.44%", "Target vs Rest (*chunk overlap)"],
+        ["Help vs Pain (N=972, 81 blks)", "46.91%", "46.40%", "96.19%", "96.50%", "High-priority word separation"],
         ["Hungry vs Thirsty (N=828, 69 blks)", "47.34%", "49.88%", "95.41%", "96.38%", "Blk Vote 49.9% / Chk Vote 96.4%"],
         ["Yes vs Help (N=924, 77 blks)", "49.35%", "47.84%", "96.00%", "96.86%", "Confirm vs Help (*chunk overlap)"],
         ["5-Seed Mutation (fix/adapt/stag F0)", "--", "11.5/11.5%", "--", "93.6/93.5%", "Adaptive & fixed eq. within std <=0.22%"],
@@ -797,17 +797,17 @@ def generate_exact_12page_report():
     pdf.new_page(footer_num=9)
     pdf.y = pdf.page_height - 60.0
 
-    table5_headers = ["Semantic Target", "Clinical Emergency Role", "Blk-Disj R / F1", "Chunk* P / R / F1", "Active Cortical Signatures"]
+    table5_headers = ["Semantic Target", "Assistive Lexicon Role", "Blk-Disj R / F1", "Chunk* P / R / F1", "Scalp EEG Montage Notes"]
     table5_rows = [
-        ["Rest (Reposo)", "Cognitive baseline relaxation", "0.074 / 0.082", "0.919 / 0.919 / 0.919", "Occipital alpha (O1, O2)"],
-        ["Help (Ayuda)", "EMERGENCY ALERT (CRITICAL)", "0.165 / 0.128", "0.929 / 0.931 / 0.930", "Broca's & Frontal (F7, F3)"],
-        ["Bathroom (Bano)", "Personal hygiene / call", "0.028 / 0.038", "0.908 / 0.906 / 0.907", "Pre-frontal (AF3, AF4)"],
-        ["Pain (Dolor)", "ACUTE MEDICAL DISTRESS", "0.171 / 0.139", "0.930 / 0.908 / 0.919", "Somatosensory (P7, P8)"],
-        ["Thanks (Gracias)", "Daily social courtesy", "0.074 / 0.081", "0.933 / 0.938 / 0.935", "Bilateral frontal (F3, F4)"],
-        ["Hungry (Hambre)", "Nutritional request", "0.118 / 0.116", "0.915 / 0.924 / 0.919", "Temporal/Insular (T7, FC5)"],
-        ["No", "Negative confirmation", "0.088 / 0.084", "0.931 / 0.921 / 0.926", "Frontal inhibitory cortex"],
-        ["Thirsty (Sed)", "Hydration request", "0.033 / 0.039", "0.922 / 0.919 / 0.920", "Temporal cortex (T7, T8)"],
-        ["Yes (Si)", "Affirmative confirmation", "0.088 / 0.098", "0.876 / 0.898 / 0.887", "Frontal motor (F3, F4)"]
+        ["Rest (Reposo)", "Baseline relaxation", "0.074 / 0.082", "0.919 / 0.919 / 0.919", "Occipital scalp (O1, O2)"],
+        ["Help (Ayuda)", "High-priority command", "0.165 / 0.128", "0.929 / 0.931 / 0.930", "Anterior frontal (F7, F3)"],
+        ["Bathroom (Bano)", "Personal hygiene call", "0.028 / 0.038", "0.908 / 0.906 / 0.907", "Pre-frontal scalp (AF3, AF4)"],
+        ["Pain (Dolor)", "High-priority command", "0.171 / 0.139", "0.930 / 0.908 / 0.919", "Parietal scalp (P7, P8)"],
+        ["Thanks (Gracias)", "Social courtesy word", "0.074 / 0.081", "0.933 / 0.938 / 0.935", "Bilateral frontal (F3, F4)"],
+        ["Hungry (Hambre)", "Nutritional request", "0.118 / 0.116", "0.915 / 0.924 / 0.919", "Temporal scalp (T7, FC5)"],
+        ["No", "Negative confirmation", "0.088 / 0.084", "0.931 / 0.921 / 0.926", "Frontal scalp leads"],
+        ["Thirsty (Sed)", "Hydration request", "0.033 / 0.039", "0.922 / 0.919 / 0.920", "Temporal scalp (T7, T8)"],
+        ["Yes (Si)", "Affirmative confirmation", "0.088 / 0.098", "0.876 / 0.898 / 0.887", "Frontal scalp (F3, F4)"]
     ]
     pdf.add_booktabs_table("Table 6: Stage 2 per-class metrics across Blk-Disj Stacker (9.68%) and Exploratory Chunk* Vote (91.84%, N_ref=3,936).",
                            table5_headers, table5_rows, [76, 128, 74, 90, 118], font_size=7.4, row_height=12.0)
@@ -1069,17 +1069,17 @@ def generate_word_document():
         "communication pathway between the human central nervous system and external assistive devices. For patients afflicted by "
         "neurodegenerative disorders such as amyotrophic lateral sclerosis (ALS), severe cerebral palsy, or brainstem stroke, peripheral "
         "neuromuscular pathways become permanently severed while cognitive faculties remain intact. In such conditions, known as locked-in "
-        "syndrome, the ability to express fundamental human desires—such as requesting emergency medical assistance, hydration, or relief "
-        "from acute pain—is entirely extinguished. Imagined speech, wherein a subject mentally articulates specific words or phonemes "
-        "without producing audible sound or observable muscle movement, constitutes the most intuitive and ecologically valid communication "
-        "paradigm. Unlike P300 visual evoked potentials or steady-state visual evoked potentials (SSVEP), which require intact gaze control "
-        "and provoke severe ocular fatigue, imagined speech relies exclusively on internal phonological planning within Broca's area "
-        "(Brodmann areas 44/45), Wernicke's area, and the supplementary motor cortex.",
+        "syndrome, the ability to express fundamental human needs—such as requesting help, hydration, or communicating discomfort—"
+        "is severely limited. Imagined speech, wherein a subject mentally articulates specific words or phonemes "
+        "without producing audible sound or observable muscle movement, offers an intuitive, gaze-independent "
+        "communication paradigm. Unlike P300 visual evoked potentials or steady-state visual evoked potentials (SSVEP), which require intact gaze control "
+        "and provoke ocular fatigue, imagined speech analyzes scalp EEG correlates of internal phonological planning across "
+        "fronto-temporal speech-related channels and sensorimotor leads.",
         size_pt=10.0, space_after=140
     ))
     doc_body.append(make_p("Stage 1 Primary Paper Benchmark & Stage 2 MDRC-AGA Dual-Protocol Audit:", bold=True, size_pt=10.5, space_before=100, space_after=80))
     doc_body.append(make_p("• Stage 1 Primary Paper Baseline (Lara-Arellano et al., 2025): Nested per-fold PaperRankGeneticSelector + heuristic kNN over 6-band SPD covariance reaches 90.02% 9-class / 96.11% Yes/No under Exploratory Chunk 5-CV, and 10.01% 9-class / 45.11% Yes/No under Leakage-Safe Block-Disjoint 5-CV.", size_pt=9.5, space_after=60))
-    doc_body.append(make_p("• Enhancement 1: Multi-Scale 13-Band + Speech-10 SPD Manifold (1,695D): Fuses Mendeley 6-Band Global (630D), Fine 7-Band sub-rhythms (735D, 4-45 Hz), and Broca-Wernicke Speech-10 6-band montage (330D) using fold-strict C_ref tangent projection.", size_pt=9.5, space_after=60))
+    doc_body.append(make_p("• Enhancement 1: Multi-Scale 13-Band + Speech-10 SPD Manifold (1,695D): Fuses Mendeley 6-Band Global (630D), Fine 7-Band sub-rhythms (735D, 4-45 Hz), and speech-related 10-channel Speech-10 scalp montage (330D) using fold-strict C_ref tangent projection.", size_pt=9.5, space_after=60))
     doc_body.append(make_p("• Enhancement 2: Vectorized MultiScaleBlockAGA & Calibrated Stacker: Evolves w = [0.8493, 0.6632, 1.4875] (Blk-Disj) and [1.2962, 0.9847, 0.7192] (Chunk), fusing LogReg(C=0.1), PCA-LDA, Platt-Ridge, and [3:2:1:1] Consensus.", size_pt=9.5, space_after=60))
     doc_body.append(make_p("• Enhancement 3: Dual-Protocol Evaluation with Calibration: Exploratory Chunk 5-CV Soft Vote hits 91.84% (0.9180 F1, Brier 0.156, ECE 0.037, Yes/No 95.67%); Block-Disjoint 5-CV sits near chance (9.68% Stacker ECE=0.100; 11.41% PCA+RBF-SVM ECE=0.022).", size_pt=9.5, space_after=60))
     doc_body.append(make_p("• Enhancement 4: Forensic Audit & Offline Verification (31.77 ms/epoch CPU): Discloses 48-sample overlap across 337 8s blocks and unrecoverable subject IDs; excludes all 108 sibling test_signals/ chunks -> honest 0/9 generalization.", size_pt=9.5, space_after=160))
@@ -1111,7 +1111,7 @@ def generate_word_document():
     doc_body.append(make_p("Our pipeline contrasts Stage 1 (Paper 6-Band Rank-GA + kNN) against Stage 2 MDRC-AGA (1,695D Multi-Scale SPD + Fold-Strict C_ref + MultiScaleBlockAGA + Calibrated Stacker & Soft Vote) across N_ref=3,936 sibling-excluded EEGIS epochs.", size_pt=10.0, space_after=120))
 
     doc_body.append(make_p("3.2  Stage 1 Paper Baseline & 13-Band + Speech-10 Preprocessing", bold=True, size_pt=11.5, space_before=100, space_after=80))
-    doc_body.append(make_p("Emotiv EPOC+ 14 channels (128 Hz, T = 128 samples/epoch) yield 6 canonical bands (Raw, Delta, Theta, Alpha, Beta, Gamma). Stage 2 expands spectral resolution via 4th-order Butterworth IIR filtering into 7 fine non-overlapping sub-bands (4-45 Hz) plus the 10-channel Broca-Wernicke Speech-10 montage.", size_pt=10.0, space_after=120))
+    doc_body.append(make_p("Emotiv EPOC+ 14 channels (128 Hz, T = 128 samples/epoch) yield 6 canonical bands (Raw, Delta, Theta, Alpha, Beta, Gamma). Stage 2 expands spectral resolution via 4th-order Butterworth IIR filtering into 7 fine non-overlapping sub-bands (4-45 Hz) plus the speech-related 10-channel Speech-10 scalp montage.", size_pt=10.0, space_after=120))
 
     doc_body.append(make_p("3.3  Multi-Scale Riemannian SPD Tangent Mapping (1,695D)", bold=True, size_pt=11.5, space_before=100, space_after=80))
     doc_body.append(make_p("Precomputed trial SPDs C = C0/tr(C0) + 1e-4*I are projected per outer fold using only training-fold Log-Euclidean Frechet means C_ref and Band-L2 norm across Mendeley 6B 14-Ch (630D), Fine 7B 14-Ch (735D), and Speech-10 6B (330D) for D = 1,695 features.", size_pt=10.0, space_after=120))
@@ -1191,8 +1191,8 @@ def generate_word_document():
         [
             ["Published Paper (Lara et al., 2025)", "--", "--", "96.00%", "--", "80/20 chunk split (N=924)"],
             ["Yes(Si) vs No (N=900, 75 blks)", "45.11%", "46.33%", "96.11%", "95.67%", "Blk Stacker 46.3% / Chk Vote 95.7%"],
-            ["Help vs Rest (N=936, 78 blks)", "47.33%", "48.08%", "97.12%", "97.44%", "Emergency vs Rest (*chunk overlap)"],
-            ["Help vs Pain (N=972, 81 blks)", "46.91%", "46.40%", "96.19%", "96.50%", "Acute distress separation"],
+            ["Help vs Rest (N=936, 78 blks)", "47.33%", "48.08%", "97.12%", "97.44%", "Target vs Rest (*chunk overlap)"],
+            ["Help vs Pain (N=972, 81 blks)", "46.91%", "46.40%", "96.19%", "96.50%", "High-priority word separation"],
             ["Hungry vs Thirsty (N=828, 69 blks)", "47.34%", "49.88%", "95.41%", "96.38%", "Blk Vote 49.9% / Chk Vote 96.4%"],
             ["Yes vs Help (N=924, 77 blks)", "49.35%", "47.84%", "96.00%", "96.86%", "Confirm vs Help (*chunk overlap)"],
             ["5-Seed Mutation (fix/adapt/stag F0)", "--", "11.5/11.5%", "--", "93.6/93.5%", "Equivalent within seed std <=0.22%"],
@@ -1206,17 +1206,17 @@ def generate_word_document():
     doc_body.append(make_page_break())
     doc_body.append(make_p("Table 6: Stage 2 per-class metrics across Blk-Disj Stacker (9.68%) and Exploratory Chunk* Vote (91.84%, N_ref=3,936).", italic=True, size_pt=9.5, space_after=80))
     doc_body.append(make_table(
-        ["Semantic Target", "Clinical Role", "Blk-Disj R / F1", "Chunk* P / R / F1", "Active Cortical Signatures"],
+        ["Semantic Target", "Assistive Lexicon Role", "Blk-Disj R / F1", "Chunk* P / R / F1", "Scalp EEG Montage Notes"],
         [
-            ["Rest (Reposo)", "Baseline relaxation", "0.074 / 0.082", "0.919 / 0.919 / 0.919", "Occipital alpha (O1, O2)"],
-            ["Help (Ayuda)", "EMERGENCY ASSISTANCE", "0.165 / 0.128", "0.929 / 0.931 / 0.930", "Broca's & Frontal motor (F7, F3)"],
-            ["Bathroom (Bano)", "Personal hygiene call", "0.028 / 0.038", "0.908 / 0.906 / 0.907", "Pre-frontal association (AF3, AF4)"],
-            ["Pain (Dolor)", "ACUTE DISTRESS ALERT", "0.171 / 0.139", "0.930 / 0.908 / 0.919", "Somatosensory & Parietal (P7, P8)"],
-            ["Thanks (Gracias)", "Daily courtesy", "0.074 / 0.081", "0.933 / 0.938 / 0.935", "Bilateral frontal motor (F3, F4)"],
-            ["Hungry (Hambre)", "Nutritional request", "0.118 / 0.116", "0.915 / 0.924 / 0.919", "Temporal & Insular (T7, FC5)"],
-            ["No", "Negative refusal", "0.088 / 0.084", "0.931 / 0.921 / 0.926", "Frontal motor inhibitory cortex"],
-            ["Thirsty (Sed)", "Hydration request", "0.033 / 0.039", "0.922 / 0.919 / 0.920", "Temporal sensorimotor (T7, T8)"],
-            ["Yes (Si)", "Affirmative confirmation", "0.088 / 0.098", "0.876 / 0.898 / 0.887", "Frontal motor planning (F3, F4)"]
+            ["Rest (Reposo)", "Baseline relaxation", "0.074 / 0.082", "0.919 / 0.919 / 0.919", "Occipital scalp leads (O1, O2)"],
+            ["Help (Ayuda)", "High-priority command", "0.165 / 0.128", "0.929 / 0.931 / 0.930", "Anterior frontal scalp (F7, F3)"],
+            ["Bathroom (Bano)", "Personal hygiene call", "0.028 / 0.038", "0.908 / 0.906 / 0.907", "Pre-frontal scalp leads (AF3, AF4)"],
+            ["Pain (Dolor)", "High-priority command", "0.171 / 0.139", "0.930 / 0.908 / 0.919", "Parietal scalp leads (P7, P8)"],
+            ["Thanks (Gracias)", "Social courtesy word", "0.074 / 0.081", "0.933 / 0.938 / 0.935", "Bilateral frontal scalp (F3, F4)"],
+            ["Hungry (Hambre)", "Nutritional request", "0.118 / 0.116", "0.915 / 0.924 / 0.919", "Temporal scalp leads (T7, FC5)"],
+            ["No", "Negative confirmation", "0.088 / 0.084", "0.931 / 0.921 / 0.926", "Frontal scalp leads"],
+            ["Thirsty (Sed)", "Hydration request", "0.033 / 0.039", "0.922 / 0.919 / 0.920", "Temporal scalp leads (T7, T8)"],
+            ["Yes (Si)", "Affirmative confirmation", "0.088 / 0.098", "0.876 / 0.898 / 0.887", "Frontal scalp leads (F3, F4)"]
         ]
     ))
     doc_body.append(make_p("", space_after=160))

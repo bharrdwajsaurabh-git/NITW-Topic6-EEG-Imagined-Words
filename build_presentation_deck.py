@@ -84,11 +84,11 @@ slides_data = [
             <div>
                 <div class="card">
                     <h3>Covert vs. Overt Speech Dynamics</h3>
-                    <p>Imagined (covert) speech produces subtle internal phonological formulation without triggering peripheral articulatory muscles (larynx, tongue).</p>
+                    <p>Imagined (covert) speech involves subtle internal phonological formulation without triggering peripheral articulatory muscles (larynx, tongue).</p>
                     <ul>
-                        <li><strong>Broca's Area (Brodmann 44/45):</strong> Frontal speech motor planning node (Electrodes <code>F7, F3, FC5</code>).</li>
-                        <li><strong>Wernicke's Area (Brodmann 22):</strong> Temporal phonological decoding & auditory feedback (Electrodes <code>T7, T8</code>).</li>
-                        <li><strong>Sensorimotor Cortex:</strong> Somatosensory mapping of internal vocal articulation.</li>
+                        <li><strong>Anterior Frontal Scalp Leads (<code>F7, F3, FC5</code>):</strong> Speech-related scalp locations overlying frontal regions linked with motor planning (non-invasive proxy; not source-localized imaging).</li>
+                        <li><strong>Temporal Scalp Leads (<code>T7, T8</code>):</strong> Speech-related lateral scalp positions over auditory-temporal zones associated with phonological processing.</li>
+                        <li><strong>Sensorimotor &amp; Parietal Leads (<code>P7, P8</code>):</strong> Scalp coverage sensitive to somatosensory and mu/beta rhythm modulation.</li>
                     </ul>
                 </div>
             </div>
@@ -96,15 +96,15 @@ slides_data = [
                 <div class="card">
                     <h3>Oscillatory Neural Signatures</h3>
                     <ul>
-                        <li><strong>Mu Rhythms (8–12 Hz):</strong> Event-Related Desynchronization (ERD) occurs over speech motor areas during phonetic preparation.</li>
-                        <li><strong>Beta Oscillations (16–26 Hz):</strong> Power suppression reflects cortical activation during lexical retrieval.</li>
-                        <li><strong>Gamma Bursts (35–45 Hz):</strong> Micro-synchronization during phonological binding.</li>
+                        <li><strong>Mu Rhythms (8–12 Hz):</strong> Event-Related Desynchronization (ERD) modulation tracked over fronto-central scalp electrodes.</li>
+                        <li><strong>Beta Oscillations (16–26 Hz):</strong> Spectral covariance shifts observed across frontal and temporal channels.</li>
+                        <li><strong>Gamma Bursts (35–45 Hz):</strong> High-frequency covariance features; low-SNR at scalp surface without invasive recording.</li>
                     </ul>
                 </div>
             </div>
         </div>
         """,
-        "notes": "When you silently imagine speaking a word, Broca's area in the frontal lobe plans the syllables, while Wernicke's area in the temporal lobe processes the sound. This causes distinct power drops in Mu and Beta brainwaves that our EEG electrodes pick up."
+        "notes": "When you silently imagine speaking a word, covert phonological processes modulate scalp mu and beta rhythms across frontal and temporal electrodes. Because scalp EEG has coarse spatial resolution, we treat Speech-10 as a speech-related scalp-electrode montage rather than direct single-region cortical measurement."
     },
     {
         "id": 4,
@@ -118,10 +118,10 @@ slides_data = [
                     <p>Signals acquired using the wireless <strong>Emotiv EPOC+</strong> headset at 128 Hz with 14 saline-based electrodes:</p>
                     <div class="code-block">AF3, F7, F3, FC5, T7, P7, O1, O2, P8, T8, FC6, F4, F8, AF4</div>
                     <ul>
-                        <li><strong>Frontal/Broca:</strong> F7, F3, FC5, FC6, F4, F8</li>
-                        <li><strong>Temporal/Wernicke:</strong> T7, T8</li>
-                        <li><strong>Parietal/Sensory:</strong> P7, P8</li>
-                        <li><strong>Occipital (Alpha Visual):</strong> O1, O2</li>
+                        <li><strong>Anterior Frontal Speech-Related:</strong> F7, F3, FC5, FC6, F4, F8</li>
+                        <li><strong>Temporal Speech-Related:</strong> T7, T8</li>
+                        <li><strong>Parietal / Sensory Leads:</strong> P7, P8</li>
+                        <li><strong>Occipital (Alpha Baseline):</strong> O1, O2</li>
                     </ul>
                 </div>
             </div>
@@ -129,43 +129,43 @@ slides_data = [
                 <div class="card highlight-card">
                     <h3>Why 14-Channel Wearable EEG?</h3>
                     <ul>
-                        <li><strong>Non-Invasive:</strong> Zero surgical risk compared to intracortical implants (Neuralink).</li>
-                        <li><strong>Portability:</strong> Wearable wireless design suitable for wheelchair and bedside patient use.</li>
-                        <li><strong>Affordable:</strong> Cost of ~$800 vs. $50,000 hospital-grade 64-channel caps.</li>
+                        <li><strong>Non-Invasive:</strong> Zero surgical risk compared to intracortical implants.</li>
+                        <li><strong>Research Prototype Scope:</strong> Portable wireless hardware suitable for offline benchmarking; clinical deployment requires external prospective trials.</li>
+                        <li><strong>Accessible Hardware:</strong> Consumer research cost (~$800) vs. 64-channel clinical systems.</li>
                     </ul>
                 </div>
             </div>
         </div>
         """,
-        "notes": "We utilize the 14-channel 10-20 system on an Emotiv EPOC+ headset. Electrodes F7 and FC5 capture Broca's area, T7 and T8 capture Wernicke's area, while O1 and O2 monitor the resting alpha baseline. This non-invasive setup is affordable and mobile."
+        "notes": "We utilize the 14-channel 10-20 system on an Emotiv EPOC+ headset. Frontal and temporal leads (F7, F3, FC5, T7, T8) form our speech-related scalp montage, while O1 and O2 monitor resting occipital alpha. Clinical or patient use remains future work requiring validated prospective studies."
     },
     {
         "id": 5,
         "title": "The EEGIS Benchmark Dataset & 9-Class Vocabulary",
-        "subtitle": "Curated Medical Assistive Lexicon (Lara-Arellano et al., 2025)",
+        "subtitle": "Closed-Set Assistive Word Lexicon (Lara-Arellano et al., 2025)",
         "content": """
         <div class="card">
             <h3>9 Closed-Vocabulary Target Classes (Mendeley DOI: 10.17632/73g4fw884c.1)</h3>
             <table class="pres-table">
                 <thead>
-                    <tr><th>Class ID</th><th>Semantic Word</th><th>Clinical Priority</th><th>Cortical Activation Pattern</th></tr>
+                    <tr><th>Class ID</th><th>Semantic Word</th><th>Lexicon Role</th><th>Scalp Montage Notes</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td><strong>0</strong></td><td>Rest (Reposo)</td><td>Baseline</td><td>Occipital Alpha synchronization (O1, O2)</td></tr>
-                    <tr class="hl-row"><td><strong>1</strong></td><td>Help (Ayuda)</td><td>CRITICAL EMERGENCY</td><td>Frontal Broca motor burst (F7, F3, FC5)</td></tr>
-                    <tr><td><strong>2</strong></td><td>Bathroom (Baño)</td><td>Basic Assistance</td><td>Frontal-parietal somatosensory network</td></tr>
-                    <tr class="hl-row"><td><strong>3</strong></td><td>Pain (Dolor)</td><td>CRITICAL EMERGENCY</td><td>Parietal nociceptive sensory activation (P7, P8)</td></tr>
-                    <tr><td><strong>4</strong></td><td>Thanks (Gracias)</td><td>Social Interaction</td><td>Frontal-central polite affirmative marker</td></tr>
-                    <tr><td><strong>5</strong></td><td>Hungry (Hambre)</td><td>Basic Need</td><td>Insular visceral retrieval & temporal lobe</td></tr>
-                    <tr><td><strong>6</strong></td><td>No</td><td>Patient Response</td><td>Frontal inhibitory prefrontal modulation</td></tr>
-                    <tr><td><strong>7</strong></td><td>Thirsty (Sed)</td><td>Basic Need</td><td>Temporal sensory projection (T7, T8)</td></tr>
-                    <tr><td><strong>8</strong></td><td>Yes (Sí)</td><td>Patient Response</td><td>Frontal motor affirmative synchronization</td></tr>
+                    <tr><td><strong>0</strong></td><td>Rest (Reposo)</td><td>Baseline State</td><td>Occipital Alpha leads (O1, O2)</td></tr>
+                    <tr class="hl-row"><td><strong>1</strong></td><td>Help (Ayuda)</td><td>High-Priority Word</td><td>Anterior frontal scalp (F7, F3, FC5)</td></tr>
+                    <tr><td><strong>2</strong></td><td>Bathroom (Baño)</td><td>Daily Request</td><td>Pre-frontal &amp; parietal scalp leads</td></tr>
+                    <tr class="hl-row"><td><strong>3</strong></td><td>Pain (Dolor)</td><td>High-Priority Word</td><td>Parietal scalp leads (P7, P8)</td></tr>
+                    <tr><td><strong>4</strong></td><td>Thanks (Gracias)</td><td>Social Courtesy</td><td>Bilateral frontal leads (F3, F4)</td></tr>
+                    <tr><td><strong>5</strong></td><td>Hungry (Hambre)</td><td>Basic Need</td><td>Temporal &amp; fronto-central (T7, FC5)</td></tr>
+                    <tr><td><strong>6</strong></td><td>No</td><td>Negative Confirmation</td><td>Pre-frontal scalp leads</td></tr>
+                    <tr><td><strong>7</strong></td><td>Thirsty (Sed)</td><td>Basic Need</td><td>Temporal scalp leads (T7, T8)</td></tr>
+                    <tr><td><strong>8</strong></td><td>Yes (Sí)</td><td>Affirmative Confirmation</td><td>Frontal scalp leads (F3, F4)</td></tr>
                 </tbody>
             </table>
             <p><strong>Trial Parameters:</strong> 1.0-second epochs (T = 128 samples/channel @ 128 Hz). <strong>4,044 real epochs</strong> across <strong>337 continuous 8s blocks</strong> (12 chunks/block, 48-sample overlap; participant IDs unrecoverable in Mendeley source).</p>
         </div>
         """,
-        "notes": "The vocabulary comprises 8 essential survival words plus an eyes-open rest state across all 4,044 real Mendeley EEGIS human trials. Help and Pain are high-urgency classes. Hungry and Thirsty represent physical needs. Yes, No, and Thanks represent vital patient feedback."
+        "notes": "The vocabulary comprises 8 Spanish assistive target words plus an eyes-open rest state across all 4,044 real Mendeley EEGIS trials. Help and Pain are tracked closely as high-priority assistive target words in offline evaluation, without claiming clinical diagnostic or emergency deployment readiness."
     },
     {
         "id": 6,
@@ -248,7 +248,7 @@ slides_data = [
             </div>
             <div class="card">
                 <h4>2. Coarse 6-Band to 13-Band + Speech-10</h4>
-                <p>Adds causal Butterworth 7 fine non-overlapping sub-bands (4-45 Hz) + 10-channel Broca-Wernicke Speech-10 sub-montage (<strong>1,695D</strong> total).</p>
+                <p>Adds causal Butterworth 7 fine non-overlapping sub-bands (4-45 Hz) + speech-related 10-channel Speech-10 scalp sub-montage (<strong>1,695D</strong> total).</p>
             </div>
             <div class="card">
                 <h4>3. Calibrated Stacker &amp; Metrics</h4>
@@ -275,7 +275,7 @@ slides_data = [
     },
     {
         "id": 10,
-        "title": "Stage 2 Multi-Scale Filter-Bank & Broca-Wernicke Speech-10",
+        "title": "Stage 2 Multi-Scale Filter-Bank & Speech-10 Scalp Montage",
         "subtitle": "Combining 6-Band EEGIS, Fine 7-Band Sub-Splits (4-45 Hz) & Localized Montages",
         "content": """
         <div class="card">
