@@ -64,7 +64,14 @@ class EEGDecoderGUI:
     def _discover_test_signals(self):
         sig_dir = os.path.join(curr_dir, "test_signals")
         if os.path.exists(sig_dir):
-            return [os.path.join(sig_dir, f) for f in sorted(os.listdir(sig_dir)) if f.endswith(".csv")]
+            cands = [f for f in os.listdir(sig_dir) if f.startswith("eeg_signal_") and f.endswith(".csv")]
+            def _num_key(name):
+                digits = "".join(ch for ch in name if ch.isdigit())
+                return int(digits) if digits else 999999
+            # Prefer 3-digit canonical files (eeg_signal_001..809)
+            cands_3d = [f for f in cands if len(f.split(".")[0].split("_")[-1]) == 3]
+            files_to_use = cands_3d if len(cands_3d) >= 800 else cands
+            return [os.path.join(sig_dir, f) for f in sorted(files_to_use, key=_num_key)]
         return []
 
     def _load_model(self):
@@ -123,16 +130,29 @@ class EEGDecoderGUI:
 
         tk.Button(
             toolbar,
-            text="Load Next Demo Sample (.csv)",
+            text="◀ Prev Sample",
+            command=self._on_prev_signal,
+            bg="#334155",
+            fg="white",
+            font=("Segoe UI", 10, "bold"),
+            padx=10,
+            pady=6,
+            relief="flat",
+            cursor="hand2",
+        ).pack(side="left", padx=(0, 4))
+
+        tk.Button(
+            toolbar,
+            text="Next Sample (1-809) ▶",
             command=self._on_cycle_signal,
             bg="#0d9488",
             fg="white",
             font=("Segoe UI", 10, "bold"),
-            padx=12,
+            padx=10,
             pady=6,
             relief="flat",
             cursor="hand2",
-        ).pack(side="left")
+        ).pack(side="left", padx=(0, 8))
 
         self.lbl_file_status = tk.Label(
             toolbar,
@@ -256,6 +276,13 @@ class EEGDecoderGUI:
         if f_path:
             self._load_specific_file(f_path)
 
+    def _on_prev_signal(self):
+        if not self.test_signal_files:
+            messagebox.showinfo("Notice", "No files found in 'test_signals/' directory.")
+            return
+        self.current_test_idx = (self.current_test_idx - 1) % len(self.test_signal_files)
+        self._load_specific_file(self.test_signal_files[self.current_test_idx])
+
     def _on_cycle_signal(self):
         if not self.test_signal_files:
             messagebox.showinfo("Notice", "No files found in 'test_signals/' directory.")
@@ -271,7 +298,9 @@ class EEGDecoderGUI:
             f_name = os.path.basename(f_path)
             v_min, v_max = float(np.min(signal)), float(np.max(signal))
             v_rms = float(np.sqrt(np.mean(signal ** 2)))
-            self.lbl_file_status.config(text=f"Loaded: {f_name}")
+            total_cnt = len(self.test_signal_files) if self.test_signal_files else 1
+            cur_pos = (self.current_test_idx + 1) if f_path in self.test_signal_files else "--"
+            self.lbl_file_status.config(text=f"Loaded: {f_name} ({cur_pos}/{total_cnt})")
             self.lbl_telemetry.config(
                 text=f"Detrended 14 Ch x 128 Pts (1.0s @ 128 Hz) | Range: [{v_min:+.2f}, {v_max:+.2f}] uV | RMS: {v_rms:.2f} uV"
             )

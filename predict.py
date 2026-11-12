@@ -50,15 +50,16 @@ from eeg_features import (
 
 
 def resolve_signal_path(user_input: str) -> str:
-    """Maps numeric shortcut 1-9, filename, or explicit path to a verified signal file path."""
+    """Maps numeric shortcut 1-809, filename, or explicit path to a verified signal file path."""
     user_input = user_input.strip().strip('"').strip("'")
     if user_input.isdigit():
         idx = int(user_input)
-        for ext in (".csv", ".npy"):
-            for base in (os.path.join(curr_dir, "test_signals"), "test_signals"):
-                cand = os.path.join(base, f"eeg_signal_{idx:02d}{ext}")
-                if os.path.exists(cand):
-                    return cand
+        for pattern in (f"eeg_signal_{idx:03d}", f"eeg_signal_{idx:02d}", f"eeg_signal_{idx}"):
+            for ext in (".csv", ".npy"):
+                for base in (os.path.join(curr_dir, "test_signals"), "test_signals"):
+                    cand = os.path.join(base, f"{pattern}{ext}")
+                    if os.path.exists(cand):
+                        return cand
 
     for cand in (
         user_input,
@@ -299,7 +300,10 @@ def print_single_prediction(file_path: str, model_pkg: dict, model_type: str, fs
 
 def evaluate_all_test_signals(model_pkg: dict, model_type: str, fs_arg: float = None):
     sig_dir = os.path.join(curr_dir, "test_signals")
-    csv_files = [os.path.join(sig_dir, f) for f in sorted(os.listdir(sig_dir)) if f.endswith(".csv")] if os.path.exists(sig_dir) else []
+    # Prefer the full 809 test set files (eeg_signal_001.csv ... eeg_signal_809.csv)
+    all_csv = [os.path.join(sig_dir, f) for f in sorted(os.listdir(sig_dir)) if f.endswith(".csv")] if os.path.exists(sig_dir) else []
+    csv_809 = [f for f in all_csv if len(os.path.basename(f).split(".")[0].split("_")[-1]) == 3]
+    csv_files = csv_809 if len(csv_809) >= 800 else all_csv
     if not csv_files:
         print("[!] No .csv files found in 'test_signals/'.")
         return
@@ -307,28 +311,50 @@ def evaluate_all_test_signals(model_pkg: dict, model_type: str, fs_arg: float = 
     registry = load_ground_truth_registry()
     is_cal = bool(model_pkg.get("is_calibrated_probabilities", False))
     score_col = "Cal.Prob%" if is_cal else "VoteScore%"
+    n_total = len(csv_files)
 
     print("\n" + "=" * 82)
-    print("  NIT WARANGAL — OFFLINE 9-SIGNAL DEMO (HELD-OUT 20% TEST SET SPLIT)")
-    print("  NOTE: 1 sample per class from held-out test split; 14 channels @ 128 Hz.")
+    print(f"  NIT WARANGAL — OFFLINE {n_total}-SIGNAL DEMO (HELD-OUT 20% TEST SET SPLIT)")
+    print(f"  Evaluating full 20% test partition: {n_total} EEG epochs @ 128 Hz (14 channels)")
     print("=" * 82)
-    print(f"{'#':<4} {'Signal File':<20} {'Reference':<18} {'Predicted':<18} {score_col:<10} {'ComputeMs':<9} {'Status'}")
+    print(f"{'#':<5} {'Signal File':<20} {'Reference':<18} {'Predicted':<18} {score_col:<10} {'ComputeMs':<9} {'Status'}")
     print("-" * 82)
 
     correct, latencies = 0, []
+    per_class_total = {}
+    per_class_correct = {}
+
     for idx, fpath in enumerate(csv_files, 1):
         fname = os.path.basename(fpath)
         sig = load_raw_eeg_file(fpath, sampling_rate_hz=fs_arg)
         pred_word, score_pct, _, lat = predict_signal(sig, model_pkg, model_type)
         latencies.append(lat)
         gt = registry.get(fname, "Unknown")
-        is_match = gt == pred_word
+        is_match = (gt == pred_word)
         if is_match:
             correct += 1
-        print(f"{idx:<4} {fname:<20} {gt:<18} {pred_word:<18} {score_pct:<10.1f} {lat:<9.1f} {'[MATCH]' if is_match else '[MISMATCH]'}")
+        per_class_total[gt] = per_class_total.get(gt, 0) + 1
+        if is_match:
+            per_class_correct[gt] = per_class_correct.get(gt, 0) + 1
+
+        # Print first 10, then ellipsis, and last 5 to keep terminal clean while verifying all
+        if idx <= 10 or idx > n_total - 5:
+            print(f"{idx:<5} {fname:<20} {gt:<18} {pred_word:<18} {score_pct:<10.1f} {lat:<9.1f} {'[MATCH]' if is_match else '[MISMATCH]'}")
+        elif idx == 11:
+            print(f"...   [Processing remaining {n_total - 15} held-out test signals] ...")
 
     print("=" * 82)
-    print(f"[*] 9-File Offline Format Check: {correct}/{len(csv_files)} Matched ({correct/len(csv_files)*100:.1f}%) | Mean Compute: {np.mean(latencies):.1f} ms/epoch")
+    print(f"[*] OVERALL {n_total}-FILE HELD-OUT TEST RESULT: {correct}/{n_total} Matched ({correct/n_total*100:.2f}%)")
+    print(f"[*] Mean CPU Compute Latency: {np.mean(latencies):.1f} ms/epoch (Workstation Python 3.14)")
+    print("-" * 82)
+    print("PER-CLASS ACCURACY BREAKDOWN ACROSS 20% TEST PARTITION:")
+    for c_id in sorted(CLASS_MAP.keys()):
+        w = CLASS_MAP[c_id]
+        tot_c = per_class_total.get(w, 0)
+        cor_c = per_class_correct.get(w, 0)
+        pct = (cor_c / tot_c * 100.0) if tot_c > 0 else 0.0
+        bar = "#" * int(pct / 5.0)
+        print(f"  Class {c_id} ({w:<16}): {cor_c:>3}/{tot_c:<3} ({pct:5.1f}%) [{bar:<20}]")
     print("=" * 82 + "\n")
 
 
