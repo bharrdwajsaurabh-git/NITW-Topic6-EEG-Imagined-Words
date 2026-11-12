@@ -1,7 +1,7 @@
 """
 build_presentation_deck.py
 ==========================
-Generates a 18-slide, interactive, publication-grade presentation deck:
+Generates a 19-slide, interactive, publication-grade presentation deck:
 'NITW_Topic6_Presentation.html' with embedded high-res diagrams, comparative
 charts, math formulations, and presenter scripts.
 """
@@ -169,6 +169,44 @@ slides_data = [
     },
     {
         "id": 6,
+        "title": "Primary Research Paper: Lara-Arellano et al. (MDPI Eng, 2025)",
+        "subtitle": "\"Feature Generation with Genetic Algorithms for Imagined Speech EEG Signal Classification\" (DOI: 10.3390/eng6040075)",
+        "content": """
+        <div class="two-col">
+            <div>
+                <div class="card">
+                    <h3>Published Dataset, 228-Bit GA Method &amp; Operators</h3>
+                    <ul>
+                        <li><strong>Authors &amp; Venue:</strong> E. Lara-Arellano, A. Takacs, S. Tovar-Arriaga &amp; J. Rodriguez-Resendiz (UAQ Mexico), <em>Eng</em> (MDPI), vol. 6, art. 75, Apr. 2025.</li>
+                        <li><strong>Task Scope &amp; Split:</strong> Binary <strong>/Si/ vs /No/</strong> (<strong>924 real trials</strong>: 444 Si + 480 No; 14-Ch Emotiv EPOC+ @ 128 Hz, 6 bands) evaluated on an <strong>80/20% split</strong> for tractable large-scale GA runs.</li>
+                        <li><strong>228-Bit Binary Genome:</strong> Encoded <strong>14 electrode activation bits</strong> + <strong>214 statistical &amp; spectral features</strong> (<code>P = 100</code> population &times; <code>G = 100</code> generations).</li>
+                        <li><strong>GA &amp; Classifier Optimization:</strong> Applied <strong>Rank Selection</strong>, <strong>Homogeneous Crossover</strong>, <strong>Bit-Flip Mutation</strong>, and <strong>heuristic <em>k</em> search</strong> across SVM, Random Forest, Decision Tree, and kNN.</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <div class="card highlight-card">
+                    <h3>Published Paper Accuracy &amp; Optimal Subset</h3>
+                    <ul>
+                        <li><strong>Pre-GA Baseline kNN:</strong> Averaged <strong>&lt;70%</strong> accuracy across all unfiltered 228 bits.</li>
+                        <li><strong>Evolved Rank-GA + kNN Peak:</strong> Achieved <strong>96.0% Binary Accuracy</strong>, <strong>0.97 Recall</strong>, and <strong>0.94 F1-Score</strong> on <code>/Si/ vs /No/</code>.</li>
+                        <li><strong>Selected Cortical Subset:</strong> Converged to <strong>8 active electrodes</strong> (<code>AF3, T7, O1, O2, P8, T8, F4, F8</code>) and <strong>103 key features</strong>.</li>
+                    </ul>
+                </div>
+                <div class="card alert-card">
+                    <h3>Research Gap Bridged by Our Project</h3>
+                    <ul>
+                        <li><strong>Primary Paper Scope Limit:</strong> Binary Yes/No only via univariate channel moments; no 9-class evaluation or inter-channel SPD phase covariance.</li>
+                        <li><strong>Our Two-Stage Upgrade:</strong> Stage 1 matches 96% Yes/No via 6B SPD + Rank-GA; Stage 2 MDRC-AGA v3 hits <strong>91.97% 9-Class</strong> &amp; <strong>96.22%-97.73% Yes/No</strong>.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        """,
+        "notes": "This slide details the exact methodology and results of our primary reference paper by Lara-Arellano et al., published in MDPI Eng (April 2025, DOI 10.3390/eng6040075). Using 924 Yes/No trials from Mendeley EEGIS on an 80/20 split, they encoded 14 channel bits and 214 statistical/spectral descriptors into a 228-bit genome optimized with Rank Selection, Homogeneous Crossover, Bit-Flip Mutation, and heuristic k search. While baseline kNN scored under 70%, their Rank-GA + kNN selected 8 electrodes and 103 features to reach 96% accuracy, 0.97 Recall, and 0.94 F1."
+    },
+    {
+        "id": 7,
         "title": "Stage 1: Primary Research Baseline (Lara-Arellano et al., 2025)",
         "subtitle": "Matching 96.0% Binary Yes/No (95.14% Holdout / 96.86% 5-CV) & 88.88% 9-Class on Real EEGIS",
         "content": """
@@ -199,7 +237,7 @@ slides_data = [
         "notes": "In Stage 1 we reproduced Lara-Arellano et al.'s Rank-GA + heuristic kNN methodology. Without spatial covariance, scalar stats stall at 20.52% to 69.73%. Paired with 6-band SPD covariance (620/630 dims), Stage 1 matches the paper's 96.0% binary benchmark (95.14% Holdout, 96.86% 5-CV) and reaches 88.88% on 9 classes."
     },
     {
-        "id": 7,
+        "id": 8,
         "title": "Critical Bottlenecks Beyond Stage 1 (Motivating MDRC-AGA v3)",
         "subtitle": "From Coarse 6-Band Global Covariance (88.88%) to Multi-Scale 13-Band + Speech-10 (91.97%)",
         "content": """
@@ -225,7 +263,7 @@ slides_data = [
         "notes": "To surpass Stage 1's 88.88% 9-class benchmark, MDRC-AGA v3 resolves four bottlenecks: univariate scalar collapse, coarse 6-band frequency pooling, posterior visual channel clutter, and unweighted slow ocular drift."
     },
     {
-        "id": 8,
+        "id": 9,
         "title": "Proposed System Architecture: Stage 1 vs MDRC-AGA v3",
         "subtitle": "Parallel Paper Baseline Benchmark & 1,695D Multi-Scale Manifold Consensus Pipeline",
         "content": """
@@ -236,7 +274,7 @@ slides_data = [
         "notes": "Here is our Stage 1 Paper Rank-GA vs Stage 2 MDRC-AGA v3 end-to-end architecture diagram. Real 14-channel trials flow through 13-band + Speech-10 SPD projection (1,695D), MultiScaleBlockAGA weighting, and Fast BLAS Consensus at 42.9 ms CPU latency."
     },
     {
-        "id": 9,
+        "id": 10,
         "title": "Stage 2 Multi-Scale Filter-Bank & Broca-Wernicke Speech-10",
         "subtitle": "Extending Canonical 6-Band EEGIS with Fine 7-Band Sub-Splits & Localized Speech Montage",
         "content": """
@@ -258,7 +296,7 @@ slides_data = [
         "notes": "MDRC-AGA v3 fuses three complementary scales: canonical 6-band global covariance (630D, w=0.7223), 7 fine spectral splits from 4 to 45 Hz (735D, 90.98% alone, w=0.9684), and the 10-channel Broca-Wernicke Speech-10 montage (330D, w=1.3093)."
     },
     {
-        "id": 10,
+        "id": 11,
         "title": "Innovation 1: Multi-Scale 13-Band + Speech-10 SPD Tangent Mapping",
         "subtitle": "Per-Band Trace-Normalized SPD Covariance & L2-Normalized Tangent Concatenation (1,695D)",
         "content": """
@@ -289,7 +327,7 @@ slides_data = [
         "notes": "Innovation 1 projects all three cortical and spectral views onto the Log-Euclidean SPD Riemannian manifold using fast eigendecomposition and per-band L2 unit scaling, forming a 1,695D geometry-preserving vector per trial."
     },
     {
-        "id": 11,
+        "id": 12,
         "title": "Innovation 2: Stage 1 Paper Rank-GA vs Stage 2 MultiScaleBlockAGA",
         "subtitle": "Comparing Feature Bit-Selection (Stage 1) with Manifold-Safe Block Evolution (Stage 2)",
         "content": """
@@ -322,7 +360,7 @@ slides_data = [
         "notes": "Stage 1 reproduces the primary paper's Rank-GA feature selector over 6-band SPD geometry (620/630 active dims). Stage 2 upgrades to MultiScaleBlockAGA on 5-Fold Train CV, learning w = [0.7223, 0.9684, 1.3093] that emphasizes localized Broca-Wernicke speech channels and fine sub-bands."
     },
     {
-        "id": 12,
+        "id": 13,
         "title": "Innovation 3: BLAS-Accelerated Multi-Metric Manifold Consensus",
         "subtitle": "Soft [3 : 2 : 1 : 1] Geodesic Voting at 43.4 ms Mean CPU Inference Latency",
         "content": """
@@ -350,7 +388,7 @@ slides_data = [
         "notes": "Innovation 3 is our BLAS-accelerated Multi-Metric Manifold Consensus Classifier combining soft [3:2:1:1] votes across k=1 and k=3 Cosine and Correlation similarities. It cuts latency 9x down to 43.4 ms while lifting 9-class accuracy to 91.97% Holdout and 92.95% 5-Fold CV."
     },
     {
-        "id": 13,
+        "id": 14,
         "title": "Experimental Protocol & Zero-Leakage Audit",
         "subtitle": "All 4,044 Real Mendeley Trials x 6 Bands + Transparent Temporal Slicing Disclosure",
         "content": """
@@ -379,7 +417,7 @@ slides_data = [
         "notes": "Every experiment executes exclusively on all 4,044 real 6-band trials from dataset/ with zero synthetic data, zero overrides, exclusion of all 9 test signals from deployment training, and transparent reporting of overlapping vs block-disjoint splits."
     },
     {
-        "id": 14,
+        "id": 15,
         "title": "Cross-Architecture Benchmark: Stage 1 Paper vs MDRC-AGA v3",
         "subtitle": "Full 4,044-Trial 9-Class Evaluation & Primary Paper Binary Replication (80/20 Split & 5-CV)",
         "content": """
@@ -409,7 +447,7 @@ slides_data = [
         "notes": "Stage 1 matches the paper's 96.0% binary benchmark at 95.14% Holdout and 96.86% 5-Fold CV while achieving 88.88% on 9 classes. Stage 2 MDRC-AGA v3 outperforms Stage 1 on every benchmark: 91.97% 9-class Holdout, 92.95% 5-CV, 96.22% Yes/No Holdout, 97.73% Yes/No 5-CV, and 99.00% Help vs Pain."
     },
     {
-        "id": 15,
+        "id": 16,
         "title": "Error Analysis: 809-Trial 9-Class Confusion Matrices",
         "subtitle": "Stage 1 Paper Baseline (88.88%) vs Improved Stage 2 MDRC-AGA v3 (91.97%)",
         "content": """
@@ -429,7 +467,7 @@ slides_data = [
         "notes": "Comparing the 809-trial organic confusion matrices: Stage 1 Paper achieves 88.88% (0.8895 F1), while Stage 2 MDRC-AGA v3 tightens the diagonal to 91.97% overall, 91.1% Help recall, 93.9% Pain recall, 96.6% Thanks recall, and 0.9095 Cohen Kappa."
     },
     {
-        "id": 16,
+        "id": 17,
         "title": "Real-Time Bedside Oscilloscope & Signal Verification",
         "subtitle": "Zero-Leakage Deployment Achieving 9/9 (100.0%) Excluded CSVs at 43.4 ms CPU Latency",
         "content": """
@@ -465,7 +503,7 @@ slides_data = [
         "notes": "Our bedside deployment model removes all 9 matching test signals from training (N_ref=4,035), extracts 13-band + Speech-10 SPD features on-the-fly, and decodes all 9 out of 9 (100.0%) excluded test CSVs at 43.4 ms mean CPU latency — over 20x faster than real-time EEG acquisition."
     },
     {
-        "id": 17,
+        "id": 18,
         "title": "Academic Integrity & Window-Overlap Transparency",
         "subtitle": "Understanding Standard Stratified Protocols vs. Block-Disjoint Clinical Transfer",
         "content": """
@@ -490,7 +528,7 @@ slides_data = [
         "notes": "Honest scientific reporting strengthens our defense. Under standard 80/20 splits used in the literature, Stage 1 matches the 96.0% paper benchmark and MDRC-AGA v3 hits 91.97%-97.73%. We also transparently report strict zero-overlap (18.40%) and block-disjoint (12.01%) splits."
     },
     {
-        "id": 18,
+        "id": 19,
         "title": "Conclusion, Key Contributions & Future Roadmap",
         "subtitle": "Advancing Honest, High-Accuracy Assistive BCIs at NIT Warangal (CS26001)",
         "content": """

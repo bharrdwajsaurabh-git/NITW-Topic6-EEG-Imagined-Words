@@ -9,8 +9,8 @@
 
 ## 1. Real Mendeley EEGIS Evaluation & Academic Integrity Disclosure
 * **Real Dataset Used (Zero Synthetic Fallbacks)**: Evaluated exclusively on all **4,044 real 6-band human EEG recordings** (`raw`, `delta`, `theta`, `alpha`, `beta`, `gamma` — 24,264 total CSVs across 10 participants and 9 classes) from the user's `dataset/` folder / official Mendeley EEGIS Database ([DOI: 10.17632/73g4fw884c.1](https://data.mendeley.com/datasets/73g4fw884c/1)). `dataset_loader.py` raises `FileNotFoundError` if real recordings are absent.
-* **Stage 1: Primary Research Paper Method (`baseline_paper.py`)**: *Feature Generation with Genetic Algorithms for Imagined Speech Electroencephalogram Signal Classification* (Lara-Arellano, Tovar-Arriaga, Takacs, Rodríguez-Reséndiz, *Eng* MDPI, 2025). [DOI: 10.3390/eng6040075](https://doi.org/10.3390/eng6040075)
-  * *Paper Exact Target*: Reported **`96.0%` binary accuracy** on **`/Sí/` vs `/No/`** (**924 trials**, 80/20 split) with Rank-GA + kNN.
+* **Stage 1: Primary Research Paper Method (`baseline_paper.py`)**: *Feature Generation with Genetic Algorithms for Imagined Speech Electroencephalogram Signal Classification* (Lara-Arellano, Tovar-Arriaga, Takács, Rodríguez-Reséndiz, *Eng* MDPI, vol. 6, art. 75, Apr. 2025). [DOI: 10.3390/eng6040075](https://doi.org/10.3390/eng6040075)
+  * *Paper Published Method & Target*: Evaluated binary **`/Sí/` vs `/No/`** (**`924` trials**: `444` Sí, `480` No, **80/20 split** chosen for tractable GA evolution). Encoded **14 electrode bits + 214 statistical/spectral features** across 6 bands into a **228-bit binary genome** (`P = 100`, `G = 100`) using **Rank Selection, Homogeneous Crossover, Bit-Flip Mutation**, and **heuristic `k` optimization** across SVM, Random Forest, Decision Tree, and kNN. Baseline pre-GA kNN scored **`<70%`**, whereas evolved **Rank-GA + kNN** selected **8 electrodes (`AF3, T7, O1, O2, P8, T8, F4, F8`)** and **103 features** to reach **`96.0%` binary accuracy (`0.97` Recall, `0.94` F1-score)**.
   * *Scalar-Only Collapse (Without Spatial Covariance)*: Applying univariate stats on all 4,044 real trials yields only **`20.52%`** (RBF-SVM, `63.78%` Yes/No), **`26.58%`** (6-Band `kNN k=7`, `63.24%` Yes/No), and **`69.73%`** (Paper Scalar Rank-GA + `kNN7`, `584` features on Yes/No).
   * *Stage 1 Reproduction (`6-Band Spatial-Covariance + PaperRankGeneticSelector + Heuristic kNN`, `620/630` active dims, `k=1`)*: Matches the published paper benchmark at **`95.14%` Holdout** (`0.9513` F1) and **`96.86%` 5-Fold CV** on `Yes (Sí) vs No`, **`88.88%` Holdout** (`0.8895` F1) / **`90.43%` 5-Fold CV** on full 9-class EEGIS, **`97.50%`** on `Help vs Pain`, **`95.31%`** on `Help vs Rest`, and **`8/9 (88.9%)`** on excluded bedside `test_signals/`.
 * **Stage 2: Proposed Improved Method — `MDRC-AGA v3` (`improved_pipeline.py`)**:
@@ -82,7 +82,7 @@ The project includes submission-ready documents matching NIT Warangal standards:
 
 1. **12-Page PDF Report**: `NITW_Topic6_Imagined_Words_Final_Report.pdf` (Strictly matches the reference layout, typography, booktabs tables, and citations).
 2. **Word Report (.docx)**: `NITW_Topic6_Imagined_Words_Final_Report.docx` (Fully editable Microsoft Word document).
-3. **18-Slide Presentation Deck**: `NITW_Topic6_Presentation.html` (Interactive, dark clinical presentation with charts and animations).
+3. **19-Slide Presentation Deck**: `NITW_Topic6_Presentation.html` (Interactive, dark clinical presentation with charts and animations).
 
 To re-compile the report:
 ```bash
@@ -128,9 +128,9 @@ imagined_speech_eeg/
 ├── test_eeg_signal.py                    # Signal-driven test script
 ├── eeg_gui_tester.py                     # Real-time oscilloscope desktop GUI
 ├── build_nitw_12page_report.py           # Pure-Python 12-page PDF & Word builder
-├── build_presentation_deck.py            # Interactive 18-slide HTML presentation builder
+├── build_presentation_deck.py            # Interactive 19-slide HTML presentation builder
 ├── NITW_Topic6_Imagined_Words_Final_Report.pdf   # Final 12-page PDF report
 ├── NITW_Topic6_Imagined_Words_Final_Report.docx  # Final Microsoft Word report
-├── NITW_Topic6_Presentation.html         # 18-slide interactive presentation deck
+├── NITW_Topic6_Presentation.html         # 19-slide interactive presentation deck
 └── README.md                             # Project documentation
 ```

@@ -503,7 +503,9 @@ def generate_exact_12page_report():
     pdf.y -= 6.0
     pdf.add_toc_line("1  Introduction", "3", level=1)
     pdf.y -= 6.0
-    pdf.add_toc_line("2  Related Work", "3", level=1)
+    pdf.add_toc_line("2  Primary Research Paper & Related Work", "3", level=1)
+    pdf.add_toc_line("2.1  Primary Paper Method, GA Design & Accuracy", "3", level=2)
+    pdf.add_toc_line("2.2  Comparative Related Literature", "4", level=2)
     pdf.y -= 6.0
     pdf.add_toc_line("3  Methodology", "4", level=1)
     pdf.add_toc_line("3.1  Overview", "4", level=2)
@@ -525,98 +527,89 @@ def generate_exact_12page_report():
     pdf.add_toc_line("References", "10", level=1)
 
     # =========================================================================
-    # PAGE 4: INTRODUCTION & RELATED WORK (Footer: 3)
+    # PAGE 4: INTRODUCTION & PRIMARY RESEARCH PAPER OVERVIEW (Footer: 3)
     # =========================================================================
     pdf.new_page(footer_num=3)
     pdf.y = pdf.page_height - 60.0
 
-    pdf.add_sec_heading("1  Introduction", size=14.0, space_before=4.0, space_after=10.0)
+    pdf.add_sec_heading("1  Introduction", size=14.0, space_before=4.0, space_after=8.0)
 
     intro_p1 = (
-        "Brain-computer interfaces (BCIs) represent a transformative frontier in clinical neuro-engineering, "
-        "offering a direct communication pathway between the human central nervous system and external assistive "
-        "devices. For patients afflicted by neurodegenerative disorders such as amyotrophic lateral sclerosis (ALS), "
-        "severe cerebral palsy, or brainstem stroke, peripheral neuromuscular pathways become permanently severed "
-        "while cognitive faculties remain intact. In such conditions, known as locked-in syndrome, the ability to "
-        "express fundamental human desires—such as requesting emergency medical assistance, hydration, or relief "
-        "from acute pain—is entirely extinguished. Imagined speech, wherein a subject mentally articulates specific "
-        "words or phonemes without producing audible sound or observable muscle movement, constitutes the most intuitive "
-        "and ecologically valid communication paradigm. Unlike P300 visual evoked potentials or steady-state visual "
-        "evoked potentials (SSVEP), which require intact gaze control and provoke severe ocular fatigue, imagined speech "
-        "relies exclusively on internal phonological planning within Broca's area (Brodmann areas 44/45), Wernicke's "
-        "area, and the supplementary motor cortex."
+        "Brain-computer interfaces (BCIs) offer a direct non-invasive communication pathway for patients with locked-in "
+        "syndrome, ALS, or brainstem stroke whose motor tracts are severed while cognition remains intact. Unlike gaze-dependent "
+        "P300 or SSVEP paradigms, imagined speech directly decodes internal phonological planning within Broca's area "
+        "(Brodmann 44/45), Wernicke's area, and sensorimotor cortex without audible sound or physical movement."
     )
-    pdf.add_paragraph(intro_p1, "F1", 9.8, 13.6)
+    pdf.add_paragraph(intro_p1, "F1", 9.6, 13.0)
 
     intro_p2 = (
-        "Stage 1 Primary Paper Benchmark: Our foundational baseline is Lara-Arellano et al. (Eng, MDPI 2025, DOI: "
-        "10.3390/eng6040075), which reported 96.0% binary 'Yes (Si) vs No' accuracy on Mendeley EEGIS (N=924; 80/20). "
-        "Applying scalar univariate stats alone yields only 20.52% (RBF-SVM) and 26.58% (6-band kNN k=7) on 9 classes, "
-        "and 69.73% with Paper Scalar Rank-GA on Yes/No. Applying the paper's PaperRankGeneticSelector + heuristic kNN "
-        "to 6-band SPD covariance (620/630 active dims, k=1) reproduces the paper's exact accuracy range: 95.14% Yes/No "
-        "Holdout, 96.86% Yes/No 5-Fold CV, 88.88% 9-Class Holdout, 90.43% 9-Class 5-CV, and 8/9 (88.9%) unseen CSVs."
+        "Building on our primary reference paper (Lara-Arellano et al., Eng MDPI 2025, 96.0% binary Yes/No accuracy), "
+        "our framework implements Stage 1 (Paper Rank-GA + kNN over 6-Band SPD covariance, matching the paper at 95.14% "
+        "Holdout / 96.86% 5-CV on Yes/No and 88.88% on 9 classes) and upgrades it to Stage 2 MDRC-AGA v3:"
     )
-    pdf.add_paragraph(intro_p2, "F1", 9.8, 13.5)
-
-    pdf.draw_text_line("Stage 2 Proposed MDRC-AGA v3 Enhancements Over Stage 1 Paper:", pdf.margin_x, pdf.y - 10.0, "F2", 10.0, (0.0, 0.0, 0.0))
-    pdf.y -= 15.0
+    pdf.add_paragraph(intro_p2, "F1", 9.6, 13.0)
 
     pdf.add_bullet(
         "Enhancement 1: Multi-Scale 13-Band + Speech-10 SPD Manifold (1,695 Features):",
-        "Augments Mendeley 6-Band SPD (630D) with Fine 7-Band Theta-to-Gamma splits (735D, 90.98% alone) and "
-        "Broca-Wernicke Speech-10 6-band covariance (330D, 76.14% alone), unifying 1,695 geometric features."
+        "Fuses Mendeley 6-Band SPD (630D) with Fine 7-Band splits (735D, 90.98% alone) and Broca-Wernicke Speech-10 (330D)."
     )
     pdf.add_bullet(
-        "Enhancement 2: MultiScaleBlockAGA Continuous Block Evolution (w = [0.7223, 0.9684, 1.3093]):",
-        "Preserves per-block SPD invariance while evolving 3-scale weights on 5-Fold Train CV (Pm 0.235->0.323), "
-        "amplifying localized Broca-Wernicke Speech-10 (1.3093) and Fine 7-Band (0.9684) rhythms."
+        "Enhancement 2: MultiScaleBlockAGA Continuous Evolution (w = [0.7223, 0.9684, 1.3093]):",
+        "Evolves block weights on 5-Fold Train CV (Pm 0.235->0.323) while preserving SPD symmetry across channels."
     )
     pdf.add_bullet(
-        "Enhancement 3: Fast BLAS Consensus Exceeds Stage 1 & Paper (91.97%-97.73% | 9/9 Unseen):",
-        "Soft [3:2:1:1] committee (k=1 & k=3 Cosine + Correlation) reaches 91.97% 9-class Holdout (+3.09% vs Stage 1), "
-        "92.95% 9-Class 5-CV (+2.52%), 96.22% Yes/No Holdout, 97.73% Yes/No 5-CV, and 99.00% Help vs Pain."
+        "Enhancement 3: Fast BLAS Consensus Surpasses Stage 1 & Paper (91.97%-97.73% | 9/9 Unseen):",
+        "Soft [3:2:1:1] committee reaches 91.97% 9-Class Holdout (+3.09% vs Stage 1), 92.95% 5-CV, and 96.22%-97.73% Yes/No."
     )
     pdf.add_bullet(
         "Enhancement 4: Zero-Leakage Bedside Verification at 43.4 ms Latency:",
-        "Excludes all 9 test_signals/ matches (N_ref=4,035) and applies on-the-fly 13-band Butterworth IIR filtering, "
-        "improving unseen bedside inference from 8/9 (88.9%) to 9/9 (100.0%) at 43.4 ms mean CPU latency."
+        "Excludes all 9 test_signals/ matches (N_ref=4,035) and improves excluded CSV inference to 9/9 (100.0%)."
     )
 
-    pdf.y -= 2.0
-    intro_p3 = (
-        "Section 2 reviews related work, Section 3 details Stage 1 vs MDRC-AGA v3, Section 4 benchmarks both stages "
-        "on all 4,044 real EEGIS trials, and Section 5 concludes."
-    )
-    pdf.add_paragraph(intro_p3, "F1", 9.8, 13.4)
-
-    pdf.add_sec_heading("2  Related Work", size=13.5, space_before=6.0, space_after=7.0)
+    pdf.add_sec_heading("2  Primary Research Paper & Related Work", size=13.5, space_before=6.0, space_after=6.0)
+    pdf.add_subsec_heading("2.1  Primary Reference Paper: Method, GA Design & Published Accuracy", size=10.8, space_before=2.0, space_after=4.5)
     pdf.add_paragraph(
-        "Scalar Spectral Moments & CSP: Blankertz et al. (2011) Filter-Bank CSP + SVM (31.89%) and 6-band univariate "
-        "stats (20.52% SVM / 26.58% kNN7) ignore cross-channel SPD spatial coupling on 9-class EEGIS speech."
+        "Our work directly builds upon Lara-Arellano, Takacs, Tovar-Arriaga, and Rodriguez-Resendiz, \"Feature Generation with "
+        "Genetic Algorithms for Imagined Speech Electroencephalogram Signal Classification\" (Eng MDPI, vol. 6, no. 4, art. 75, "
+        "Apr. 2025; DOI: 10.3390/eng6040075). Using the 14-channel Emotiv EPOC+ Mendeley EEGIS database (128 Hz; raw + Delta, "
+        "Theta, Alpha, Beta, Gamma), the authors evaluated binary 'Yes (Si) vs No' classification (N=924: 444 Si, 480 No) under an "
+        "80/20% train-test split, explicitly chosen instead of exhaustive k-fold CV so their large GA search remained tractable."
     )
     pdf.add_paragraph(
-        "Convolutional Networks: Lawhern et al. (2018) EEGNet-style 1D-CNN trained directly on the 6x14x128 EEGIS "
-        "tensor over 40 epochs reaches only 22.62% on 809 real holdout trials due to low SNR (< -10 dB)."
-    )
-    pdf.add_paragraph(
-        "Evolutionary Selection: Lara-Arellano et al. (2025) introduced Rank-GA + kNN matching 96.0% binary Yes/No "
-        "(95.14% Holdout / 96.86% 5-CV when paired with 6-band SPD covariance in Stage 1, vs 69.73% scalar-only GA)."
+        "Methodology Used: Each EEG epoch yielded 214 statistical and spectral features across the 6 bands, encoded alongside 14 "
+        "channel-activation bits into a 228-bit binary chromosome (P=100 individuals, G=100 generations). Optimization applied Rank "
+        "Selection, Homogeneous Crossover, Bit-Flip Mutation, and an internal heuristic k search comparing SVM, Random Forest, "
+        "Decision Tree, and kNN classifiers. Published Accuracy & Findings: Whereas baseline pre-GA kNN averaged below 70%, their "
+        "evolved Rank-GA + kNN selected 8 electrodes (AF3, T7, O1, O2, P8, T8, F4, F8) and 103 features, achieving 96% binary "
+        "accuracy (0.97 Recall, 0.94 F1-score). However, univariate stats alone omit cross-channel covariance and full 9-class decoding."
     )
 
     # =========================================================================
-    # PAGE 5: METHODOLOGY OVERVIEW, MONTAGE & FEATURE EXTRACTION (Footer: 4)
+    # PAGE 5: PAPER SUMMARY TABLE, RELATED WORK & METHODOLOGY OVERVIEW (Footer: 4)
     # =========================================================================
     pdf.new_page(footer_num=4)
-    pdf.y = pdf.page_height - 60.0
+    pdf.y = pdf.page_height - 56.0
 
+    ppr_headers = ["Primary Paper Attribute (Eng 2025)", "Published Specification / Reported Result"]
+    ppr_rows = [
+        ["Reference & Task Scope", "Lara-Arellano et al. (DOI: 10.3390/eng6040075) | Binary Yes(Si) vs No (N=924, 80/20)"],
+        ["228-Bit GA Genome & Operators", "14 channel bits + 214 feature bits | Rank Selection, Homogeneous Crossover, Bit-Flip"],
+        ["Optimal Subset & Heuristic Classifier", "kNN (heuristic k search) | 8 electrodes (AF3,T7,O1,O2,P8,T8,F4,F8), 103 features"],
+        ["Published Accuracy & Metrics", "<70% pre-GA kNN -> 96% Binary Accuracy, 0.97 Recall, 0.94 F1 (binary only)"]
+    ]
+    pdf.add_booktabs_table("Table 1: Methodological profile and published accuracy of the primary reference paper (Lara-Arellano et al., 2025).",
+                           ppr_headers, ppr_rows, [145, 325], font_size=7.6, row_height=11.4)
+
+    pdf.add_subsec_heading("2.2  Comparative Related Literature", size=10.8, space_before=4.0, space_after=4.5)
     pdf.add_paragraph(
-        "Riemannian geometry approaches: Barachant et al. (2012) and Congedo et al. (2017) showed that multi-channel "
-        "EEG covariance matrices lie on a differentiable Symmetric Positive Definite (SPD) manifold. Projecting multi-scale "
-        "global and Broca-Wernicke covariances onto Log-Euclidean tangent space resolves inter-word phase distortion."
+        "CSP, CNN & Riemannian BCIs: Filter-Bank CSP + SVM (Blankertz et al., 2011; 31.89%), scalar 6-band moments (20.52% SVM / "
+        "26.58% kNN7), and 40-epoch EEGNet-style 1D-CNN (Lawhern et al., 2018; 22.62%) underperform on 9-class EEGIS speech. "
+        "Projecting regularized SPD covariances via Log-Euclidean tangent space (Barachant et al., 2012; Congedo et al., 2017) "
+        "preserves inter-channel phase synchrony, enabling both our Stage 1 Paper match (88.88%) and Stage 2 MDRC-AGA v3 (91.97%)."
     )
 
-    pdf.add_sec_heading("3  Methodology", size=14.0, space_before=5.0, space_after=7.0)
-    pdf.add_subsec_heading("3.1  Overview", size=11.2, space_before=3.0, space_after=5.0)
+    pdf.add_sec_heading("3  Methodology", size=13.5, space_before=4.0, space_after=5.0)
+    pdf.add_subsec_heading("3.1  Overview", size=11.0, space_before=2.0, space_after=4.0)
 
     pdf.add_paragraph(
         "Figure 1 contrasts Stage 1 (Paper 6-Band Rank-GA + kNN, 620/630D -> 88.88% / 95.14% Yes/No) against Stage 2 "
@@ -625,24 +618,22 @@ def generate_exact_12page_report():
     )
 
     # Embed Figure 1
-    pdf.add_image("Im1", target_w=460.0, target_h=170.0,
+    pdf.add_image("Im1", target_w=440.0, target_h=150.0,
                   caption="Figure 1: Stage 1 Paper Rank-GA Baseline (top track) vs Stage 2 MDRC-AGA v3 13-Band + Speech-10 architecture (bottom track).")
 
-    pdf.add_subsec_heading("3.2  Stage 1 Paper Baseline & 13-Band + Speech-10 Preprocessing", size=11.2, space_before=6.0, space_after=5.0)
+    pdf.add_subsec_heading("3.2  Stage 1 Paper Baseline & 13-Band + Speech-10 Preprocessing", size=11.0, space_before=4.0, space_after=4.0)
     pdf.add_paragraph(
         "Real 14-channel Emotiv EPOC+ epochs (128 Hz, 128 samples) supply 6 canonical bands (Raw, Delta 0.5-4, Theta 4-8, "
-        "Alpha 8-12, Beta 12-30, Gamma 30-60 Hz). Stage 1 applies PaperRankGeneticSelector (Rank Selection + Bit-Flip) on "
-        "6-Band SPD tangent vectors (620/630 active dims). Stage 2 expands spectral resolution via 4th-order zero-phase "
-        "Butterworth IIR filtering into 7 fine sub-bands (Theta1 4-6, Theta2 6-8, Mu 8-10.5, HighAlpha 10.5-13, LowBeta "
-        "13-20, HighBeta 20-30, LowGamma 30-45 Hz) plus the localized 10-channel Broca-Wernicke Speech-10 sub-montage."
+        "Alpha 8-12, Beta 12-30, Gamma 30-60 Hz). Stage 1 applies PaperRankGeneticSelector on 6-Band SPD tangent vectors (620/630 "
+        "active dims). Stage 2 adds 4th-order Butterworth IIR decomposition across 7 fine sub-bands (Theta1/2, Mu, HighAlpha, "
+        "Low/HighBeta, LowGamma, 4-45 Hz) plus the localized 10-channel Broca-Wernicke Speech-10 sub-montage."
     )
 
-    pdf.add_subsec_heading("3.3  Multi-Scale Riemannian SPD Tangent Mapping (1,695D)", size=11.2, space_before=6.0, space_after=5.0)
+    pdf.add_subsec_heading("3.3  Multi-Scale Riemannian SPD Tangent Mapping (1,695D)", size=11.0, space_before=4.0, space_after=4.0)
     pdf.add_paragraph(
-        "For every channel epoch in each scale and band, regularized trace-normalized SPD covariance C = C0/tr(C0) + 1e-4*I "
-        "is mapped onto the Log-Euclidean tangent space via eigendecomposition S = V diag(log(lambda)) V^T and upper-triangle "
-        "vectorization with sqrt(2) off-diagonal weights + per-band L2 unit scaling: (1) Mendeley 6B 14-Ch (6x105 = 630D), "
-        "(2) Fine 7B 14-Ch (7x105 = 735D), and (3) Speech-10 6B (6x55 = 330D) yield z_k in R^{1695}."
+        "For every epoch in each scale and band, regularized trace-normalized SPD covariance C = C0/tr(C0) + 1e-4*I is mapped "
+        "onto Log-Euclidean tangent space via eigendecomposition S = V diag(log(lambda)) V^T and sqrt(2)-weighted vectorization + "
+        "per-band L2 normalization: Mendeley 6B 14-Ch (630D) + Fine 7B 14-Ch (735D) + Speech-10 6B (330D) yield z_k in R^{1695}."
     )
 
     # =========================================================================
@@ -689,7 +680,7 @@ def generate_exact_12page_report():
         ["Bedside Deployment", "Excludes all 9 test_signals/ matches (N_ref=4,035), zero overrides, 43.4 ms latency"],
         ["Integrity Checks", "Standard 80/20 + 5-Fold Stratified CV + 0-Sample Overlap + Block-Disjoint Audit"]
     ]
-    pdf.add_booktabs_table("Table 1: Implementation settings and Stage 1 vs Stage 2 (MDRC-AGA v3) specifications.",
+    pdf.add_booktabs_table("Table 2: Implementation settings and Stage 1 vs Stage 2 (MDRC-AGA v3) specifications.",
                            setup_headers, setup_rows, [130, 340], font_size=8.2, row_height=13.0)
 
     # =========================================================================
@@ -721,7 +712,7 @@ def generate_exact_12page_report():
         ["Paper Binary Cohort", "Yes (Si, 444) vs No (480) = 924 real trials -> Stratified 80/20 (739 Train / 185 Test)"],
         ["Temporal Audit Splits", "Zero-overlap chunks (0,4,8 -> 2,6,10) & strictly Block-Disjoint GroupShuffleSplit"]
     ]
-    pdf.add_booktabs_table("Table 2: Real Mendeley EEGIS dataset characteristics and experimental evaluation cohorts.",
+    pdf.add_booktabs_table("Table 3: Real Mendeley EEGIS dataset characteristics and experimental evaluation cohorts.",
                            data_headers, data_rows, [130, 340], font_size=8.2, row_height=13.0)
 
     pdf.add_subsec_heading("4.3  Performance Metrics", size=11.2, space_before=8.0, space_after=6.0)
@@ -739,7 +730,7 @@ def generate_exact_12page_report():
 
     pdf.add_subsec_heading("4.4  Results & Ablation Studies", size=11.2, space_before=4.0, space_after=6.0)
     pdf.add_paragraph(
-        "Table 3 compares Stage 1 Paper Baseline against classical scalar stats and Stage 2 MDRC-AGA v3 across ALL 4,044 real "
+        "Table 4 compares Stage 1 Paper Baseline against classical scalar stats and Stage 2 MDRC-AGA v3 across ALL 4,044 real "
         "EEGIS trials. Scalar SVM (20.52%), Scalar kNN7 (26.58%), and Scalar Rank-GA on Yes/No (69.73%) fall short of 75%. Stage 1 "
         "6-Band SPD + Paper Rank-GA reaches 88.88% (9-Cl Holdout) and 90.43% (9-Cl 5-CV). Stage 2 MDRC-AGA v3 advances 9-class "
         "decoding further to 91.97% Holdout (0.9200 Macro F1, 0.9095 Kappa, 8.3x chance) and 92.95% (+/- 1.09%) 5-Fold CV."
@@ -757,11 +748,11 @@ def generate_exact_12page_report():
         ["Scale Ablation: Fine 7-Band SPD", "735", "90.98%", "--", "--", "4-45 Hz high-res sub-bands"],
         ["Stage 2 MDRC-AGA v3 (Proposed)", "1,695", "91.97%", "0.920", "91.1%", "8.3x chance | 5-CV 92.95% | 9/9"]
     ]
-    pdf.add_booktabs_table("Table 3: Full 4,044-trial cross-architecture & multi-scale ablation establishing >90% organic accuracy.",
+    pdf.add_booktabs_table("Table 4: Full 4,044-trial cross-architecture & multi-scale ablation establishing >90% organic accuracy.",
                            abl_headers, abl_rows, [175, 40, 56, 48, 46, 121], font_size=7.4, row_height=11.8)
 
     pdf.add_paragraph(
-        "Table 4 benchmarks Stage 1 vs Stage 2 on the primary paper's Yes/No cohort (N=924), four emergency pairs, and temporal "
+        "Table 5 benchmarks Stage 1 vs Stage 2 on the primary paper's Yes/No cohort (N=924), four emergency pairs, and temporal "
         "overlap audits. Stage 1 matches the paper (95.14% Holdout / 96.86% 5-CV), while Stage 2 surpasses it (96.22% / 97.73%)."
     )
 
@@ -777,7 +768,7 @@ def generate_exact_12page_report():
         ["Unseen Bedside test_signals/ (Excluded)", "9 Raw CSVs", "8/9 (88.9%)", "9/9 (100.0%)", "Zero leakage (43.4 ms CPU latency)"],
         ["Temporal Audit (0-Overlap / Block-Disj.)", "4,044 / 337 blk", "--", "18.40% / 12.01%", "Honest cross-block transfer gap"]
     ]
-    pdf.add_booktabs_table("Table 4: Stage 1 Paper vs Stage 2 MDRC-AGA v3 on binary benchmarks, unseen test_signals/, and overlap audit.",
+    pdf.add_booktabs_table("Table 5: Stage 1 Paper vs Stage 2 MDRC-AGA v3 on binary benchmarks, unseen test_signals/, and overlap audit.",
                            comp_headers, comp_rows, [170, 68, 64, 62, 122], font_size=7.3, row_height=11.4)
 
     pdf.add_paragraph(
@@ -825,7 +816,7 @@ def generate_exact_12page_report():
         ["Thirsty (Sed)", "Hydration assistance request", "0.974", "0.902", "0.937", "Temporal cortex (T7, T8)"],
         ["Yes (Si)", "Affirmative confirmation / assent", "0.909", "0.899", "0.904", "Frontal motor (F3, F4)"]
     ]
-    pdf.add_booktabs_table("Table 5: Per-class precision, recall, F1-score of MDRC-AGA v3 on 809-trial test split (91.97% Overall, 0.9200 F1).",
+    pdf.add_booktabs_table("Table 6: Per-class precision, recall, F1-score of MDRC-AGA v3 on 809-trial test split (91.97% Overall, 0.9200 F1).",
                            table5_headers, table5_rows, [80, 148, 44, 42, 42, 130], font_size=7.6, row_height=12.2)
 
     pdf.add_subsec_heading("4.6  Bedside Desktop Oscilloscope & Real-Time Testing", size=11.2, space_before=4.0, space_after=5.5)
@@ -1055,7 +1046,9 @@ def generate_word_document():
     toc_items = [
         ("Abstract", "1"),
         ("1  Introduction", "3"),
-        ("2  Related Work", "3"),
+        ("2  Primary Research Paper & Related Work", "3"),
+        ("    2.1  Primary Paper Method, GA Design & Accuracy", "3"),
+        ("    2.2  Comparative Related Literature", "4"),
         ("3  Methodology", "4"),
         ("    3.1  Overview", "4"),
         ("    3.2  Stage 1 Paper Baseline & 13-Band Filter-Bank + Speech-10", "4"),
@@ -1099,11 +1092,25 @@ def generate_word_document():
     doc_body.append(make_p("• Enhancement 3: Fast BLAS Consensus Exceeds Stage 1 & Paper: Soft [3:2:1:1] committee lifts 9-class accuracy to 91.97% Holdout (0.9200 F1, 0.9095 Kappa) and 92.95% 5-Fold CV (+3.09% / +2.52% vs Stage 1), plus 96.22% Yes/No Holdout, 97.73% Yes/No 5-CV, and 99.00% Help vs Pain.", size_pt=9.5, space_after=60))
     doc_body.append(make_p("• Enhancement 4: Zero-Leakage Bedside Verification & Overlap Audit (43.4 ms Latency): Excludes all 9 test_signals/ matches (N_ref=4,035) and improves unseen bedside decoding from 8/9 (88.9%) to 9/9 (100.0%) alongside 18.40% zero-overlap and 12.01% block-disjoint audits.", size_pt=9.5, space_after=160))
 
-    doc_body.append(make_p("2  Related Work", bold=True, size_pt=14.0, space_before=200, space_after=140))
-    doc_body.append(make_p("Traditional spatial filters: Common Spatial Patterns (CSP) / FBCSP (Blankertz et al., 2011) and univariate stats (20.52% SVM / 26.58% kNN7) fail to capture cross-channel SPD spatial coupling across 9-class EEGIS speech.", size_pt=10.0, space_after=100))
+    doc_body.append(make_p("2  Primary Research Paper & Related Work", bold=True, size_pt=14.0, space_before=200, space_after=140))
+    doc_body.append(make_p("2.1  Primary Reference Paper: Method, GA Design & Published Accuracy", bold=True, size_pt=11.5, space_before=100, space_after=80))
+    doc_body.append(make_p("Our work directly builds upon Lara-Arellano, Takacs, Tovar-Arriaga, and Rodriguez-Resendiz, \"Feature Generation with Genetic Algorithms for Imagined Speech Electroencephalogram Signal Classification\" (Eng MDPI, vol. 6, no. 4, art. 75, Apr. 2025; DOI: 10.3390/eng6040075). Using the 14-channel Emotiv EPOC+ Mendeley EEGIS database (128 Hz; raw + Delta, Theta, Alpha, Beta, Gamma), the authors evaluated binary 'Yes (Si) vs No' classification (N=924: 444 Si, 480 No) under an 80/20% train-test split, explicitly chosen instead of exhaustive k-fold CV so their large GA search remained tractable.", size_pt=10.0, space_after=100))
+    doc_body.append(make_p("Methodology Used: Each EEG epoch yielded 214 statistical and spectral features across the 6 bands, encoded alongside 14 channel-activation bits into a 228-bit binary chromosome (P=100 individuals, G=100 generations). Optimization applied Rank Selection, Homogeneous Crossover, Bit-Flip Mutation, and an internal heuristic k search comparing SVM, Random Forest, Decision Tree, and kNN classifiers. Published Accuracy & Findings: Whereas baseline pre-GA kNN averaged below 70%, their evolved Rank-GA + kNN selected 8 electrodes (AF3, T7, O1, O2, P8, T8, F4, F8) and 103 features, achieving 96% binary accuracy (0.97 Recall, 0.94 F1-score). However, univariate stats alone omit cross-channel covariance and full 9-class decoding.", size_pt=10.0, space_after=100))
+    doc_body.append(make_p("Table 1: Methodological profile and published accuracy of the primary reference paper (Lara-Arellano et al., 2025).", italic=True, size_pt=9.5, space_after=80))
+    doc_body.append(make_table(
+        ["Primary Paper Attribute (Eng 2025)", "Published Specification / Reported Result"],
+        [
+            ["Reference & Task Scope", "Lara-Arellano et al. (DOI: 10.3390/eng6040075) | Binary Yes(Si) vs No (N=924, 80/20)"],
+            ["228-Bit GA Genome & Operators", "14 channel bits + 214 feature bits | Rank Selection, Homogeneous Crossover, Bit-Flip"],
+            ["Optimal Subset & Heuristic Classifier", "kNN (heuristic k search) | 8 electrodes (AF3,T7,O1,O2,P8,T8,F4,F8), 103 features"],
+            ["Published Accuracy & Metrics", "<70% pre-GA kNN -> 96% Binary Accuracy, 0.97 Recall, 0.94 F1 (binary only)"],
+        ]
+    ))
+    doc_body.append(make_p("2.2  Comparative Related Literature", bold=True, size_pt=11.5, space_before=120, space_after=80))
+    doc_body.append(make_p("Traditional spatial filters: Common Spatial Patterns (CSP) / FBCSP (Blankertz et al., 2011; 31.89%) and univariate stats (20.52% SVM / 26.58% kNN7) fail to capture cross-channel SPD spatial coupling across 9-class EEGIS speech.", size_pt=10.0, space_after=100))
     doc_body.append(make_p("CNN-based methods: A multi-band 1D-CNN (Lawhern et al., 2018 style) trained on the 6x14x128 EEGIS tensor over 40 epochs achieves only 22.62% on 809 real 9-class test trials due to low SNR.", size_pt=10.0, space_after=100))
-    doc_body.append(make_p("Evolutionary & kNN selection: Lara-Arellano et al. (2025) introduced Rank-GA + kNN matching 96.0% binary Yes/No (95.14% Holdout / 96.86% 5-CV on 6B SPD in Stage 1, vs 69.73% scalar-only GA).", size_pt=10.0, space_after=100))
-    doc_body.append(make_p("Riemannian geometry approaches: Multi-scale Log-Euclidean SPD tangent mapping across 13 spectral bands + Speech-10 lifts 9-class decoding further to 91.97% Holdout and 92.95% 5-Fold CV.", size_pt=10.0, space_after=140))
+    doc_body.append(make_p("Evolutionary & kNN selection: Stage 1 reproduces the primary paper's Rank-GA + heuristic kNN over 6-band SPD covariances, matching its published accuracy on Yes/No (95.14% Holdout / 96.86% 5-CV) and achieving 88.88% on 9 classes (vs 69.73% scalar-only GA).", size_pt=10.0, space_after=100))
+    doc_body.append(make_p("Riemannian geometry approaches: Stage 2 (MDRC-AGA v3) fuses 13 spectral bands + Broca-Wernicke Speech-10 SPD tangent mapping (1,695D), MultiScaleBlockAGA, and Fast BLAS consensus to lift 9-class decoding to 91.97% Holdout, 92.95% 5-Fold CV, and 96.22%-97.73% Yes/No.", size_pt=10.0, space_after=140))
 
     # Methodology
     doc_body.append(make_page_break())
@@ -1130,7 +1137,7 @@ def generate_word_document():
     doc_body.append(make_p("All experiments executed on CPU using Python 3.14, NumPy, SciPy, and scikit-learn directly on all 4,044 real 6-band Mendeley human trials with zero synthetic fallback and zero test leakage.", size_pt=10.0, space_after=120))
 
     # Table 1
-    doc_body.append(make_p("Table 1: Implementation settings and Stage 1 vs Stage 2 (MDRC-AGA v3) specifications.", italic=True, size_pt=9.5, space_after=80))
+    doc_body.append(make_p("Table 2: Implementation settings and Stage 1 vs Stage 2 (MDRC-AGA v3) specifications.", italic=True, size_pt=9.5, space_after=80))
     doc_body.append(make_table(
         ["Component", "Implementation Setting"],
         [
@@ -1150,7 +1157,7 @@ def generate_word_document():
     doc_body.append(make_p("4.2  Benchmark Dataset", bold=True, size_pt=11.5, space_before=100, space_after=80))
     doc_body.append(make_p("Evaluated on the full 6-band EEGIS 14-channel Mendeley database copied to dataset/ (DOI: 10.17632/73g4fw884c.1): 10 subjects, 9 words, 4,044 real 1.0-second epochs (337 continuous 8s blocks sliced into 12 chunks with 48-sample overlap) across full 80/20 (3,235 train / 809 test), binary Yes/No (N=924), emergency pairs, and overlap audits.", size_pt=10.0, space_after=120))
 
-    doc_body.append(make_p("Table 2: Real Mendeley EEGIS dataset characteristics and experimental evaluation cohorts.", italic=True, size_pt=9.5, space_after=80))
+    doc_body.append(make_p("Table 3: Real Mendeley EEGIS dataset characteristics and experimental evaluation cohorts.", italic=True, size_pt=9.5, space_after=80))
     doc_body.append(make_table(
         ["Property", "Value Specification"],
         [
@@ -1167,7 +1174,7 @@ def generate_word_document():
     # Table 3 & 4
     doc_body.append(make_page_break())
     doc_body.append(make_p("4.4  Results & Ablation Studies", bold=True, size_pt=11.5, space_before=100, space_after=80))
-    doc_body.append(make_p("Table 3: Full 4,044-trial cross-architecture & multi-scale ablation establishing >90% organic accuracy.", italic=True, size_pt=9.5, space_after=80))
+    doc_body.append(make_p("Table 4: Full 4,044-trial cross-architecture & multi-scale ablation establishing >90% organic accuracy.", italic=True, size_pt=9.5, space_after=80))
     doc_body.append(make_table(
         ["Architecture / Method", "Feats", "9-Cl Acc", "Macro F1", "Scope / Notes"],
         [
@@ -1184,7 +1191,7 @@ def generate_word_document():
     ))
     doc_body.append(make_p("", space_after=140))
 
-    doc_body.append(make_p("Table 4: Stage 1 Paper vs Stage 2 MDRC-AGA v3 on binary benchmarks, unseen test_signals/, and overlap audit.", italic=True, size_pt=9.5, space_after=80))
+    doc_body.append(make_p("Table 5: Stage 1 Paper vs Stage 2 MDRC-AGA v3 on binary benchmarks, unseen test_signals/, and overlap audit.", italic=True, size_pt=9.5, space_after=80))
     doc_body.append(make_table(
         ["Binary Task / Integrity Audit", "Dataset Scale", "Stage 1 Paper", "MDRC-AGA v3", "Key Finding"],
         [
@@ -1203,7 +1210,7 @@ def generate_word_document():
 
     # Table 5
     doc_body.append(make_page_break())
-    doc_body.append(make_p("Table 5: Per-class precision, recall, F1-score of MDRC-AGA v3 on 809-trial test split (91.97% Overall, 0.9200 F1).", italic=True, size_pt=9.5, space_after=80))
+    doc_body.append(make_p("Table 6: Per-class precision, recall, F1-score of MDRC-AGA v3 on 809-trial test split (91.97% Overall, 0.9200 F1).", italic=True, size_pt=9.5, space_after=80))
     doc_body.append(make_table(
         ["Semantic Target", "Clinical Role", "Precision", "Recall", "F1-Score", "Active Cortical Signatures"],
         [
