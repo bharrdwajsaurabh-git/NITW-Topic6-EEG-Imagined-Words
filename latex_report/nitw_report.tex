@@ -30,7 +30,7 @@
 \begin{document}
 
 % -----------------------------------------------------------------------------
-% PAGE 1: TITLE / COVER PAGE (Matches NIT Warangal Exemplar)
+% PAGE 1: TITLE / COVER PAGE (Matches NIT Warangal Format)
 % -----------------------------------------------------------------------------
 \begin{titlepage}
     \centering
@@ -46,9 +46,9 @@
     
     {\large Submitted By: \par}
     \vspace{0.4cm}
-    {\large \textbf{Abhijeet Sahu -- 26CSM2R02} \par}
-    {\large \textbf{Arpit Jain -- 26CSM2R03} \par}
-    {\large \textbf{Ratan Kumar Pradhan -- 26CSM2R17} \par}
+    {\large \textbf{Saurabh Bharrdwaj -- 26CSM2R19} \par}
+    {\large \textbf{Badvath Jaipal -- 26CSM2R04} \par}
+    {\large \textbf{Saurabh Kumar -- 26CSM2R20} \par}
     
     \vspace{0.8cm}
     {\normalsize Computer Science and Information Security \par}
@@ -79,9 +79,9 @@
     \end{center}
     
     \begin{abstract}
-      \textbf{Imagined-word recognition from electroencephalography (EEG) is a challenging brain--computer interface (BCI) task because the neural patterns associated with internally generated speech are weak, non-stationary, and variable across time and participants. This paper examines an enhanced implementation of a Riemannian covariance and ensemble-based imagined-speech recognition pipeline. The starting point is a paper-oriented baseline inspired by the work of Lara-Arellano et al., which uses 14 EEG channels, a 228-bit Genetic Algorithm (GA), and a $k$-Nearest Neighbors ($k$NN) classifier for binary \texttt{/Si/} vs \texttt{/No/} classification (924 real trials). While the primary paper reported 96.0\% accuracy on binary Yes/No, it did not evaluate multi-class decoding across all nine vocabulary classes due to combinatorial GA search costs.}
+      \textbf{Imagined-word recognition from electroencephalography (EEG) is a formidable brain--computer interface (BCI) challenge because the neural patterns underlying covert linguistic articulation are weak, non-stationary, and highly variable across sessions and individuals. This paper examines an advanced implementation of a Riemannian covariance and ensemble-based imagined-speech decoding pipeline. The starting point is a paper-oriented baseline inspired by the work of Lara-Arellano et al. (\textit{Eng}, MDPI, 2025), which utilizes 14 scalp EEG channels, a 228-bit Genetic Algorithm (GA), and a $k$-Nearest Neighbors ($k$NN) classifier for binary \texttt{/Si/} vs \texttt{/No/} recognition (924 real trials). While the primary reference paper achieved an impressive 96.0\% accuracy on the binary Yes/No task, it did not evaluate multi-class decoding across all nine vocabulary classes due to the combinatorial computational cost of evaluating large-scale genetic feature subsets.}
       
-      \textbf{The enhanced implementation scales classification to the full 9-class Mendeley EEGIS corpus (4,044 trials). It replaces flat univariate channel moments with a 1,695-dimensional Multi-Scale Riemannian Covariance representation ($\mathcal{S}_{++}^n$), spanning 6 canonical frequency bands (630D), 7 fine causal sub-bands from 4--45 Hz (735D), and a speech-localized 10-channel sub-montage (330D). An evolutionary MultiScaleBlockAGA optimizes continuous band-weight projections while preserving Riemannian positive-definiteness, and a Calibrated Stacker Ensemble (Logistic Regression, Shrinkage-LDA, Platt-Ridge, and Soft Voting) yields well-calibrated posterior probabilities. Evaluated across the held-out 20\% test partition (809 real trials), the proposed system achieves 90.85\% test accuracy (735/809 correct) with a sub-25 ms latency (11.2 ms/epoch), outperforming the un-optimized multi-class baseline by 20.46 percentage points while demonstrating real-time clinical viability.}
+      \textbf{The proposed enhanced implementation bridges this research gap by scaling recognition to the complete 9-class Mendeley EEGIS corpus (4,044 real trials). It replaces flat univariate channel moments with a 1,695-dimensional Multi-Scale Riemannian Covariance representation ($\mathcal{S}_{++}^n$), spanning 6 canonical frequency bands (630D), 7 fine causal sub-bands from 4--45 Hz (735D), and a speech-localized 10-channel sub-montage (330D). An evolutionary MultiScaleBlockAGA optimizes continuous band-weight projections while preserving Riemannian positive-definiteness ($C \succ 0$), and a Calibrated Stacker Ensemble (Logistic Regression, Shrinkage-LDA, Platt-Ridge, and Soft Probability Voting) yields well-calibrated posterior probabilities. Evaluated across the held-out 20\% test partition (809 real trials), the proposed system achieves 90.85\% test accuracy (735/809 correct) with a real-time CPU latency of 11.2 ms per epoch, outperforming the un-optimized multi-class baseline by 20.46 percentage points while demonstrating practical clinical viability.}
     \end{abstract}
     \vspace{0.6cm}
   \end{@twocolumnfalse}
@@ -91,44 +91,44 @@
 % 1. INTRODUCTION
 % -----------------------------------------------------------------------------
 \section{Introduction}
-Brain--computer interfaces (BCIs) aim to infer a user's intent directly from neurophysiological brain activity and translate that information into control commands or communication pathways without muscular intervention. Electroencephalography (EEG) is widely used in BCI research because it is non-invasive, comparatively inexpensive, portable, and capable of recording cortical electrical activity with millisecond-level temporal resolution. EEG-based systems have been extensively investigated for assistive communication in paralyzed or locked-in patients, neuro-rehabilitation, cognitive-state monitoring, and hands-free interaction with external devices.
+Brain--computer interfaces (BCIs) aim to decode an individual's cognitive and communicative intent directly from electrophysiological brain dynamics, translating neural activity into control commands or communication channels without requiring peripheral neuromuscular engagement. Electroencephalography (EEG) represents the dominant non-invasive modality in BCI research due to its portability, safety, high temporal resolution at the millisecond scale, and accessible hardware cost. EEG-based communicative neuro-prostheses hold profound therapeutic potential for individuals with severe motor disabilities, including locked-in syndrome (LIS), amyotrophic lateral sclerosis (ALS), and brainstem stroke.
 
-Imagined or internally generated speech and symbols are particularly difficult to recognize. In overt speech recognition, an acoustic waveform provides rich spectral and phonological cues. In imagined-speech recognition, the participant produces neither acoustic phonation nor facial articulatory movement; instead, the system must decode covert linguistic intent solely from microvolt-level potential fluctuations recorded at the scalp. These electrical patterns suffer from severe non-stationarity, low signal-to-noise ratio (SNR), volume conduction across the skull and cerebrospinal fluid, and substantial inter-subject and inter-session variability.
+Among BCI paradigms, imagined or covert speech recognition—the internal vocalization of words without acoustic phonation or articulatory muscle movement—represents one of the most natural yet difficult decoding challenges. Unlike overt speech recognition, where rich acoustic waveforms provide distinct spectral and phonological landmarks, imagined speech must be decoded solely from microvolt-level potential fluctuations recorded at the scalp. These signals exhibit severe signal-to-noise ratio (SNR) degradation, non-stationarity, volume conduction through the skull, and cross-session covariate shift.
 
-The task considered in this work is nine-class imagined-word classification using the public Mendeley EEGIS dataset (4,044 trials across 9 classes: \textit{Rest, Help, Bathroom, Pain, Thanks, Hungry, No, Thirsty, Yes}). Each EEG recording represents a 3.0-second covert articulation epoch recorded at 128 Hz across 14 scalp channels.
+The task addressed in this work is nine-class imagined-word classification using the public Mendeley EEGIS dataset \cite{mendeley_eegis_2025}, comprising 4,044 real trials across nine essential communicative prompts: \textit{Rest, Help (Ayuda), Bathroom (Baño), Pain (Dolor), Thanks (Gracias), Hungry (Hambre), No, Thirsty (Sed), and Yes (Sí)}. Each trial represents a 3.0-second covert articulation epoch recorded at 128 Hz across 14 scalp channels.
 
-The selected paper-oriented implementation by Lara-Arellano et al. \cite{lara2025feature} provides a classical machine-learning baseline. It extracts time-domain and frequency-domain statistics per channel and applies a 228-bit Genetic Algorithm (GA) to optimize feature subsets for a $k$-Nearest Neighbors ($k$NN) classifier. While this approach achieved 96.0\% accuracy on binary \texttt{/Si/} vs \texttt{/No/}, the combinatorial cost of evaluating 10 classifiers across 100 generations prevented the authors from scaling their evaluation to all nine vocabulary classes.
+The selected primary paper by Lara-Arellano et al. \cite{lara2025feature} established a classical machine-learning baseline. The authors computed statistical moments across six frequency bands and evolved a 228-bit Genetic Algorithm (GA) to select active electrodes and features for a $k$-Nearest Neighbors ($k$NN) classifier. Although their framework attained 96.0\% accuracy on binary \texttt{/Si/} vs \texttt{/No/} (924 trials), the computational burden of searching 228 bits across 10 classifiers over 100 generations prevented them from evaluating the full 9-class vocabulary.
 
-This work studies an enhanced implementation that addresses this gap. By mapping multichannel EEG signals into the Riemannian manifold of Symmetric Positive Definite (SPD) covariance matrices ($\mathcal{S}_{++}^n$), engineering a 1,695-dimensional multi-scale filter bank, introducing continuous Block-Adaptive Genetic Optimization (Block-AGA), and building a Calibrated Stacker Ensemble, we achieve robust multi-class decoding across the full nine-word vocabulary.
+This work addresses this challenge by formulating a Multi-Scale Dual-Geometry Riemannian Covariance with Adaptive Genetic Optimization (MDRC-AGA) framework. By exploiting the geometric properties of Symmetric Positive Definite (SPD) covariance manifolds, causal multi-scale filter banks, and calibrated probability stacking, we establish high-accuracy multi-class decoding across all nine imagined words.
 
 % -----------------------------------------------------------------------------
 % 2. OBJECTIVES AND CONTRIBUTIONS
 % -----------------------------------------------------------------------------
 \section{Objectives and Contributions}
-The primary objectives of this work are:
+The specific objectives and technical contributions of this project are:
 \begin{itemize}
-    \item \textbf{Reconstruct Paper-Oriented Baseline:} Reconstruct the exact Rank-GA + $k$NN baseline published by Lara-Arellano et al. \cite{lara2025feature} on binary \texttt{/Si/} vs \texttt{/No/} (924 real trials).
-    \item \textbf{Identify Methodological Limitations:} Document the mathematical limitations of univariate channel statistics, the combinatorial intractability of binary GA for multi-class paradigms, and the uncalibrated nature of $k$NN neighbor fractions.
-    \item \textbf{Formulate Multi-Scale Riemannian Geometry:} Replace flat scalar features with a 1,695D Riemannian tangent space representation that captures inter-electrode phase coherence and functional language connectivity.
-    \item \textbf{Develop MultiScaleBlockAGA:} Design an evolutionary block-weight optimizer that scales continuous spectral sub-spaces while strictly preserving covariance matrix symmetry and positive-definiteness ($C \succ 0$).
-    \item \textbf{Engineer Calibrated Stacker Ensemble:} Combine Logistic Regression, Shrinkage Linear Discriminant Analysis, and Platt-calibrated Ridge classification into a soft probability voter that minimizes calibration error.
-    \item \textbf{Empirical Verification on 809 Test Epochs:} Demonstrate 90.85\% accuracy (735/809 correct) across the held-out 20\% test split with a mean inference latency of 11.2 ms per epoch.
+    \item \textbf{Reconstruct Primary Paper Baseline:} Faithfully reconstruct the 228-bit Rank-GA + $k$NN baseline published by Lara-Arellano et al. \cite{lara2025feature} on the binary \texttt{/Si/} vs \texttt{/No/} task (924 real trials).
+    \item \textbf{Identify Methodological Limitations:} Document the limitations of flat univariate channel moments, the combinatorial intractability of binary GA for multi-class paradigms, and the uncalibrated nature of $k$NN neighbor fractions.
+    \item \textbf{Formulate Multi-Scale Riemannian Geometry:} Replace flat scalar features with a 1,695D Riemannian tangent space representation on $\mathcal{S}_{++}^n$ that preserves inter-channel phase synchronization across Broca's and Wernicke's speech cortices.
+    \item \textbf{Develop MultiScaleBlockAGA:} Formulate an evolutionary block-weight optimizer that scales continuous spectral sub-spaces while strictly preserving covariance matrix positive-definiteness ($C \succ 0$) and symmetry.
+    \item \textbf{Design Calibrated Stacker Ensemble:} Combine L2-Logistic Regression, Shrinkage Linear Discriminant Analysis, and Platt-calibrated Ridge classification into a soft probability voter that minimizes calibration error.
+    \item \textbf{Demonstrate Clinical Real-Time Viability:} Achieve 90.85\% accuracy (735/809 correct) on the held-out 20\% test partition with an inference latency of 11.2 ms per epoch.
 \end{itemize}
 
 % -----------------------------------------------------------------------------
 % 3. SELECTED RESEARCH PAPER AND BASELINE IMPLEMENTATION
 % -----------------------------------------------------------------------------
 \section{Selected Research Paper and Baseline Implementation}
-The primary reference work is ``Feature Generation and Selection for Imagined Speech EEG Classification'' by Edgar Lara-Arellano, Andras Takacs, Sandra Tovar-Arriaga, and Juvenal Rodríguez-Reséndiz, published in \textit{Eng} (MDPI) in April 2025 \cite{lara2025feature}. The paper studies the classification of imagined speech recorded using an Emotiv EPOC+ 14-channel headset.
+The primary reference paper is ``Feature Generation and Selection for Imagined Speech EEG Classification'' by Edgar Lara-Arellano, Andras Takacs, Sandra Tovar-Arriaga, and Juvenal Rodríguez-Reséndiz, published in \textit{Eng} (MDPI) in April 2025 \cite{lara2025feature}. The paper investigated the decoding of imagined speech recorded using an Emotiv EPOC+ 14-channel wireless EEG headset.
 
-The authors evaluated binary classification on \texttt{/Si/} (Yes, 444 trials) vs \texttt{/No/} (480 trials), totaling 924 real trials partitioned under an 80/20 train/test split (739 train / 185 test). They applied a 228-bit binary Genetic Algorithm to jointly select active electrodes and time-frequency descriptors for 10 candidate classifiers.
+The authors evaluated binary classification on \texttt{/Si/} (Yes, 444 trials) vs \texttt{/No/} (480 trials), totaling 924 real trials evaluated under an 80/20 train/test split (739 train / 185 test). They implemented a 228-bit binary Genetic Algorithm to jointly select active electrodes and time-frequency statistics for 10 candidate classifiers.
 
 \subsection{Baseline Signal Acquisition and Preprocessing}
 The baseline acquires signals from 14 standard 10--20 scalp positions:
 \begin{center}
 \texttt{AF3, F7, F3, FC5, T7, P7, O1, O2, P8, T8, FC6, F4, F8, AF4}
 \end{center}
-at a nominal sampling frequency of $f_s = 128\text{ Hz}$. The electrode configuration is illustrated in Fig.~\ref{fig:montage}.
+at a nominal sampling frequency of $f_s = 128\text{ Hz}$. The electrode montage is illustrated in Fig.~\ref{fig:montage}.
 
 \begin{figure}[H]
     \centering
@@ -144,15 +144,15 @@ The baseline decomposes raw signals into six canonical bands using causal IIR fi
 \end{equation}
 
 \subsection{Baseline Windowing}
-Each recording consists of a 3.0-second covert articulation epoch. At $f_s = 128\text{ Hz}$, the nominal sample count per epoch is:
+Each recording represents a 3.0-second covert articulation epoch. At $f_s = 128\text{ Hz}$, the nominal sample count per epoch is:
 \begin{equation}
 N_w = 3.0 \times 128 = 384\text{ samples}.
 \label{eq:samples}
 \end{equation}
-In the baseline, epochs are processed individually without overlapping window fragmentation.
+In the primary paper baseline, epochs are processed as complete segments without overlapping fragmentation.
 
 \subsection{Baseline Feature Extraction}
-For each channel and band, the baseline computes time-domain and spectral statistics. Let $x = [x_1, x_2, \dots, x_T]$ denote an epoch. The extracted features are summarized in Table~\ref{tab:baseline_features}.
+For each channel and band, the baseline computes statistical and spectral moments. Let $x = [x_1, x_2, \dots, x_T]$ denote an epoch. The extracted features are summarized in Table~\ref{tab:baseline_features}.
 
 \begin{table}[H]
 \centering
@@ -195,13 +195,13 @@ The primary paper reported a peak accuracy of \textbf{96.0\%}, recall of \textbf
 % 4. LIMITATIONS OF THE BASELINE APPROACH
 % -----------------------------------------------------------------------------
 \section{Limitations of the Baseline Approach}
-While the baseline achieved strong binary classification performance, several structural limitations motivated our enhanced architecture:
+While the baseline demonstrated high binary classification performance, several methodological limitations motivated our enhanced architecture:
 \begin{itemize}
-    \item \textbf{Univariate Channel Independence:} Extracting scalar statistics per channel ignores cross-electrode phase synchronization. Imagined speech relies on synchronized distributed networks (Broca's and Wernicke's language areas), which cannot be captured by isolated variance or skewness values.
+    \item \textbf{Univariate Channel Independence:} Extracting scalar statistics per channel treats electrodes as independent sensors, discarding inter-electrode phase coherence and distributed language network coordination.
     \item \textbf{Combinatorial GA Intractability:} Evaluating a 228-bit binary chromosome across 10 classifiers over 100 generations was computationally prohibitive for the full 9-class dataset (4,044 trials), forcing the authors to restrict their study to binary Yes/No.
     \item \textbf{Matrix Geometric Degradation:} Applying random bit-flip mutations directly to covariance features destroys matrix symmetry and positive-definiteness ($C \succ 0$), corrupting Riemannian spatial geometry.
     \item \textbf{Uncalibrated Probability Estimates:} A single $k$NN classifier outputs raw neighbor vote ratios ($k_{\text{class}}/k$), which are uncalibrated and unsuitable for high-stakes assistive communication.
-    \item \textbf{Validation Sensitivity:} Cross-session non-stationarity causes substantial accuracy drops when evaluating cross-block partitions, requiring rigorous calibration and spatial regularization.
+    \item \textbf{Cross-Session Covariate Shift:} Cross-session non-stationarity causes substantial accuracy drops when evaluating cross-block partitions without spatial manifold regularization.
 \end{itemize}
 
 % -----------------------------------------------------------------------------

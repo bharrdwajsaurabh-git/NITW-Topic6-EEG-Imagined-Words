@@ -409,9 +409,9 @@ def generate_report():
     pdf.current_stream.append(f"q {logo_w:.2f} 0 0 {logo_h:.2f} {logo_x:.2f} {logo_y:.2f} cm /LOGO Do Q\n")
 
     # Project Title (Centered, 17 pt bold)
-    title_line1 = "EEG-Based Imagined Digit & Word Recognition"
+    title_line1 = "EEG-Based Imagined Word Recognition"
     title_line2 = "Using Multi-Scale Riemannian Covariance and"
-    title_line3 = "Calibrated Stacker Classification"
+    title_line3 = "Calibrated Stacker Ensemble"
     
     y_pos = 530.0
     w1 = get_text_width(title_line1, "F2", 17.0)
@@ -431,9 +431,9 @@ def generate_report():
 
     # Student Names & Roll Numbers
     students = [
-        ("Abhijeet Sahu - 26CSM2R02", 11.5, "F2"),
-        ("Arpit Jain - 26CSM2R03", 11.5, "F2"),
-        ("Ratan Kumar Pradhan - 26CSM2R17", 11.5, "F2"),
+        ("Saurabh Bharrdwaj - 26CSM2R19", 11.5, "F2"),
+        ("Badvath Jaipal - 26CSM2R04", 11.5, "F2"),
+        ("Saurabh Kumar - 26CSM2R20", 11.5, "F2"),
         ("", 8.0, "F1"),
         ("Computer Science and Information Security", 11.0, "F1"),
         ("Department of Computer Science and Engineering", 11.0, "F1"),
