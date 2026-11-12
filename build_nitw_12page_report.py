@@ -11,7 +11,7 @@ Deliverables generated:
 
 Topic 6: Prediction of Imagined Words (Help, Hungry, Thirsty, Fire, etc.) Using Brain EEG Signals
 Department of Computer Science and Engineering, National Institute of Technology Warangal
-Team: Saurabh Bharrdwaj (Lead) • Badvath Jaipal • Saurabh Kumar
+Team: Saurabh Bharrdwaj • Badvath Jaipal • Saurabh Kumar
 Date: November 2026
 """
 

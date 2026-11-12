@@ -96,7 +96,7 @@ class EEGDecoderGUI:
 
         tk.Label(
             header,
-            text="Team: Saurabh Bharrdwaj (Lead) • Badvath Jaipal • Saurabh Kumar",
+            text="Team: Saurabh Bharrdwaj • Badvath Jaipal • Saurabh Kumar",
             font=("Segoe UI", 10),
             fg=self.text_muted,
             bg="#090d16",

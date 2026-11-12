@@ -7,7 +7,7 @@ with an official NIT Warangal Cover Page for Topic 6:
 and Calibrated Stacker Ensemble"
 
 Team:
-- Saurabh Bharrdwaj (26CSM2R19) - Lead
+- Saurabh Bharrdwaj (26CSM2R19)
 - Badvath Jaipal (26CSM2R04)
 - Saurabh Kumar (26CSM2R20)
 Project Supervisor: Dr. Manish Kumar Bajpai
@@ -437,15 +437,13 @@ li {
     
     <div class="cover-body">
         <div class="cover-title">EEG-Based Imagined Word Recognition Using Multi-Scale Riemannian Covariance and Calibrated Stacker Ensemble</div>
-        <div class="cover-sub">A Project Report submitted in partial fulfillment of the requirements for the award of degree of Master of Technology in Computer Science and Information Security</div>
-        <div class="cover-topic">Topic 6: Advanced Algorithms &bull; Covert Speech Decoding</div>
     </div>
     
     <div class="cover-details">
         <div class="cover-box">
             <div class="cover-box-label">Submitted by:</div>
             <div class="cover-name">Saurabh Bharrdwaj</div>
-            <div class="cover-subtext">Roll No.: 26CSM2R19 (Lead)</div>
+            <div class="cover-subtext">Roll No.: 26CSM2R19</div>
             <div class="cover-name" style="margin-top: 4pt;">Badvath Jaipal</div>
             <div class="cover-subtext">Roll No.: 26CSM2R04</div>
             <div class="cover-name" style="margin-top: 4pt;">Saurabh Kumar</div>
@@ -479,7 +477,7 @@ li {
         <div class="author-grid">
             <div class="author-block">
                 <div class="author-name">Saurabh Bharrdwaj</div>
-                <div class="author-roll">Roll No.: 26CSM2R19 (Lead)</div>
+                <div class="author-roll">Roll No.: 26CSM2R19</div>
             </div>
             <div class="author-block">
                 <div class="author-name">Badvath Jaipal</div>

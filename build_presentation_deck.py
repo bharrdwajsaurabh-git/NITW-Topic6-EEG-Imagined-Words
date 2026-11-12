@@ -20,7 +20,7 @@ slides_data = [
             <div class="team-grid">
                 <div class="team-member">
                     <strong>Saurabh Bharrdwaj</strong>
-                    <span>Team Lead</span>
+                    <span>26CSM2R19</span>
                     <small>Architecture, Riemannian Geometry &amp; Dual-Protocol Audit</small>
                 </div>
                 <div class="team-member">
@@ -564,7 +564,7 @@ slides_data = [
         </div>
         <div class="text-center mt-3">
             <h3>Thank You! Questions &amp; Discussion</h3>
-            <p>Team: Saurabh Bharrdwaj (Lead) | Badvath Jaipal | Saurabh Kumar &mdash; NIT Warangal (CS26001)</p>
+            <p>Team: Saurabh Bharrdwaj | Badvath Jaipal | Saurabh Kumar &mdash; NIT Warangal (CS26001)</p>
         </div>
         """,
         "notes": "In summary, we remediated all audit flaws, removed sibling leakage, evaluated Block-Disjoint Primary and Exploratory Chunk 5-CV side by side with calibration and bootstrap CIs, and verified 8 unit tests and honest CLI/GUI inference. Thank you!"

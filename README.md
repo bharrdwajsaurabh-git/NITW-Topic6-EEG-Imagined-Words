@@ -1,7 +1,7 @@
 # EEG-Based Imagined Words Decoding via Multi-Scale Riemannian Manifold & Nested Adaptive GA (CS26001)
 
 > **NIT Warangal — Course Project (Topic 6): Deep & Evolutionary Frameworks for EEG-Based Imagined Speech Decoding**  
-> **Team:** Saurabh Bharrdwaj (Lead) • Badvath Jaipal • Saurabh Kumar  
+> **Team:** Saurabh Bharrdwaj • Badvath Jaipal • Saurabh Kumar  
 > **Scope Notice:** Offline Signal-Driven BCI Research Prototype on pre-recorded 1.0 s 14-channel 128 Hz epochs (NOT a real-time clinical streaming controller or hardware DAC system).  
 > **Primary Research Reference:** Lara-Arellano, E., Takacs, T. A., Tovar-Arriaga, S., & Rodriguez-Resendiz, J. (2025). *"Feature Generation with Genetic Algorithms for Imagined Speech Electroencephalogram Signal Classification."* **Eng (MDPI)**, 6(4), 75. DOI: `10.3390/eng6040075`.  
 > **Dataset Source:** Official Real 6-Band **EEGIS Mendeley Corpus** (DOI: `10.17632/73g4fw884c.1`) — `4,044` 1.0 s trials × 6 canonical bands (`24,264` CSVs) reconstructed from **`337` continuous 8 s (1,008-sample) recording blocks** (`overlap = 48 samples / 37.5%`, `stride = 80 samples`, `within_block_max_abs_diff = 0.0 uV`, `between_block_mean_abs_diff = 197.40 uV`). Participant IDs are absent in the distributed Mendeley archive and explicitly marked `anonymized_unrecoverable` (`subject_ids_recoverable = false`).
