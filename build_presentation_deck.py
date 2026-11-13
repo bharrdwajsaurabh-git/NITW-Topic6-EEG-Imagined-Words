@@ -4,14 +4,13 @@ build_presentation_deck.py
 Generates a stunning, modern, highly attractive 19-slide presentation deck:
 'NITW_Topic6_Presentation.html'
 
-Key Enhancements:
-1. Increased content depth & technical rigor (gaps in primary paper, why MDRC-AGA was chosen, detailed mathematical methods).
-2. Significantly enlarged typography for effortless readability from the back of an exam hall (12.5-14pt body, 24-28pt titles).
-3. Modern dark academic glassmorphism UI (#0a1128, cyan #00d2ff, emerald #06d6a0, gold #ffd166).
-4. Clean card-based visual layouts with embedded high-resolution figures.
-5. Removed on-slide "What to say to professor" drawer to eliminate visual clutter.
-6. Promising, visionary Conclusion & Strategic Future Roadmap on Slide 19.
-7. Exact ground-truth JSON metrics (Calibrated Stacker: 73.55%, Peak Soft Voter: 90.85%).
+Key User Upgrades:
+1. Improved architecture pipeline diagram ('architecture_flow_diagram.png') featured front-and-center on Slide 8!
+2. Eliminated all harsh red colors - replaced with distinguished warm solar amber (#ffb703 / #ffd166) and electric cyan (#00d2ff).
+3. Substantially enlarged typography (Titles: 28-32pt, Card Headings: 18-20pt, Body & Bullets: 14-15.5pt, Stat Numbers: 40-44pt).
+4. Prominent, grand "THANK YOU!" section on the final slide with inviting Q&A discussion block.
+5. High-readability dark glassmorphism aesthetic (#060b18, #121e42, #00d2ff, #06d6a0).
+6. Exact uninflated ground-truth JSON metrics (Calibrated Stacker: 73.55%, Peak Soft Voter: 90.85%).
 """
 
 import os
@@ -90,7 +89,7 @@ def build_deck():
             "subtitle": "Bridging the Critical Communication Barrier in Locked-In Syndrome and ALS",
             "html": """
             <div class="grid-2col">
-                <div class="info-card alert-card">
+                <div class="info-card warm-card">
                     <h3><span class="icon">&#9888;</span> The Neurological Challenge</h3>
                     <p>Patients suffering from <strong>Amyotrophic Lateral Sclerosis (ALS)</strong>, severe brainstem stroke, or high cervical trauma lose all peripheral neuromuscular control, entering <strong>Locked-In Syndrome (LIS)</strong>.</p>
                     <p>While cognitively alert, these individuals cannot articulate speech or control conventional mechanical assistive devices. Restoring communicative autonomy is an urgent clinical imperative.</p>
@@ -107,12 +106,12 @@ def build_deck():
                         <div class="chip chip-em">Help</div>
                         <div class="chip chip-em">Hungry</div>
                         <div class="chip chip-em">Thirsty</div>
-                        <div class="chip">Yes (S&iacute;)</div>
-                        <div class="chip">No</div>
-                        <div class="chip">Rest</div>
+                        <div class="chip chip-cyan">Yes (S&iacute;)</div>
+                        <div class="chip chip-cyan">No</div>
+                        <div class="chip chip-cyan">Rest</div>
                         <div class="chip chip-warn">Pain</div>
                         <div class="chip chip-warn">Bathroom</div>
-                        <div class="chip chip-cyan">Thanks</div>
+                        <div class="chip chip-em">Thanks</div>
                     </div>
                     <div class="callout-box" style="margin-top: 16pt;">
                         <strong>Clinical Latency Budget:</strong> Decision must be rendered in <strong>&lt; 25 ms</strong> to enable fluid, interactive neuro-prosthetic augmentative and alternative communication (AAC).
@@ -128,10 +127,10 @@ def build_deck():
             "badge": "Stage 1: Reference Paper",
             "title": "Primary Reference Paper: Lara-Arellano et al. (MDPI Eng, 2025)",
             "subtitle": "Feature Generation and Selection for Imagined Speech EEG Classification",
-            "html": """
+            "html": f"""
             <div class="grid-2col">
                 <div class="info-card">
-                    <h3><span class="icon">&#128214;</span> Paper Overview &amp; Experimental Design</h3>
+                    <h3><span class="icon">&#128214;</span> Paper Methodology &amp; 14-Channel Setup</h3>
                     <div class="bullet-list">
                         <div class="bitem"><strong>Citation:</strong> E. Lara-Arellano, A. Takacs, S. Tovar-Arriaga, and J. Rodr&iacute;guez-Res&eacute;ndiz, <em>Eng</em> (MDPI), vol. 6, no. 4, art. 75, Apr. 2025.</div>
                         <div class="bitem"><strong>Dataset:</strong> EEGIS Database (Mendeley Data V1), 14 channels at 128 Hz.</div>
@@ -141,14 +140,9 @@ def build_deck():
                     </div>
                 </div>
                 
-                <div class="info-card">
-                    <h3><span class="icon">&#9881;</span> Primary Paper Pipeline &amp; Claims</h3>
-                    <div class="bullet-list">
-                        <div class="bitem"><strong>Feature Engineering:</strong> Computes 214 univariate moments per channel across 6 bands + raw signal &rarr; <strong>2,996 flat scalar moments</strong> per trial (variance, skewness, kurtosis, Hjorth parameters, spectral entropy).</div>
-                        <div class="bitem"><strong>Genetic Algorithm (GA):</strong> 228-bit binary chromosome with uniform crossover (p<sub>c</sub> = 0.85) and bit-flip mutation (p<sub>m</sub> = 0.03).</div>
-                        <div class="bitem"><strong>Classifier:</strong> Single <em>k</em>-Nearest Neighbors (<em>k</em>NN, <em>k</em> = 5).</div>
-                        <div class="bitem"><strong>Published Benchmark:</strong> <strong>96.00% binary test accuracy</strong> with 288 selected features.</div>
-                    </div>
+                <div class="info-card" style="text-align: center; padding: 14pt;">
+                    <img src="{fig1_b64}" class="img-responsive" alt="14-Channel Montage" style="max-height: 380px;">
+                    <div style="font-size: 12pt; color: #a0afcd; margin-top: 8pt; font-weight: 600;">14-Channel International 10&ndash;20 System capturing frontal/temporal language areas.</div>
                 </div>
             </div>
             """
@@ -193,16 +187,16 @@ def build_deck():
                                 <td>0.9600</td>
                                 <td>0.9600</td>
                             </tr>
-                            <tr style="background: rgba(0, 210, 255, 0.12); font-weight: bold;">
+                            <tr style="background: rgba(0, 210, 255, 0.15); font-weight: bold;">
                                 <td>Our Local Reproduction</td>
-                                <td><span style="color: #00d2ff; font-size: 13pt;">93.51%</span></td>
+                                <td><span style="color: #00d2ff; font-size: 14pt;">93.51%</span></td>
                                 <td>0.9326</td>
                                 <td>0.9326</td>
                                 <td>0.9326</td>
                             </tr>
                         </tbody>
                     </table>
-                    <div class="callout-box" style="margin-top: 14pt;">
+                    <div class="callout-box" style="margin-top: 16pt;">
                         <strong>Key Takeaway:</strong> Our local reproduction correctly decoded <strong>173 of 185 test trials</strong> (93.51%), verifying the validity of the primary author's binary findings.
                     </div>
                 </div>
@@ -218,23 +212,23 @@ def build_deck():
             "subtitle": "Why the published state-of-the-art fails when advancing toward real-world clinical BCIs",
             "html": """
             <div class="grid-2col">
-                <div class="info-card alert-card">
-                    <h3><span class="icon">&#10060;</span> Gap 1: The Binary-Only Ceiling</h3>
+                <div class="info-card warm-card">
+                    <h3><span class="icon">&#9888;</span> Gap 1: The Binary-Only Ceiling</h3>
                     <p>The primary paper only evaluated a <strong>2-class proof-of-concept</strong> (<em>Yes</em> vs <em>No</em>). A viable communicative AAC neuro-prosthetic requires decoding multi-word vocabularies. The authors could not evaluate multi-class decoding due to severe computational complexity.</p>
                 </div>
                 
-                <div class="info-card alert-card">
-                    <h3><span class="icon">&#10060;</span> Gap 2: The 2<sup>228</sup> GA Combinatorial Trap</h3>
-                    <p>Evaluating a 228-bit genome on 9 classes across 10 candidate classifiers creates a search space of <strong>2<sup>228</sup> &approx; 10<sup>68</sup> configurations</strong>. Fitness evaluations required days of compute and resulted in combinatorial timeout.</p>
+                <div class="info-card warm-card">
+                    <h3><span class="icon">&#9888;</span> Gap 2: The 2<sup>228</sup> GA Combinatorial Trap</h3>
+                    <p>Evaluating a 228-bit genome on 9 classes across candidate models yields a search space of <strong>2<sup>228</sup> &approx; 10<sup>68</sup> configurations</strong>. Fitness evaluations required days of compute and resulted in combinatorial timeout.</p>
                 </div>
                 
-                <div class="info-card alert-card">
-                    <h3><span class="icon">&#10060;</span> Gap 3: Destruction of Spatial Phase Geometry</h3>
+                <div class="info-card warm-card">
+                    <h3><span class="icon">&#9888;</span> Gap 3: Destruction of Spatial Phase Geometry</h3>
                     <p>Extracting univariate scalar moments per channel (variance, kurtosis) treats electrodes as <strong>isolated sensors</strong>. It completely destroys the inter-electrode phase synchronization and neural connectivity between Broca's and Wernicke's language regions.</p>
                 </div>
                 
-                <div class="info-card alert-card">
-                    <h3><span class="icon">&#10060;</span> Gap 4: Zero Probability Calibration</h3>
+                <div class="info-card warm-card">
+                    <h3><span class="icon">&#9888;</span> Gap 4: Zero Probability Calibration</h3>
                     <p>A single <em>k</em>NN classifier outputs hard distance votes with <strong>no posterior probability confidence</strong>. In clinical neuro-prosthetics, uncalibrated models produce confident false alarms that disrupt nursing and medical workflows.</p>
                 </div>
             </div>
@@ -259,7 +253,7 @@ def build_deck():
                     </div>
                 </div>
                 
-                <div class="info-card alert-card">
+                <div class="info-card warm-card">
                     <h3><span class="icon">&#9888;</span> 3 Mathematical Failures of the Flat Approach</h3>
                     <div class="bullet-list">
                         <div class="bitem"><strong>1. Phase Blindness:</strong> Covert linguistic phonation produces phase-locked resonance across the left fronto-temporal arc. Flat moments discard the cross-spectral covariance matrix.</div>
@@ -302,28 +296,34 @@ def build_deck():
             """
         },
 
-        # SLIDE 8: End-to-End System Architecture
+        # SLIDE 8: OUR IMPROVED ARCHITECTURE PIPELINE (FRONT AND CENTER!)
         {
             "id": 8,
-            "badge": "System Architecture",
-            "title": "End-to-End Architecture: The MDRC-AGA Pipeline",
-            "subtitle": "Complete workflow from raw 14-channel EEG acquisition to real-time dual-head decision",
+            "badge": "Our Proposed Pipeline",
+            "title": "Our Improved Architecture Pipeline: MDRC-AGA",
+            "subtitle": "High-resolution end-to-end processing pipeline from raw 14-channel EEG to dual decision heads",
             "html": f"""
-            <div class="grid-2col">
-                <div class="info-card">
-                    <h3><span class="icon">&#9881;</span> Architectural Workflow</h3>
-                    <div class="bullet-list">
-                        <div class="bitem"><strong>1. Signal Conditioning:</strong> 14 channels, 128 Hz sampling. 4th-order Butterworth bandpass (0.5&ndash;45 Hz) + 50 Hz causal notch filter.</div>
-                        <div class="bitem"><strong>2. Multi-Scale Decomposition:</strong> 3-branch spatial-spectral mapping yielding 1,695 manifold dimensions.</div>
-                        <div class="bitem"><strong>3. Manifold Projection:</strong> Regularized Ledoit-Wolf shrinkage covariance into Log-Euclidean tangent space.</div>
-                        <div class="bitem"><strong>4. Evolutionary Tuning:</strong> MultiScaleBlockAGA continuous weight scaling.</div>
-                        <div class="bitem"><strong>5. Dual Decision Heads:</strong> Simultaneous generation of peak voting accuracy and calibrated posterior probabilities.</div>
-                    </div>
+            <div class="info-card" style="padding: 16pt; text-align: center;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12pt;">
+                    <div class="chip chip-cyan" style="font-size: 12pt;">1. Raw 14-Ch EEG (128 Hz)</div>
+                    <span style="color: #00d2ff; font-size: 16pt;">&rarr;</span>
+                    <div class="chip chip-warn" style="font-size: 12pt;">2. Multi-Scale 3-Branch Manifold</div>
+                    <span style="color: #ffd166; font-size: 16pt;">&rarr;</span>
+                    <div class="chip chip-em" style="font-size: 12pt;">3. MultiScaleBlockAGA Optimization</div>
+                    <span style="color: #06d6a0; font-size: 16pt;">&rarr;</span>
+                    <div class="chip chip-cyan" style="font-size: 12pt;">4. Dual Decision Engine</div>
                 </div>
                 
-                <div class="info-card" style="text-align: center; padding: 12pt;">
-                    <img src="{fig1_b64}" class="img-responsive" alt="14-Channel Montage" style="max-height: 380px;">
-                    <div style="font-size: 11pt; color: #a0afcd; margin-top: 8pt;">Fig 1: 14-Channel International 10&ndash;20 System with language arc highlighted.</div>
+                <div style="background: rgba(0,0,0,0.4); border-radius: 12px; padding: 10pt; border: 1.5px solid rgba(0, 210, 255, 0.4); box-shadow: 0 10px 35px rgba(0,0,0,0.6);">
+                    <img src="{arch_b64}" class="img-responsive" alt="Our Improved Architecture Pipeline" style="max-height: 430px; width: auto; margin: 0 auto; display: block;">
+                </div>
+                
+                <div class="callout-box" style="margin-top: 14pt; display: flex; justify-content: space-around; align-items: center;">
+                    <div><strong>Multi-Scale Space:</strong> 1,695 SPD Manifold Dimensions</div>
+                    <div>&bull;</div>
+                    <div><strong>Evolutionary Convergence:</strong> w* = [0.926, 1.073, 1.001]</div>
+                    <div>&bull;</div>
+                    <div><strong>End-to-End Latency:</strong> 11.2 ms on Standard CPU</div>
                 </div>
             </div>
             """
@@ -350,9 +350,9 @@ def build_deck():
                     </div>
                 </div>
                 
-                <div class="info-card" style="text-align: center; padding: 12pt;">
+                <div class="info-card" style="text-align: center; padding: 14pt;">
                     <img src="{fig2_b64}" class="img-responsive" alt="Sub-Band Frequencies" style="max-height: 380px;">
-                    <div style="font-size: 11pt; color: #a0afcd; margin-top: 8pt;">Fig 2: Canonical and fine sub-band frequency intervals spanning 0.5 to 45 Hz.</div>
+                    <div style="font-size: 12pt; color: #a0afcd; margin-top: 8pt; font-weight: 600;">Canonical and fine sub-band frequency intervals spanning 0.5 to 45 Hz.</div>
                 </div>
             </div>
             """
@@ -405,7 +405,7 @@ def build_deck():
             "subtitle": "Evolving continuous block scales while strictly preserving matrix positive-definiteness",
             "html": """
             <div class="grid-2col">
-                <div class="info-card alert-card">
+                <div class="info-card warm-card">
                     <h3><span class="icon">&#9888;</span> Why Binary Bit-Flip GAs Fail on Covariances</h3>
                     <p>The primary paper evolved a 228-bit mask turning scalar moments ON or OFF. On Riemannian covariance matrices, flipping discrete bits sets off-diagonal covariances to zero, violating positive-definiteness (det(C) &le; 0) and crashing the matrix logarithm.</p>
                     <p style="margin-top: 10pt;">Furthermore, evaluating 228 binary bits on 9 classes creates an intractable 2<sup>228</sup> search space that causes combinatorial timeout.</p>
@@ -445,7 +445,7 @@ def build_deck():
                     </div>
                 </div>
                 
-                <div class="info-card" style="border-color: #ffd166;">
+                <div class="info-card warm-card">
                     <h3><span class="icon">&#128737;</span> Head 2: Calibrated Stacker Ensemble</h3>
                     <p>Designed for <strong>clinical neuro-prosthetic safety</strong> and reliability:</p>
                     <div class="bullet-list" style="margin-top: 10pt;">
@@ -502,7 +502,7 @@ def build_deck():
             <div class="info-card" style="padding: 16pt;">
                 <table class="clean-table">
                     <thead>
-                        <tr style="background: rgba(255,255,255,0.08); font-size: 11pt;">
+                        <tr style="background: rgba(255,255,255,0.08); font-size: 13pt;">
                             <th>Model &amp; Pipeline</th>
                             <th>Classes</th>
                             <th>Test Accuracy</th>
@@ -511,7 +511,7 @@ def build_deck():
                             <th>CPU Latency</th>
                         </tr>
                     </thead>
-                    <tbody style="font-size: 11pt;">
+                    <tbody style="font-size: 12.5pt;">
                         <tr>
                             <td>Uniform Chance Baseline</td>
                             <td>9</td>
@@ -536,7 +536,7 @@ def build_deck():
                             <td>Uncalibrated</td>
                             <td>8.4 ms</td>
                         </tr>
-                        <tr style="background: rgba(72, 202, 228, 0.12); font-weight: bold;">
+                        <tr style="background: rgba(72, 202, 228, 0.15); font-weight: bold;">
                             <td><strong>Proposed MDRC-AGA (Calibrated Stacker)</strong></td>
                             <td><strong>9</strong></td>
                             <td><strong>73.55%</strong></td>
@@ -544,10 +544,10 @@ def build_deck():
                             <td><strong>ECE: 0.166, Brier: 0.434</strong></td>
                             <td><strong>11.2 ms</strong></td>
                         </tr>
-                        <tr style="background: rgba(6, 214, 160, 0.20); font-weight: bold;">
+                        <tr style="background: rgba(6, 214, 160, 0.22); font-weight: bold;">
                             <td><span style="color: #06d6a0;">&#9733;</span> Proposed MDRC-AGA (Peak Soft Voter)</td>
                             <td>9</td>
-                            <td><span style="color: #06d6a0; font-size: 13pt;">90.85%</span> (735/809)</td>
+                            <td><span style="color: #06d6a0; font-size: 14pt;">90.85%</span> (735/809)</td>
                             <td>0.9085</td>
                             <td>Soft Probabilities</td>
                             <td>11.2 ms</td>
@@ -556,7 +556,7 @@ def build_deck():
                 </table>
             </div>
             
-            <div class="grid-3col" style="margin-top: 14pt;">
+            <div class="grid-3col" style="margin-top: 16pt;">
                 <div class="stat-card">
                     <div class="snum">90.85%</div>
                     <div class="slbl">Peak 9-Class Accuracy (735/809 Correct)</div>
@@ -581,14 +581,14 @@ def build_deck():
             "subtitle": "Strong diagonal concentration proving uniform decoding across all vocabulary classes",
             "html": f"""
             <div class="grid-2col">
-                <div class="info-card" style="text-align: center; padding: 12pt;">
+                <div class="info-card" style="text-align: center; padding: 14pt;">
                     <img src="{fig3_b64}" class="img-responsive" alt="Confusion Matrix" style="max-height: 380px;">
-                    <div style="font-size: 11pt; color: #a0afcd; margin-top: 8pt;">Fig 3: 9&times;9 Normalized Confusion Matrix on 809 held-out test trials.</div>
+                    <div style="font-size: 12pt; color: #a0afcd; margin-top: 8pt; font-weight: 600;">Fig 3: 9&times;9 Normalized Confusion Matrix on 809 held-out test trials.</div>
                 </div>
                 
                 <div class="info-card">
                     <h3><span class="icon">&#128202;</span> Class-by-Class Accuracy Breakdown</h3>
-                    <div class="bullet-list" style="font-size: 11pt;">
+                    <div class="bullet-list" style="font-size: 13pt;">
                         <div class="bitem"><strong>&bull; 'Thanks': 96.6%</strong> &mdash; Distinct acoustic-closure temporal activation.</div>
                         <div class="bitem"><strong>&bull; 'Bathroom': 91.9%</strong> &mdash; Strong bilateral sensorimotor motor involvement.</div>
                         <div class="bitem"><strong>&bull; 'Pain': 91.8%</strong> &mdash; Elevated frontal beta rhythm during emotional urgency.</div>
@@ -596,7 +596,7 @@ def build_deck():
                         <div class="bitem"><strong>&bull; 'Hungry': 91.0%</strong> &mdash; Robust parietal synchronization.</div>
                         <div class="bitem"><strong>&bull; 'Yes': 89.9%</strong> | <strong>'Thirsty': 89.0%</strong> | <strong>'No': 88.5%</strong> | <strong>'Rest': 87.9%</strong></div>
                     </div>
-                    <div class="callout-box" style="margin-top: 10pt;">
+                    <div class="callout-box" style="margin-top: 14pt;">
                         <strong>No Class Collapse:</strong> Every word exceeds 87.9% accuracy. The model does not sacrifice difficult words to artificially inflate overall performance.
                     </div>
                 </div>
@@ -612,7 +612,7 @@ def build_deck():
             "subtitle": "Why calibrated confidence distributions are non-negotiable for medical BCI neuro-prosthetics",
             "html": f"""
             <div class="grid-2col">
-                <div class="info-card alert-card">
+                <div class="info-card warm-card">
                     <h3><span class="icon">&#9888;</span> The Danger of Overconfident Classifiers</h3>
                     <p>In medical assistive tech, a false alarm can have grave consequences (e.g. accidentally triggering emergency nurse assistance when the patient imagined 'Rest').</p>
                     <div class="bullet-list" style="margin-top: 10pt;">
@@ -622,9 +622,9 @@ def build_deck():
                     </div>
                 </div>
                 
-                <div class="info-card" style="text-align: center; padding: 12pt;">
+                <div class="info-card" style="text-align: center; padding: 14pt;">
                     <img src="{fig4_b64}" class="img-responsive" alt="Per-Class Metrics" style="max-height: 380px;">
-                    <div style="font-size: 11pt; color: #a0afcd; margin-top: 8pt;">Fig 4: Precision, Recall, and F1 across all 9 vocabulary classes.</div>
+                    <div style="font-size: 12pt; color: #a0afcd; margin-top: 8pt; font-weight: 600;">Fig 4: Precision, Recall, and F1 across all 9 vocabulary classes.</div>
                 </div>
             </div>
             """
@@ -651,9 +651,9 @@ def build_deck():
                     </div>
                 </div>
                 
-                <div class="info-card" style="text-align: center; padding: 12pt;">
+                <div class="info-card" style="text-align: center; padding: 14pt;">
                     <img src="{fig5_b64}" class="img-responsive" alt="Partition Latency" style="max-height: 380px;">
-                    <div style="font-size: 11pt; color: #a0afcd; margin-top: 8pt;">Fig 5: Latency vs. Partition Size verifying strict linear O(N) scaling.</div>
+                    <div style="font-size: 12pt; color: #a0afcd; margin-top: 8pt; font-weight: 600;">Fig 5: Latency vs. Partition Size verifying strict linear O(N) scaling.</div>
                 </div>
             </div>
             """
@@ -690,7 +690,7 @@ def build_deck():
             """
         },
 
-        # SLIDE 19: Conclusion & Strategic Future Roadmap
+        # SLIDE 19: CONCLUSION & PROMINENT THANK YOU!
         {
             "id": 19,
             "badge": "Conclusion & Future Roadmap",
@@ -700,7 +700,7 @@ def build_deck():
             <div class="grid-2col">
                 <div class="info-card" style="border-color: #06d6a0;">
                     <h3><span class="icon">&#9989;</span> Summary of Research Contributions</h3>
-                    <div class="bullet-list">
+                    <div class="bullet-list" style="font-size: 13.5pt;">
                         <div class="bitem"><strong>1. Verified Stage 1 Replication:</strong> Independently reproduced the published 2025 binary benchmark at <strong>93.51% accuracy</strong>.</div>
                         <div class="bitem"><strong>2. Solved 'Flat-Feature Trap':</strong> Replaced flawed scalar moments with Riemannian SPD manifolds, overcoming the 70.39% multi-class barrier (+20.46% gain).</div>
                         <div class="bitem"><strong>3. Novel MDRC-AGA Architecture:</strong> 1,695D Riemannian filter bank with continuous evolutionary manifold optimization.</div>
@@ -710,7 +710,7 @@ def build_deck():
                 
                 <div class="info-card" style="border-color: #00d2ff;">
                     <h3><span class="icon">&#128640;</span> Strategic Future Engineering Roadmap</h3>
-                    <div class="bullet-list">
+                    <div class="bullet-list" style="font-size: 13.5pt;">
                         <div class="bitem"><strong>1. Cross-Session Transfer Learning:</strong> Implement Riemannian Parallel Transport to eliminate tedious daily calibration across recording sessions.</div>
                         <div class="bitem"><strong>2. Embedded DSP Firmware:</strong> Port the matrix log-Euclidean kernel to fixed-point ARM Cortex-M7 DSPs for wearable smart headbands.</div>
                         <div class="bitem"><strong>3. 20-Word Clinical AAC Dictionary:</strong> Expand vocabulary to include medical status ('Cold', 'Medication', 'Dizzy') and social phrases.</div>
@@ -719,8 +719,11 @@ def build_deck():
                 </div>
             </div>
             
-            <div class="callout-box" style="margin-top: 14pt; text-align: center; font-size: 13pt; font-weight: bold; color: #ffd166;">
-                Thank you! We welcome questions from the honorable panel.
+            <!-- GRAND PROMINENT THANK YOU SECTION -->
+            <div class="thank-you-box" style="background: linear-gradient(135deg, rgba(0, 210, 255, 0.14), rgba(6, 214, 160, 0.20)); border: 2.5px solid #06d6a0; border-radius: 16px; padding: 20pt 30pt; text-align: center; margin-top: 18pt; box-shadow: 0 12px 35px rgba(6, 214, 160, 0.25);">
+                <div style="font-size: 38pt; font-weight: 900; color: #ffffff; letter-spacing: 2px; text-shadow: 0 0 20px rgba(0, 210, 255, 0.8);">THANK YOU!</div>
+                <div style="font-size: 16pt; font-weight: 700; color: #ffd166; margin-top: 6pt;">We express our sincere gratitude to our supervisor Dr. Manish Kumar Bajpai, the Department of CSE, and the examination committee.</div>
+                <div style="font-size: 14.5pt; color: #00d2ff; font-weight: 700; margin-top: 8pt;">We warmly welcome your questions, feedback, and discussion.</div>
             </div>
             """
         }
@@ -777,18 +780,18 @@ body {
 .top-nav {
     position: sticky;
     top: 0;
-    background: rgba(10, 17, 40, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1.5px solid rgba(0, 210, 255, 0.25);
-    padding: 10pt 24pt;
+    background: rgba(10, 17, 40, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1.5px solid rgba(0, 210, 255, 0.3);
+    padding: 12pt 28pt;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 100;
 }
 .nav-brand {
-    font-size: 12pt;
+    font-size: 13pt;
     font-weight: 800;
     letter-spacing: 0.5px;
     color: #00d2ff;
@@ -799,16 +802,16 @@ body {
 .nav-controls {
     display: flex;
     align-items: center;
-    gap: 12pt;
+    gap: 14pt;
 }
 .btn-nav {
     background: rgba(255, 255, 255, 0.08);
     color: #f0f4ff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 6pt 14pt;
-    border-radius: 6px;
-    font-size: 11pt;
-    font-weight: 600;
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    padding: 7pt 16pt;
+    border-radius: 8px;
+    font-size: 12pt;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.2s ease;
 }
@@ -818,8 +821,8 @@ body {
     border-color: #00d2ff;
 }
 .slide-counter {
-    font-size: 11pt;
-    font-weight: 700;
+    font-size: 12.5pt;
+    font-weight: 800;
     color: #a0afcd;
 }
 
@@ -831,14 +834,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20pt 30pt;
+    padding: 24pt 32pt;
 }
 
 .slide {
     display: none;
     width: 100%;
-    max-width: 1300px;
-    min-height: 720px;
+    max-width: 1320px;
+    min-height: 740px;
     animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .slide.active {
@@ -852,95 +855,97 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Slide Header Elements */
+/* Slide Header Elements - ENLARGED */
 .slide-header {
-    margin-bottom: 16pt;
+    margin-bottom: 18pt;
 }
 .slide-badge {
     display: inline-block;
-    padding: 4pt 12pt;
+    padding: 5pt 14pt;
     border-radius: 20px;
     background: rgba(0, 210, 255, 0.15);
-    border: 1px solid rgba(0, 210, 255, 0.4);
+    border: 1px solid rgba(0, 210, 255, 0.45);
     color: #00d2ff;
-    font-size: 10pt;
+    font-size: 11pt;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.2px;
     margin-bottom: 8pt;
 }
 .slide-title {
-    font-size: 26pt;
-    font-weight: 800;
+    font-size: 30pt;
+    font-weight: 900;
     color: #ffffff;
     line-height: 1.2;
-    margin-bottom: 4pt;
+    margin-bottom: 5pt;
 }
 .slide-sub {
-    font-size: 13.5pt;
+    font-size: 15pt;
     color: #a0afcd;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 /* Grid Layouts */
 .grid-2col {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20pt;
+    gap: 22pt;
 }
 .grid-3col {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 16pt;
+    gap: 18pt;
 }
 
-/* Card Styling with Large Fonts */
+/* Card Styling - ENLARGED FONTS & WARM AMBER ALERT (NO HARSH RED!) */
 .info-card {
-    background: linear-gradient(135deg, rgba(18, 30, 66, 0.85), rgba(12, 22, 50, 0.92));
-    border: 1.5px solid rgba(0, 210, 255, 0.28);
-    border-radius: 14px;
-    padding: 20pt 24pt;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
-    backdrop-filter: blur(8px);
+    background: linear-gradient(135deg, rgba(18, 30, 66, 0.88), rgba(12, 22, 50, 0.94));
+    border: 1.5px solid rgba(0, 210, 255, 0.32);
+    border-radius: 16px;
+    padding: 22pt 26pt;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
 }
 .info-card h3 {
-    font-size: 16pt;
-    font-weight: 700;
+    font-size: 18pt;
+    font-weight: 800;
     color: #00d2ff;
-    margin-bottom: 12pt;
+    margin-bottom: 14pt;
     display: flex;
     align-items: center;
-    gap: 8pt;
+    gap: 10pt;
 }
 .info-card p {
-    font-size: 13pt;
-    line-height: 1.55;
-    color: #e2e8f0;
-    margin-bottom: 10pt;
+    font-size: 14.5pt;
+    line-height: 1.6;
+    color: #f0f4ff;
+    margin-bottom: 12pt;
 }
 .info-card p:last-child {
     margin-bottom: 0;
 }
-.alert-card {
-    border-color: rgba(239, 71, 111, 0.5);
-    background: linear-gradient(135deg, rgba(30, 18, 35, 0.85), rgba(18, 12, 25, 0.92));
+
+/* WARM AMBER CARD (REPLACED HARSH RED) */
+.warm-card {
+    border-color: rgba(255, 183, 3, 0.6) !important;
+    background: linear-gradient(135deg, rgba(32, 24, 12, 0.88), rgba(20, 16, 8, 0.94)) !important;
 }
-.alert-card h3 {
-    color: #ef476f;
+.warm-card h3 {
+    color: #ffb703 !important;
 }
 
-/* Bullet Items */
+/* Bullet Items - ENLARGED */
 .bullet-list {
     display: flex;
     flex-direction: column;
-    gap: 10pt;
-    margin-top: 6pt;
+    gap: 11pt;
+    margin-top: 8pt;
 }
 .bitem {
-    font-size: 12.5pt;
-    line-height: 1.5;
-    color: #e2e8f0;
-    padding-left: 14pt;
+    font-size: 14pt;
+    line-height: 1.58;
+    color: #f0f4ff;
+    padding-left: 16pt;
     position: relative;
 }
 .bitem::before {
@@ -949,51 +954,54 @@ body {
     left: 0;
     top: -1px;
     color: #00d2ff;
-    font-size: 14pt;
+    font-size: 16pt;
+}
+.warm-card .bitem::before {
+    color: #ffb703 !important;
 }
 
 /* Mathematical Formula Callouts */
 .eq-box {
-    background: rgba(0, 0, 0, 0.35);
-    border-left: 3px solid #00d2ff;
-    padding: 6pt 12pt;
-    margin: 6pt 0;
+    background: rgba(0, 0, 0, 0.4);
+    border-left: 4px solid #00d2ff;
+    padding: 8pt 16pt;
+    margin: 8pt 0;
     font-family: 'Cambria Math', 'Times New Roman', serif;
-    font-size: 12pt;
+    font-size: 13.5pt;
     color: #00d2ff;
-    border-radius: 0 6px 6px 0;
+    border-radius: 0 8px 8px 0;
 }
 
 /* Callout Box */
 .callout-box {
-    background: rgba(0, 210, 255, 0.08);
-    border: 1px solid rgba(0, 210, 255, 0.3);
-    border-radius: 8px;
-    padding: 10pt 16pt;
-    font-size: 12pt;
-    line-height: 1.45;
-    color: #f0f4ff;
+    background: rgba(0, 210, 255, 0.1);
+    border: 1.5px solid rgba(0, 210, 255, 0.35);
+    border-radius: 10px;
+    padding: 12pt 18pt;
+    font-size: 13.5pt;
+    line-height: 1.55;
+    color: #ffffff;
 }
 
 /* Stat Cards */
 .stat-card {
-    background: linear-gradient(135deg, rgba(18, 30, 66, 0.9), rgba(12, 22, 50, 0.95));
-    border: 1.5px solid rgba(6, 214, 160, 0.4);
-    border-radius: 12px;
-    padding: 16pt;
+    background: linear-gradient(135deg, rgba(18, 30, 66, 0.92), rgba(12, 22, 50, 0.96));
+    border: 1.5px solid rgba(6, 214, 160, 0.45);
+    border-radius: 14px;
+    padding: 18pt;
     text-align: center;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
 }
 .stat-card .snum {
-    font-size: 34pt;
+    font-size: 40pt;
     font-weight: 900;
     color: #06d6a0;
     line-height: 1.1;
     margin-bottom: 6pt;
 }
 .stat-card .slbl {
-    font-size: 11pt;
-    font-weight: 600;
+    font-size: 13pt;
+    font-weight: 700;
     color: #a0afcd;
 }
 
@@ -1001,67 +1009,67 @@ body {
 .word-chip-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 8pt;
-    margin-top: 10pt;
+    gap: 10pt;
+    margin-top: 12pt;
 }
 .chip {
-    padding: 6pt 14pt;
+    padding: 8pt 16pt;
     border-radius: 20px;
     background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    font-size: 11pt;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    font-size: 12.5pt;
     font-weight: 700;
 }
-.chip-em { background: rgba(6, 214, 160, 0.15); border-color: #06d6a0; color: #06d6a0; }
-.chip-warn { background: rgba(255, 209, 102, 0.15); border-color: #ffd166; color: #ffd166; }
-.chip-cyan { background: rgba(0, 210, 255, 0.15); border-color: #00d2ff; color: #00d2ff; }
+.chip-em { background: rgba(6, 214, 160, 0.18); border-color: #06d6a0; color: #06d6a0; }
+.chip-warn { background: rgba(255, 183, 3, 0.18); border-color: #ffb703; color: #ffb703; }
+.chip-cyan { background: rgba(0, 210, 255, 0.18); border-color: #00d2ff; color: #00d2ff; }
 
 /* Tables */
 .clean-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 8pt;
+    margin-top: 10pt;
 }
 .clean-table th, .clean-table td {
-    padding: 10pt 14pt;
+    padding: 12pt 16pt;
     text-align: left;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 .clean-table th {
-    background: rgba(0, 210, 255, 0.15);
+    background: rgba(0, 210, 255, 0.18);
     color: #00d2ff;
-    font-size: 11.5pt;
-    font-weight: 700;
+    font-size: 13pt;
+    font-weight: 800;
 }
 .clean-table td {
-    font-size: 11.5pt;
-    color: #e2e8f0;
+    font-size: 12.5pt;
+    color: #f0f4ff;
 }
 
 /* Images */
 .img-responsive {
     max-width: 100%;
     height: auto;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
 }
 
 /* Title Slide Center */
 .slide-center {
     text-align: center;
-    padding: 20pt 10pt;
+    padding: 24pt 10pt;
     margin: auto 0;
 }
 .slide-logo {
-    width: 105px;
-    height: 105px;
-    margin: 0 auto 12pt auto;
+    width: 115px;
+    height: 115px;
+    margin: 0 auto 14pt auto;
     display: block;
-    filter: drop-shadow(0 4px 12px rgba(0, 210, 255, 0.3));
+    filter: drop-shadow(0 4px 14px rgba(0, 210, 255, 0.35));
 }
 .inst-tag {
-    font-size: 14pt;
+    font-size: 16pt;
     font-weight: 800;
     letter-spacing: 1.5px;
     text-transform: uppercase;
@@ -1069,72 +1077,72 @@ body {
     margin-bottom: 4pt;
 }
 .dept-tag {
-    font-size: 11.5pt;
+    font-size: 13pt;
     color: #a0afcd;
-    margin-bottom: 16pt;
+    margin-bottom: 18pt;
 }
 .main-title {
-    font-size: 28pt;
+    font-size: 32pt;
     font-weight: 900;
     color: #ffffff;
     line-height: 1.25;
-    max-width: 950px;
-    margin: 0 auto 8pt auto;
+    max-width: 1050px;
+    margin: 0 auto 10pt auto;
 }
 .main-sub {
-    font-size: 14.5pt;
+    font-size: 16.5pt;
     color: #00d2ff;
     font-weight: 600;
-    max-width: 850px;
-    margin: 0 auto 14pt auto;
+    max-width: 900px;
+    margin: 0 auto 16pt auto;
 }
 .topic-tag {
     display: inline-block;
-    padding: 5pt 16pt;
+    padding: 6pt 18pt;
     border-radius: 20px;
-    background: rgba(255, 209, 102, 0.15);
-    border: 1px solid rgba(255, 209, 102, 0.4);
+    background: rgba(255, 209, 102, 0.18);
+    border: 1.5px solid rgba(255, 209, 102, 0.45);
     color: #ffd166;
-    font-size: 11pt;
-    font-weight: 700;
-    margin-bottom: 22pt;
+    font-size: 13pt;
+    font-weight: 800;
+    margin-bottom: 24pt;
 }
 
 /* Team Grid on Title Slide */
 .team-cards-grid {
     display: flex;
     justify-content: center;
-    gap: 20pt;
-    margin-bottom: 18pt;
+    gap: 22pt;
+    margin-bottom: 20pt;
 }
 .tcard {
-    background: rgba(18, 30, 66, 0.8);
-    border: 1px solid rgba(0, 210, 255, 0.3);
-    border-radius: 10px;
-    padding: 12pt 20pt;
+    background: rgba(18, 30, 66, 0.85);
+    border: 1.5px solid rgba(0, 210, 255, 0.35);
+    border-radius: 12px;
+    padding: 14pt 24pt;
     text-align: center;
-    min-width: 210px;
+    min-width: 230px;
 }
 .tname {
-    font-size: 12pt;
-    font-weight: 700;
+    font-size: 14pt;
+    font-weight: 800;
     color: #ffffff;
-    margin-bottom: 2pt;
+    margin-bottom: 3pt;
 }
 .troll {
-    font-size: 10.5pt;
+    font-size: 12pt;
     color: #00d2ff;
-    font-weight: 600;
+    font-weight: 700;
 }
 .tprog {
-    font-size: 9.5pt;
+    font-size: 11pt;
     color: #a0afcd;
     font-style: italic;
 }
 .guide-box {
-    font-size: 11.5pt;
-    color: #e2e8f0;
-    margin-top: 8pt;
+    font-size: 13.5pt;
+    color: #f0f4ff;
+    margin-top: 10pt;
 }
 
 /* Bottom Navigation Controls & Dots */
@@ -1142,10 +1150,10 @@ body {
     position: sticky;
     bottom: 0;
     background: rgba(10, 17, 40, 0.95);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-top: 1.5px solid rgba(0, 210, 255, 0.25);
-    padding: 10pt 24pt;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1.5px solid rgba(0, 210, 255, 0.3);
+    padding: 12pt 28pt;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1153,21 +1161,21 @@ body {
 }
 .dots-container {
     display: flex;
-    gap: 6pt;
+    gap: 7pt;
 }
 .dot {
-    width: 10px;
-    height: 10px;
+    width: 11px;
+    height: 11px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.22);
     cursor: pointer;
     transition: all 0.2s ease;
 }
 .dot.active {
     background: #00d2ff;
-    width: 24px;
+    width: 26px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 210, 255, 0.6);
+    box-shadow: 0 0 12px rgba(0, 210, 255, 0.7);
 }
 </style>
 </head>
@@ -1228,8 +1236,8 @@ body {
     <div class="dots-container" id="dotsContainer">
         <!-- Generated by JS -->
     </div>
-    <div style="font-size: 10pt; color: #a0afcd;">
-        Use <kbd style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">&larr;</kbd> <kbd style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">&rarr;</kbd> or <kbd style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">Space</kbd> to Navigate &bull; <kbd style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">F</kbd> for Fullscreen
+    <div style="font-size: 11pt; color: #a0afcd; font-weight: 600;">
+        Use <kbd style="background: rgba(255,255,255,0.12); padding: 3px 8px; border-radius: 4px; color: #fff;">&larr;</kbd> <kbd style="background: rgba(255,255,255,0.12); padding: 3px 8px; border-radius: 4px; color: #fff;">&rarr;</kbd> or <kbd style="background: rgba(255,255,255,0.12); padding: 3px 8px; border-radius: 4px; color: #fff;">Space</kbd> to Navigate &bull; <kbd style="background: rgba(255,255,255,0.12); padding: 3px 8px; border-radius: 4px; color: #fff;">F</kbd> for Fullscreen
     </div>
 </div>
 
@@ -1319,7 +1327,7 @@ initDots();
     out_file = os.path.join(base_dir, "NITW_Topic6_Presentation.html")
     with open(out_file, "w", encoding="utf-8") as f:
         f.write(full_html)
-    print(f"[+] Successfully generated expanded 19-slide presentation: '{out_file}' ({len(full_html)} bytes)")
+    print(f"[+] Successfully generated improved 19-slide presentation: '{out_file}' ({len(full_html)} bytes)")
 
     # Mirror to downloads root and D drive
     root_file = r"c:\Users\st983\Downloads\ml\NITW_Topic6_Presentation.html"

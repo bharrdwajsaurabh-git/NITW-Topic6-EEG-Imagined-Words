@@ -34,7 +34,8 @@ TEXT_MUTED = RGBColor(160, 175, 205)   # #a0afcd
 CYAN = RGBColor(0, 210, 255)           # #00d2ff
 EMERALD = RGBColor(6, 214, 160)        # #06d6a0
 GOLD = RGBColor(255, 209, 102)         # #ffd166
-CORAL = RGBColor(239, 71, 111)         # #ef476f
+AMBER = RGBColor(255, 183, 3)          # #ffb703 Warm Solar Amber (replaces harsh red)
+CORAL = AMBER                          # Alias to ensure no harsh red remains
 TABLE_HDR = RGBColor(25, 42, 90)       # Header Row
 TABLE_ROW_ALT = RGBColor(14, 23, 52)   # Alternating Row
 
@@ -71,26 +72,26 @@ def add_header(slide, badge_text, title_text, subtitle_text, slide_num, total_sl
     p_n.font.name = "Calibri"
 
     # Title
-    title_box = slide.shapes.add_textbox(Inches(0.8), Inches(0.75), Inches(11.7), Inches(0.60))
+    title_box = slide.shapes.add_textbox(Inches(0.8), Inches(0.72), Inches(11.7), Inches(0.65))
     tf_t = title_box.text_frame
     tf_t.word_wrap = True
     tf_t.margin_left = tf_t.margin_top = tf_t.margin_right = tf_t.margin_bottom = 0
     p_t = tf_t.paragraphs[0]
     p_t.text = title_text
-    p_t.font.size = Pt(22.0)
+    p_t.font.size = Pt(25.0)
     p_t.font.bold = True
     p_t.font.color.rgb = TEXT_WHITE
     p_t.font.name = "Calibri"
 
     # Subtitle
     if subtitle_text:
-        sub_box = slide.shapes.add_textbox(Inches(0.8), Inches(1.35), Inches(11.7), Inches(0.35))
+        sub_box = slide.shapes.add_textbox(Inches(0.8), Inches(1.36), Inches(11.7), Inches(0.35))
         tf_s = sub_box.text_frame
         tf_s.word_wrap = True
         tf_s.margin_left = tf_s.margin_top = tf_s.margin_right = tf_s.margin_bottom = 0
         p_s = tf_s.paragraphs[0]
         p_s.text = subtitle_text
-        p_s.font.size = Pt(12.0)
+        p_s.font.size = Pt(13.5)
         p_s.font.color.rgb = TEXT_MUTED
         p_s.font.name = "Calibri"
 
@@ -104,42 +105,42 @@ def add_card(slide, left, top, width, height, title, items, border_color=CYAN, b
     tf = shape.text_frame
     tf.word_wrap = True
     tf.vertical_anchor = MSO_ANCHOR.TOP
-    tf.margin_left = Inches(0.30)
-    tf.margin_top = Inches(0.22)
-    tf.margin_right = Inches(0.30)
-    tf.margin_bottom = Inches(0.22)
+    tf.margin_left = Inches(0.28)
+    tf.margin_top = Inches(0.20)
+    tf.margin_right = Inches(0.28)
+    tf.margin_bottom = Inches(0.20)
 
     # Title
     p_title = tf.paragraphs[0]
     p_title.text = title
-    p_title.font.size = Pt(15.0)
+    p_title.font.size = Pt(16.5)
     p_title.font.bold = True
     p_title.font.color.rgb = border_color
     p_title.font.name = "Calibri"
-    p_title.space_after = Pt(10)
+    p_title.space_after = Pt(8)
 
     # Items
     for item in items:
         p = tf.add_paragraph()
-        p.space_after = Pt(8)
+        p.space_after = Pt(6)
         if isinstance(item, tuple):
             prefix, text = item
             r_pre = p.add_run()
             r_pre.text = prefix + " "
             r_pre.font.bold = True
-            r_pre.font.size = Pt(12.0)
+            r_pre.font.size = Pt(13.0)
             r_pre.font.color.rgb = TEXT_WHITE
             r_pre.font.name = "Calibri"
 
             r_txt = p.add_run()
             r_txt.text = text
-            r_txt.font.size = Pt(11.5)
+            r_txt.font.size = Pt(12.5)
             r_txt.font.color.rgb = TEXT_MUTED
             r_txt.font.name = "Calibri"
         else:
             r = p.add_run()
             r.text = item
-            r.font.size = Pt(11.5)
+            r.font.size = Pt(12.5)
             r.font.color.rgb = TEXT_WHITE
             r.font.name = "Calibri"
 
@@ -159,7 +160,7 @@ def add_stat_box(slide, left, top, width, height, num_str, label_str, num_color=
     p_num = tf.paragraphs[0]
     p_num.alignment = PP_ALIGN.CENTER
     p_num.text = num_str
-    p_num.font.size = Pt(28.0)
+    p_num.font.size = Pt(36.0)
     p_num.font.bold = True
     p_num.font.color.rgb = num_color
     p_num.font.name = "Calibri"
@@ -167,7 +168,7 @@ def add_stat_box(slide, left, top, width, height, num_str, label_str, num_color=
     p_lbl = tf.add_paragraph()
     p_lbl.alignment = PP_ALIGN.CENTER
     p_lbl.text = label_str
-    p_lbl.font.size = Pt(11.0)
+    p_lbl.font.size = Pt(12.0)
     p_lbl.font.bold = True
     p_lbl.font.color.rgb = TEXT_MUTED
     p_lbl.font.name = "Calibri"
@@ -175,7 +176,7 @@ def add_stat_box(slide, left, top, width, height, num_str, label_str, num_color=
 def add_speaker_notes(slide, notes_text):
     notes_slide = slide.notes_slide
     tf = notes_slide.notes_text_frame
-    tf.text = "WHAT TO SAY TO THE PROFESSOR:\n\n" + notes_text
+    tf.text = notes_text
 
 def build_deck():
     base_dir = r"c:\Users\st983\Downloads\ml\imagined_speech_eeg"
@@ -183,6 +184,9 @@ def build_deck():
 
     logo_path = os.path.join(img_dir, "nitw_logo_clean.png")
     fig1_path = os.path.join(img_dir, "fig1_montage.png")
+    arch_path = os.path.join(img_dir, "architecture_flow_diagram.png")
+    if not os.path.exists(arch_path):
+        arch_path = os.path.join(base_dir, "results", "architecture_flow_diagram.png")
     fig2_path = os.path.join(img_dir, "fig2_frequency_bands.jpg")
     fig3_path = os.path.join(img_dir, "fig3_confusion_matrix.png")
     fig4_path = os.path.join(img_dir, "fig4_per_class_metrics.png")
@@ -327,23 +331,26 @@ def build_deck():
     add_header(s3, "Stage 1: Reference Paper", "Primary Reference Paper: Lara-Arellano et al. (MDPI Eng, 2025)",
                "Feature Generation and Selection for Imagined Speech EEG Classification", 3)
 
-    add_card(s3, Inches(0.8), Inches(1.8), Inches(5.6), Inches(5.0),
-             "Paper Methodology & Experimental Setup", [
+    add_card(s3, Inches(0.8), Inches(1.8), Inches(4.3), Inches(5.1),
+             "Paper Methodology & Setup", [
                  ("Primary Reference:", "Lara-Arellano et al., MDPI Eng 2025 (DOI: 10.3390/eng6040075)."),
                  ("Dataset Scope:", "924 real trials of binary 'Yes' (Sí) vs 'No' from Mendeley EEGIS."),
                  ("14-Channel Montage:", "Standard 10-20 international system (AF3, F7, F3, FC5, T7, P7, O1, O2, P8, T8, FC6, F4, F8, AF4)."),
                  ("6 Frequency Bands:", "Delta (0.5-4 Hz), Theta (4-8 Hz), Alpha (8-13 Hz), Low-Beta (13-20 Hz), High-Beta (20-30 Hz), Gamma (30-45 Hz)."),
-                 ("Binary Restriction:", "The authors only evaluated binary Yes vs No; no multi-class evaluation was performed.")
+                 ("Binary Restriction:", "Authors evaluated only binary Yes vs No; no multi-class decoding was attempted.")
              ])
 
-    add_card(s3, Inches(6.9), Inches(1.8), Inches(5.6), Inches(5.0),
-             "Primary Paper Pipeline & Claims", [
+    add_card(s3, Inches(5.3), Inches(1.8), Inches(4.3), Inches(5.1),
+             "Pipeline & Claims", [
                  ("Feature Extraction:", "Computes 214 univariate moments per channel across 6 bands + raw signal = 2,996 flat scalar moments per trial."),
                  ("Scalar Features:", "Variance, skewness, kurtosis, Hjorth parameters, and spectral entropy."),
-                 ("Genetic Algorithm (GA):", "228-bit binary chromosome with uniform crossover (pc=0.85) and bit-flip mutation (pm=0.03)."),
+                 ("Genetic Algorithm:", "228-bit binary chromosome with uniform crossover (pc=0.85) and bit-flip mutation (pm=0.03)."),
                  ("Classifier:", "Single k-Nearest Neighbors (kNN, k=5)."),
                  ("Published Claim:", "Achieved 96.00% binary test accuracy with 288 selected features.")
              ])
+
+    if os.path.exists(fig1_path):
+        s3.shapes.add_picture(fig1_path, Inches(9.8), Inches(2.1), width=Inches(2.7))
 
     add_speaker_notes(s3, "As Stage 1 of our project, we examined the primary reference paper published in MDPI Eng 2025 by Lara-Arellano et al. They evaluated binary Yes vs No on 924 trials, extracting 2,996 flat scalar moments and using a 228-bit binary Genetic Algorithm with kNN to achieve 96.0% accuracy.")
 
@@ -468,7 +475,7 @@ def build_deck():
     add_header(s8, "System Architecture", "End-to-End Architecture: The MDRC-AGA Pipeline",
                "Complete workflow from raw 14-channel EEG acquisition to real-time dual-head decision", 8)
 
-    add_card(s8, Inches(0.8), Inches(1.8), Inches(5.6), Inches(5.0),
+    add_card(s8, Inches(0.8), Inches(1.8), Inches(4.9), Inches(5.1),
              "Architectural Workflow", [
                  ("1. Signal Conditioning:", "14 channels at 128 Hz. 4th-order Butterworth bandpass (0.5-45 Hz) + 50 Hz causal notch filter."),
                  ("2. Multi-Scale Decomposition:", "3-branch spatial-spectral mapping yielding 1,695 manifold dimensions."),
@@ -477,7 +484,9 @@ def build_deck():
                  ("5. Dual Decision Heads:", "Simultaneous generation of peak voting accuracy (90.85%) and calibrated posterior probabilities (73.55%).")
              ])
 
-    if os.path.exists(fig1_path):
+    if os.path.exists(arch_path):
+        s8.shapes.add_picture(arch_path, Inches(5.9), Inches(1.9), width=Inches(6.6))
+    elif os.path.exists(fig1_path):
         s8.shapes.add_picture(fig1_path, Inches(6.9), Inches(1.8), width=Inches(5.6))
 
     add_speaker_notes(s8, "Here is our complete end-to-end architecture. Raw 14-channel EEG is bandpass filtered, mapped through our 3-branch multi-scale decomposition into 1,695 Riemannian dimensions, tuned via continuous AGA, and classified by our dual-head decision engine.")
@@ -772,7 +781,7 @@ def build_deck():
     add_header(s19, "Conclusion & Future Roadmap", "Conclusion & Strategic Neuro-Assistive Roadmap",
                "Summary of research milestones and translation pathway from laboratory prototype to clinical AAC", 19)
 
-    add_card(s19, Inches(0.8), Inches(1.8), Inches(5.6), Inches(5.0),
+    add_card(s19, Inches(0.8), Inches(1.8), Inches(5.7), Inches(3.8),
              "Summary of Research Contributions", [
                  ("1. Verified Stage 1 Replication:", "Successfully reproduced Lara-Arellano et al. (MDPI 2025) binary baseline at 93.51% test accuracy."),
                  ("2. Uncovered 'Flat-Feature Trap':", "Mathematically demonstrated why conventional flat moments fail on multi-class vocabularies (70.39%)."),
@@ -781,7 +790,7 @@ def build_deck():
                  ("5. Clinically Calibrated Stacker (73.55%):", "Tuned for probabilistic safety with ECE = 0.166 and Brier = 0.434.")
              ], border_color=EMERALD)
 
-    add_card(s19, Inches(6.9), Inches(1.8), Inches(5.6), Inches(5.0),
+    add_card(s19, Inches(6.8), Inches(1.8), Inches(5.7), Inches(3.8),
              "Strategic Future Engineering Roadmap", [
                  ("1. Cross-Session Transfer Learning:", "Implementing Riemannian Parallel Transport to align covariance matrices across different days without retraining."),
                  ("2. Embedded DSP Firmware:", "Porting the matrix log-Euclidean kernel to fixed-point ARM Cortex-M7 DSPs for wearable smart headbands."),
@@ -789,7 +798,13 @@ def build_deck():
                  ("4. Closed-Loop Auditory Feedback:", "Providing instant auditory confirmation tones to patient headphones upon word decoding.")
              ], border_color=CYAN)
 
-    add_speaker_notes(s19, "In conclusion, we replicated the published binary benchmark at 93.51%, identified the flat-feature trap, and created MDRC-AGA to solve 9-class covert speech decoding at 90.85% accuracy and 11.2 ms latency. Our future roadmap includes transfer learning and wearable DSP firmware. Thank you, and we welcome your questions.")
+    add_card(s19, Inches(0.8), Inches(5.78), Inches(11.7), Inches(1.22),
+             "THANK YOU!  |  QUESTIONS & DISCUSSION WELCOME", [
+                 ("Academic Mentorship:", "Sincere gratitude to Course Supervisor Dr. Manish Kumar Bajpai, Department of CSE, NIT Warangal, and the Honorable Evaluation Committee."),
+                 ("Open Source Verification:", "Complete reproducible source code, trained models, GUI tester, and IEEE paper available on GitHub.")
+             ], border_color=GOLD, bg_color=RGBColor(12, 28, 64))
+
+    add_speaker_notes(s19, "In conclusion, we replicated the published binary benchmark at 93.51%, identified the flat-feature trap, and created MDRC-AGA to solve 9-class covert speech decoding at 90.85% accuracy and 11.2 ms latency. Our future roadmap includes transfer learning and wearable DSP firmware. Thank you respected examiners and professors, and we are ready for your questions and discussion.")
 
     # Save
     pptx_out = os.path.join(base_dir, "NITW_Topic6_Presentation.pptx")

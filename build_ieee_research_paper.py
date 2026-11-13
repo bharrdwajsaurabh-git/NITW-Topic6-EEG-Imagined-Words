@@ -48,7 +48,17 @@ def build_paper():
 <style>
 @page {
     size: letter;
-    margin: 0.70in 0.60in 0.70in 0.60in;
+    margin: 0;
+}
+
+@media print {
+    @page {
+        margin: 0;
+    }
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
 }
 
 body {
@@ -70,9 +80,9 @@ body {
     break-after: page;
     text-align: center;
     box-sizing: border-box;
-    padding: 16pt 10pt 10pt 10pt;
-    height: 670pt;
-    max-height: 670pt;
+    padding: 0.65in 0.60in 0.50in 0.60in;
+    height: 11in;
+    max-height: 11in;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -185,6 +195,30 @@ body {
 /* ========================================================================= */
 /* PAGES 2+: TWO-COLUMN IEEE RESEARCH PAPER LAYOUT                           */
 /* ========================================================================= */
+table.paper-layout-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 0;
+    padding: 0;
+}
+td.page-header-spacer {
+    height: 0.65in;
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+td.page-footer-spacer {
+    height: 0.65in;
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+td.page-content-cell {
+    padding: 0 0.60in;
+    vertical-align: top;
+    border: none;
+}
 .paper-page {
     box-sizing: border-box;
 }
@@ -468,7 +502,13 @@ li {
 <!-- ========================================================================= -->
 <!-- PAGES 2+: TWO-COLUMN IEEE RESEARCH PAPER                                  -->
 <!-- ========================================================================= -->
-<div class="paper-page">
+<table class="paper-layout-table">
+  <thead><tr><td class="page-header-spacer"></td></tr></thead>
+  <tfoot><tr><td class="page-footer-spacer"></td></tr></tfoot>
+  <tbody>
+    <tr>
+      <td class="page-content-cell">
+        <div class="paper-page">
 
     <!-- Header Banner -->
     <div class="header-container">
@@ -860,6 +900,10 @@ li {
     </div><!-- End of continuous two-columns -->
 
 </div><!-- End of paper-page -->
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 </body>
 </html>
