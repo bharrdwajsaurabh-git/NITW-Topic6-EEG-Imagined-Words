@@ -43,7 +43,7 @@ def build_deck():
         # SLIDE 1: Title
         {
             "id": 1,
-            "badge": "M.Tech Major Project Review",
+            "badge": "Topic 6 • Advanced Algorithms",
             "title": "EEG-Based Imagined Word Recognition",
             "subtitle": "Using Multi-Scale Riemannian Covariance and Calibrated Stacker Ensemble",
             "html": f"""
