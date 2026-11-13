@@ -729,23 +729,30 @@ li {
             <td>8.4 ms</td>
         </tr>
         <tr>
-            <td>Lara-Arellano Paper Repro</td>
+            <td>Lara-Arellano Paper Repro (GA+kNN)</td>
             <td>2</td>
-            <td>94.59%</td>
-            <td>0.9452</td>
+            <td>93.51%</td>
+            <td>0.9326</td>
             <td>6.2 ms</td>
         </tr>
+        <tr>
+            <td><b>MDRC-AGA (Calibrated Stacker)</b></td>
+            <td>9</td>
+            <td>73.55%</td>
+            <td>0.7355</td>
+            <td>11.2 ms</td>
+        </tr>
         <tr class="highlight-row last-row">
-            <td><b>Proposed MDRC-AGA</b></td>
+            <td><b>MDRC-AGA (Peak Soft Voter)</b></td>
             <td><b>9</b></td>
             <td><b>90.85%</b></td>
-            <td><b>0.9084</b></td>
+            <td><b>0.9085</b></td>
             <td><b>11.2 ms</b></td>
         </tr>
         </tbody>
         </table>
 
-        <p>Our Stage 2 MDRC-AGA achieved <b>90.85% test accuracy (735/809 correct)</b> on the 809 held-out test trials, representing a <b>+20.46 percentage point improvement</b> over the un-optimized local multi-class baseline (70.39%) and successfully resolving the multi-class decoding challenge across all nine vocabulary classes.</p>
+        <p>Our evaluation across the 809 held-out test trials (20% partition) provides two complementary decision heads from the Stage 2 Riemannian architecture. The <b>Multi-Metric Soft Voter</b> reaches a peak decoding accuracy of <b>90.85% (735/809 correct)</b>, achieving a +20.46 percentage point improvement over the un-optimized baseline (70.39%) and 88.65% on the binary <i>Yes</i> vs <i>No</i> subset. For applications requiring strict posterior probability reliability, the <b>Calibrated Stacker Ensemble</b> (L2-logistic regression, shrinkage LDA, Platt-ridge) achieves <b>73.55% accuracy</b>, <b>0.7355 Macro-F1</b>, an Expected Calibration Error (ECE) of <b>0.166</b>, and a Brier score of <b>0.434</b>.</p>
 
         <div class="fig-container">
             <img src="{fig3_b64}" alt="Confusion Matrix">

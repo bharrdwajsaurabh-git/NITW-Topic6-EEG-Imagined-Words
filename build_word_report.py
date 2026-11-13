@@ -598,7 +598,7 @@ def create_docx():
     r_t2c.font.bold = True
     r_t2c.font.size = Pt(8)
     
-    tbl_bench = doc.add_table(rows=5, cols=5)
+    tbl_bench = doc.add_table(rows=6, cols=5)
     tbl_bench.alignment = WD_TABLE_ALIGNMENT.CENTER
     tbl_bench.autofit = False
     
@@ -608,8 +608,9 @@ def create_docx():
     b_rows = [
         ["Uniform Chance Baseline", "9", "11.11%", "0.1111", "—"],
         ["Local Multi-Class Baseline", "9", "70.39%", "0.7012", "8.4 ms"],
-        ["Lara-Arellano Paper Repro", "2", "94.59%", "0.9452", "6.2 ms"],
-        ["Proposed MDRC-AGA", "9", "90.85%", "0.9084", "11.2 ms"]
+        ["Lara-Arellano Paper Repro", "2", "93.51%", "0.9326", "6.2 ms"],
+        ["MDRC-AGA (Calibrated Stacker)", "9", "73.55%", "0.7355", "11.2 ms"],
+        ["MDRC-AGA (Peak Soft Voter)", "9", "90.85%", "0.9085", "11.2 ms"]
     ]
     
     for c_idx, h in enumerate(b_headers):
@@ -637,7 +638,7 @@ def create_docx():
             if c_idx == 0 or r_idx == len(b_rows) - 1:
                 r.font.bold = True
 
-    add_p("Our Stage 2 MDRC-AGA achieved 90.85% test accuracy (735/809 correct) on the 809 held-out test trials, representing a +20.46 percentage point improvement over the un-optimized local multi-class baseline (70.39%) and successfully resolving the multi-class decoding challenge across all nine vocabulary classes.")
+    add_p("Our evaluation across the 809 held-out test trials (20% partition) provides two complementary decision heads from the Stage 2 Riemannian architecture. The Multi-Metric Soft Voter reaches a peak decoding accuracy of 90.85% (735/809 correct), achieving a +20.46 percentage point improvement over the un-optimized baseline (70.39%) and 88.65% on the binary Yes vs No subset. For applications requiring strict posterior probability reliability, the Calibrated Stacker Ensemble (L2-logistic regression, shrinkage LDA, Platt-ridge) achieves 73.55% accuracy, 0.7355 Macro-F1, an Expected Calibration Error (ECE) of 0.166, and a Brier score of 0.434.")
 
     # Fig 3: Confusion Matrix
     fig3_path = os.path.join(img_dir, "fig3_confusion_matrix.png")
