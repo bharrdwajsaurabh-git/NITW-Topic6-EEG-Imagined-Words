@@ -891,6 +891,7 @@ li {
         "--headless",
         "--no-sandbox",
         "--disable-gpu",
+        "--no-pdf-header-footer",
         f"--print-to-pdf={pdf_out}",
         file_url
     ]
