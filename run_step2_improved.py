@@ -74,14 +74,20 @@ def main():
     for c in range(9):
         print(f"      - Class {c} ({CLASS_MAP[c]:<16}): {np.sum(y == c)} trials")
 
-    # 2. 80/20 Train/Test Split (Matching paper protocol scaled to 9 classes)
-    print("\n[*] Splitting dataset into 80% Train and 20% Held-out Test (Stratified)...")
-    train_idx, test_idx = train_test_split(
+    # 2. 70/10/20 Train/Validation/Test Split (Class-Stratified)
+    print("\n[*] Splitting dataset into 70% Train, 10% Validation, and 20% Held-out Test (Stratified)...")
+    train_val_idx, test_idx = train_test_split(
         np.arange(n_samples), test_size=0.20, random_state=42, stratify=y
     )
+    train_idx, val_idx = train_test_split(
+        train_val_idx, test_size=0.125, random_state=42, stratify=y[train_val_idx]
+    )
     X_tr, y_tr = X[train_idx], y[train_idx]
+    X_va, y_va = X[val_idx], y[val_idx]
     X_te, y_te = X[test_idx], y[test_idx]
-    print(f"  [+] Training pool: {len(train_idx)} trials | Test pool: {len(test_idx)} trials")
+    print(f"  [+] Training pool:   {len(train_idx)} trials (70.0%)")
+    print(f"  [+] Validation pool: {len(val_idx)} trials (10.0%)")
+    print(f"  [+] Test pool:       {len(test_idx)} trials (20.0%)")
 
     # 3. Multi-Scale Riemannian Feature Extraction (1,695 Dimensions)
     print("\n[*] Extracting Multi-Scale 1,695D Riemannian SPD Tangent Features...")
@@ -96,15 +102,17 @@ def main():
     t0 = time.time()
     # Fit extractor ONLY on training trials (zero leakage)
     F_tr = ext.fit_transform(X_tr[:, 0, :, :], X_6b_train=X_tr)
+    F_va = ext.transform(X_va[:, 0, :, :], X_6b=X_va)
     F_te = ext.transform(X_te[:, 0, :, :], X_6b=X_te)
     
     scaler = StandardScaler().fit(F_tr)
     Z_tr = scaler.transform(F_tr)
+    Z_va = scaler.transform(F_va)
     Z_te = scaler.transform(F_te)
     print(f"  [+] Features extracted in {time.time()-t0:.2f}s | Shape: {Z_tr.shape}")
 
     # 4. MultiScaleBlockAGA Optimization
-    print("\n[*] Optimizing Scale Weights via MultiScaleBlockAGA...")
+    print("\n[*] Optimizing Scale Weights via MultiScaleBlockAGA on Training Pool...")
     aga = MultiScaleBlockAGA(
         block_dims=ext.block_dims_,
         n_population=16,
@@ -118,6 +126,7 @@ def main():
     print(f"  [+] Evolved Manifold Weights w = [6B: {best_w[0]:.4f}, Fine-7B: {best_w[1]:.4f}, Speech-10: {best_w[2]:.4f}]")
 
     Zw_tr = aga.transform(Z_tr)
+    Zw_va = aga.transform(Z_va)
     Zw_te = aga.transform(Z_te)
 
     # 5. Train Calibrated Stacker Ensemble & Multi-Metric Soft Voter
@@ -128,32 +137,52 @@ def main():
     voter = MultiMetricSoftVotingClassifier(k_base=3, weights=(3.0, 2.0, 1.0, 1.0))
     voter.fit(Zw_tr, y_tr)
 
-    # 6. Evaluate on 20% Held-Out Test Set (809 trials)
+    # 6. Comprehensive 70/10/20 Evaluation: Train, Validation, and Test
     print("\n" + "=" * 80)
-    print(f"  STAGE 2 EVALUATION ON HELD-OUT 20% TEST SET (N = {len(y_te)} Trials)")
+    print(f"  STAGE 2 EVALUATION ACROSS 70/10/20 SPLIT")
+    print(f"  Train: N = {len(y_tr)} | Validation: N = {len(y_va)} | Test: N = {len(y_te)}")
     print("=" * 80)
 
-    # Stacker Evaluation
+    # Training predictions
+    preds_tr_st = stacker.predict(Zw_tr)
+    preds_tr_vt = voter.predict(Zw_tr)
+    acc_tr_st = accuracy_score(y_tr, preds_tr_st)
+    acc_tr_vt = accuracy_score(y_tr, preds_tr_vt)
+
+    # Validation predictions
+    preds_va_st = stacker.predict(Zw_va)
+    preds_va_vt = voter.predict(Zw_va)
+    acc_va_st = accuracy_score(y_va, preds_va_st)
+    acc_va_vt = accuracy_score(y_va, preds_va_vt)
+
+    # Test predictions & calibration
     probs_st = stacker.predict_proba(Zw_te)
     preds_st = stacker.predict(Zw_te)
     acc_st = accuracy_score(y_te, preds_st)
     cal_metrics = compute_classification_and_calibration_metrics(y_te, preds_st, probs_st)
 
-    # Soft Voter Evaluation
     probs_vt = voter.predict_proba(Zw_te)
     preds_vt = voter.predict(Zw_te)
     acc_vt = accuracy_score(y_te, preds_vt)
 
-    print(f"[*] 9-Class Random Chance:                11.11%")
-    print(f"[>] Stage 2 Calibrated Stacker Accuracy:   {acc_st*100:.2f}% (Brier: {cal_metrics['brier_score']:.3f}, ECE: {cal_metrics['ece_10bin']:.3f})")
-    print(f"[>] Stage 2 Multi-Metric Soft Voter Acc:  {acc_vt*100:.2f}% (Peak 9-Class Decoding)")
-
     # Binary Yes vs No evaluation within test set
     mask_yn_te = np.isin(y_te, [6, 8])
     acc_yn = accuracy_score(y_te[mask_yn_te], preds_vt[mask_yn_te])
-    print(f"[>] Binary Yes vs No Subtask Accuracy:     {acc_yn*100:.2f}% (Paper Target: 96.0%)")
 
-    print("\nClassification Report (Stage 2 Soft Voter on All 9 Classes):")
+    print(f"[*] 9-Class Random Chance:                11.11%")
+    print(f"\n[>] --- Multi-Metric Soft Voter ---")
+    print(f"    - Training Accuracy   (N = {len(y_tr)}): {acc_tr_vt*100:.2f}% ({np.sum(preds_tr_vt == y_tr)}/{len(y_tr)})")
+    print(f"    - Validation Accuracy (N = {len(y_va)}): {acc_va_vt*100:.2f}% ({np.sum(preds_va_vt == y_va)}/{len(y_va)})")
+    print(f"    - Testing Accuracy    (N = {len(y_te)}): {acc_vt*100:.2f}% ({np.sum(preds_vt == y_te)}/{len(y_te)})")
+    print(f"    - Binary Yes/No Test Accuracy:      {acc_yn*100:.2f}% ({np.sum(preds_vt[mask_yn_te] == y_te[mask_yn_te])}/{np.sum(mask_yn_te)})")
+
+    print(f"\n[>] --- Calibrated Stacker Ensemble ---")
+    print(f"    - Training Accuracy   (N = {len(y_tr)}): {acc_tr_st*100:.2f}% ({np.sum(preds_tr_st == y_tr)}/{len(y_tr)})")
+    print(f"    - Validation Accuracy (N = {len(y_va)}): {acc_va_st*100:.2f}% ({np.sum(preds_va_st == y_va)}/{len(y_va)})")
+    print(f"    - Testing Accuracy    (N = {len(y_te)}): {acc_st*100:.2f}% ({np.sum(preds_st == y_te)}/{len(y_te)})")
+    print(f"    - Expected Calibration Error (ECE): {cal_metrics['ece_10bin']:.3f} | Brier: {cal_metrics['brier_score']:.3f}")
+
+    print("\nClassification Report (Stage 2 Soft Voter on All 9 Classes - Test Split):")
     print(classification_report(y_te, preds_vt, target_names=WORD_CLASSES, digits=4))
 
     # 7. Update test_signals/ with Verified Held-out Test Samples for Demo
@@ -223,6 +252,7 @@ def main():
     model_pkg = {
         "mode": "mdrc_aga_v4_fold_tangent_calibrated",
         "code_version": CODE_VERSION,
+        "split_protocol": "70_10_20_stratified",
         "tangent_extractor": ext,
         "scaler": scaler,
         "aga": aga,
@@ -234,8 +264,13 @@ def main():
         "channel_names": CHANNEL_NAMES,
         "class_map": CLASS_MAP,
         "n_train_trials": len(train_idx),
+        "n_val_trials": len(val_idx),
         "n_test_trials": len(test_idx),
+        "train_accuracy": float(acc_tr_vt),
+        "val_accuracy": float(acc_va_vt),
         "test_accuracy": float(acc_vt),
+        "stacker_train_accuracy": float(acc_tr_st),
+        "stacker_val_accuracy": float(acc_va_st),
         "stacker_accuracy": float(acc_st),
         "is_calibrated_probabilities": True,
     }
@@ -248,11 +283,17 @@ def main():
     metrics_summary = {
         "task": "9-Class Imagined Words Decoding",
         "dataset": "EEGIS Mendeley Database (DOI: 10.17632/73g4fw884c.1)",
+        "split_protocol": "70/10/20 Train/Validation/Test (Stratified)",
         "train_samples": len(train_idx),
+        "val_samples": len(val_idx),
         "test_samples": len(test_idx),
         "random_chance": 0.1111,
         "stage1_paper_binary_accuracy": 0.960,
+        "train_accuracy_soft_voter": float(acc_tr_vt),
+        "val_accuracy_soft_voter": float(acc_va_vt),
         "stage2_9class_test_accuracy": float(acc_vt),
+        "train_accuracy_stacker": float(acc_tr_st),
+        "val_accuracy_stacker": float(acc_va_st),
         "stage2_stacker_test_accuracy": float(acc_st),
         "stage2_yes_no_test_accuracy": float(acc_yn),
         "brier_score": cal_metrics["brier_score"],

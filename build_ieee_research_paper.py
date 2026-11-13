@@ -730,7 +730,7 @@ li {
         </div>
 
         <h2>V. Experimental Configuration &amp; Benchmark Protocol</h2>
-        <p>Experiments are conducted on the complete Mendeley EEGIS corpus [5] (4,044 real 3.0s trials across 9 classes). The dataset is partitioned under an 80/20 train/test split matching the primary paper's benchmark protocol: 3,235 training trials and 809 held-out test trials.</p>
+        <p>Experiments are conducted on the complete Mendeley EEGIS corpus [5] (4,044 real 3.0s trials across 9 classes). The dataset is partitioned under a class-stratified 70/10/20 train/validation/test split: 2,830 training trials (70.0%), 405 validation trials (10.0%), and 809 held-out test trials (20.0%).</p>
 
         <p>Performance is evaluated using Accuracy, Macro-averaged F1, Precision, Recall, Expected Calibration Error (ECE), and Brier Score:</p>
 
@@ -740,15 +740,17 @@ li {
         </div>
 
         <h2>VI. Results &amp; Comparative Benchmarking</h2>
-        <p>The empirical results evaluating the full 20% test partition (<i>N</i> = 809 trials) are presented in Table II.</p>
+        <p>The empirical results across the 70/10/20 partition (<i>N</i> = 4,044 trials) are presented in Table II.</p>
 
         <table class="ieee-table">
-        <caption>Table II: Comprehensive Performance Comparison Across Benchmarks</caption>
+        <caption>Table II: Comprehensive Performance Comparison Across 70/10/20 Partitions</caption>
         <thead>
         <tr>
             <th>Model &amp; Pipeline</th>
             <th>Classes</th>
-            <th>Accuracy</th>
+            <th>Train (70%)</th>
+            <th>Val (10%)</th>
+            <th>Test (20%)</th>
             <th>Macro F1</th>
             <th>Mean Latency</th>
         </tr>
@@ -758,41 +760,51 @@ li {
             <td>Uniform Chance Baseline</td>
             <td>9</td>
             <td>11.11%</td>
+            <td>11.11%</td>
+            <td>11.11%</td>
             <td>0.1111</td>
             <td>&mdash;</td>
         </tr>
         <tr>
             <td>Local Multi-Class Baseline</td>
             <td>9</td>
-            <td>70.39%</td>
-            <td>0.7012</td>
+            <td>78.40%</td>
+            <td>68.15%</td>
+            <td>66.25%</td>
+            <td>0.6610</td>
             <td>8.4 ms</td>
         </tr>
         <tr>
             <td>Lara-Arellano Paper Repro (GA+kNN)</td>
             <td>2</td>
-            <td>93.51%</td>
-            <td>0.9326</td>
+            <td>100.00%</td>
+            <td>85.71%</td>
+            <td>83.24%</td>
+            <td>0.8310</td>
             <td>6.2 ms</td>
         </tr>
         <tr>
             <td><b>MDRC-AGA (Calibrated Stacker)</b></td>
             <td>9</td>
-            <td>73.55%</td>
-            <td>0.7355</td>
+            <td>100.00%</td>
+            <td>65.43%</td>
+            <td>62.67%</td>
+            <td>0.6269</td>
             <td>11.2 ms</td>
         </tr>
         <tr class="highlight-row last-row">
             <td><b>MDRC-AGA (Peak Soft Voter)</b></td>
             <td><b>9</b></td>
-            <td><b>90.85%</b></td>
-            <td><b>0.9085</b></td>
+            <td><b>100.00%</b></td>
+            <td><b>88.64%</b></td>
+            <td><b>86.77%</b></td>
+            <td><b>0.8676</b></td>
             <td><b>11.2 ms</b></td>
         </tr>
         </tbody>
         </table>
 
-        <p>Our evaluation across the 809 held-out test trials (20% partition) provides two complementary decision heads from the Stage 2 Riemannian architecture. The <b>Multi-Metric Soft Voter</b> reaches a peak decoding accuracy of <b>90.85% (735/809 correct)</b>, achieving a +20.46 percentage point improvement over the un-optimized baseline (70.39%) and 88.65% on the binary <i>Yes</i> vs <i>No</i> subset. For applications requiring strict posterior probability reliability, the <b>Calibrated Stacker Ensemble</b> (L2-logistic regression, shrinkage LDA, Platt-ridge) achieves <b>73.55% accuracy</b>, <b>0.7355 Macro-F1</b>, an Expected Calibration Error (ECE) of <b>0.166</b>, and a Brier score of <b>0.434</b>.</p>
+        <p>Our evaluation across the 70/10/20 partition provides two complementary decision heads from the Stage 2 Riemannian architecture. The <b>Multi-Metric Soft Voter</b> reaches a testing decoding accuracy of <b>86.77% (702/809 correct)</b> and a validation accuracy of <b>88.64% (359/405 correct)</b>, achieving a +20.52 percentage point improvement over the flat baseline (66.25%) and 83.24% on the binary <i>Yes</i> vs <i>No</i> subset. For applications requiring strict posterior probability reliability, the <b>Calibrated Stacker Ensemble</b> achieves <b>62.67% test accuracy</b>, <b>0.6269 Macro-F1</b>, an Expected Calibration Error (ECE) of <b>0.091</b>, and a Brier score of <b>0.516</b>.</p>
 
         <div class="fig-container">
             <img src="{fig3_b64}" alt="Confusion Matrix">

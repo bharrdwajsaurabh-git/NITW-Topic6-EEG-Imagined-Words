@@ -959,8 +959,8 @@ body {
                     <h3><span class="icon">&#128203;</span> Dataset &amp; Benchmark Partitioning</h3>
                     <div class="bullet-list">
                         <div class="bitem"><strong>Dataset:</strong> Mendeley EEGIS Corpus (DOI: 10.17632/73g4fw884c.1), 4,044 real 3.0s trials.</div>
-                        <div class="bitem"><strong>9 Vocabulary Classes:</strong> Help (450), Hungry (450), Thirsty (450), Yes (462), No (462), Rest (450), Pain (450), Bathroom (450), Thanks (450).</div>
-                        <div class="bitem"><strong>Train / Test Split:</strong> Exact 80% train (3,235 trials) / 20% held-out test (809 trials) matching benchmark protocols.</div>
+                        <div class="bitem"><strong>9 Vocabulary Classes:</strong> Help, Hungry, Thirsty, Yes, No, Rest, Pain, Bathroom, Thanks (balanced across all splits).</div>
+                        <div class="bitem"><strong>70/10/20 Stratified Partition:</strong> 70% Train (2,830 trials), 10% Validation (405 trials), and 20% Held-Out Test (809 trials).</div>
                         <div class="bitem"><strong>Hardware Environment:</strong> Evaluated on consumer CPU (Intel Core i7, 16GB RAM) without GPU acceleration.</div>
                     </div>
                 </div>
@@ -984,8 +984,8 @@ body {
             
             <div class="slide-header">
                 <span class="slide-badge">Experimental Results</span>
-                <h2 class="slide-title">Benchmark Results on Held-Out Test Set (N = 809)</h2>
-                <div class="slide-sub">Verified, uninflated metrics directly matching results/step2_improved_metrics.json</div>
+                <h2 class="slide-title">Benchmark Results Across 70/10/20 Partition (N = 4,044)</h2>
+                <div class="slide-sub">Rigorous Train (2,830), Validation (405), and Test (809) metrics from results/step2_improved_metrics.json</div>
             </div>
             
             <div class="slide-body">
@@ -996,9 +996,10 @@ body {
                         <tr style="background: rgba(255,255,255,0.08); font-size: 13pt;">
                             <th>Model &amp; Pipeline</th>
                             <th>Classes</th>
-                            <th>Test Accuracy</th>
-                            <th>Macro-F1</th>
-                            <th>Posterior Calibration</th>
+                            <th>Train (70%)</th>
+                            <th>Val (10%)</th>
+                            <th>Test (20%)</th>
+                            <th>Posterior Safety</th>
                             <th>CPU Latency</th>
                         </tr>
                     </thead>
@@ -1007,39 +1008,44 @@ body {
                             <td>Uniform Chance Baseline</td>
                             <td>9</td>
                             <td>11.11%</td>
-                            <td>0.1111</td>
+                            <td>11.11%</td>
+                            <td>11.11%</td>
                             <td>&mdash;</td>
                             <td>&mdash;</td>
                         </tr>
                         <tr>
-                            <td>Lara-Arellano Primary Paper Repro (GA + kNN) [1]</td>
+                            <td>Lara-Arellano Repro (Yes/No) [1]</td>
                             <td>2</td>
-                            <td>93.51%</td>
-                            <td>0.9326</td>
+                            <td>100.00%</td>
+                            <td>85.71%</td>
+                            <td>83.24% (154/185)</td>
                             <td>Uncalibrated</td>
                             <td>6.2 ms</td>
                         </tr>
                         <tr>
-                            <td>Local Multi-Class Baseline (Un-optimized 6-Band)</td>
+                            <td>Conventional Flat-Moment Baseline</td>
                             <td>9</td>
-                            <td>70.39%</td>
-                            <td>0.7012</td>
+                            <td>78.40%</td>
+                            <td>68.15%</td>
+                            <td>66.25%</td>
                             <td>Uncalibrated</td>
                             <td>8.4 ms</td>
                         </tr>
                         <tr style="background: rgba(72, 202, 228, 0.15); font-weight: bold;">
                             <td><strong>Proposed MDRC-AGA (Calibrated Stacker)</strong></td>
                             <td><strong>9</strong></td>
-                            <td><strong>73.55%</strong></td>
-                            <td><strong>0.7355</strong></td>
-                            <td><strong>ECE: 0.166, Brier: 0.434</strong></td>
+                            <td><strong>100.00%</strong></td>
+                            <td><strong>65.43%</strong></td>
+                            <td><strong>62.67%</strong> (507/809)</td>
+                            <td><strong>ECE: 0.091, Brier: 0.516</strong></td>
                             <td><strong>11.2 ms</strong></td>
                         </tr>
                         <tr style="background: rgba(6, 214, 160, 0.22); font-weight: bold;">
                             <td><span style="color: #06d6a0;">&#9733;</span> Proposed MDRC-AGA (Peak Soft Voter)</td>
                             <td>9</td>
-                            <td><span style="color: #06d6a0; font-size: 14pt;">90.85%</span> (735/809)</td>
-                            <td>0.9085</td>
+                            <td>100.00%</td>
+                            <td><span style="color: #06d6a0; font-size: 13pt;">88.64%</span> (359/405)</td>
+                            <td><span style="color: #06d6a0; font-size: 14pt;">86.77%</span> (702/809)</td>
                             <td>Soft Probabilities</td>
                             <td>11.2 ms</td>
                         </tr>
@@ -1049,12 +1055,12 @@ body {
             
             <div class="grid-3col" style="margin-top: 16pt;">
                 <div class="stat-card">
-                    <div class="snum">90.85%</div>
-                    <div class="slbl">Peak 9-Class Accuracy (735/809 Correct)</div>
+                    <div class="snum">86.77%</div>
+                    <div class="slbl">Test Accuracy (702/809 Correct)</div>
                 </div>
                 <div class="stat-card">
-                    <div class="snum">+20.46%</div>
-                    <div class="slbl">Gain Over 70.39% Un-optimized Baseline</div>
+                    <div class="snum">88.64%</div>
+                    <div class="slbl">Validation Accuracy (359/405 Correct)</div>
                 </div>
                 <div class="stat-card">
                     <div class="snum">11.2 ms</div>
@@ -1220,7 +1226,7 @@ body {
                         <div class="bitem"><strong>1. Verified Stage 1 Replication:</strong> Independently reproduced the published 2025 binary benchmark at <strong>93.51% accuracy</strong>.</div>
                         <div class="bitem"><strong>2. Solved 'Flat-Feature Trap':</strong> Replaced flawed scalar moments with Riemannian SPD manifolds, overcoming the 70.39% multi-class barrier (+20.46% gain).</div>
                         <div class="bitem"><strong>3. Novel MDRC-AGA Architecture:</strong> 1,695D Riemannian filter bank with continuous evolutionary manifold optimization.</div>
-                        <div class="bitem"><strong>4. High-Performance Decoding:</strong> <strong>90.85% peak test accuracy</strong> (735/809 correct) and <strong>73.55% calibrated safety</strong> at <strong>11.2 ms CPU latency</strong>.</div>
+                        <div class="bitem"><strong>4. High-Performance Decoding:</strong> <strong>86.77% test accuracy</strong> (702/809 correct) and <strong>88.64% validation accuracy</strong> (359/405) at <strong>11.2 ms CPU latency</strong>.</div>
                     </div>
                 </div>
                 

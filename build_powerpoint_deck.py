@@ -601,8 +601,8 @@ def build_deck():
     add_card(s13, Inches(0.8), Inches(1.8), Inches(5.6), Inches(5.0),
              "Dataset & Benchmark Partitioning", [
                  ("Dataset:", "Mendeley EEGIS Corpus (DOI: 10.17632/73g4fw884c.1), 4,044 real 3.0s trials."),
-                 ("9 Vocabulary Classes:", "Help (450), Hungry (450), Thirsty (450), Yes (462), No (462), Rest (450), Pain (450), Bathroom (450), Thanks (450)."),
-                 ("Train / Test Split:", "Exact 80% train (3,235 trials) / 20% held-out test (809 trials) matching benchmark protocols."),
+                 ("9 Vocabulary Classes:", "Help, Hungry, Thirsty, Yes, No, Rest, Pain, Bathroom, Thanks (balanced across all splits)."),
+                 ("70 / 10 / 20 Partition:", "70% Train (2,830 trials), 10% Validation (405 trials), 20% Held-Out Test (809 trials)."),
                  ("Hardware Environment:", "Evaluated on consumer CPU (Intel Core i7, 16GB RAM) without GPU acceleration.")
              ])
 
@@ -614,26 +614,26 @@ def build_deck():
                  ("Deterministic Seeds:", "Locked to RNG seed=42 for 100% bit-exact replication.")
              ], border_color=EMERALD)
 
-    add_speaker_notes(s13, "We evaluated on all 4,044 trials of the Mendeley EEGIS corpus under a strict 80/20 train/test split. All Fréchet geometric means, scalers, and genetic optimizations were computed strictly inside training folds to guarantee zero data leakage.")
+    add_speaker_notes(s13, "We evaluated on all 4,044 trials of the Mendeley EEGIS corpus under a strict 70/10/20 train/validation/test split. All Fréchet geometric means, scalers, and genetic optimizations were computed strictly inside the 70% training pool to guarantee zero data leakage.")
 
     # =========================================================================
     # SLIDE 14: BENCHMARK RESULTS (TABLE II)
     # =========================================================================
     s14 = prs.slides.add_slide(blank_layout)
     set_slide_background(s14)
-    add_header(s14, "Experimental Results", "Benchmark Results on Held-Out Test Split (N = 809)",
-               "Exact, uninflated metrics directly matching results/step2_improved_metrics.json", 14)
+    add_header(s14, "Experimental Results", "Benchmark Results Across 70/10/20 Partition (N = 4,044)",
+               "Exact Train (2,830), Validation (405), and Test (809) metrics from results/step2_improved_metrics.json", 14)
 
     table_shape = s14.shapes.add_table(6, 6, Inches(0.8), Inches(1.8), Inches(11.7), Inches(3.0))
     table = table_shape.table
-    table.columns[0].width = Inches(3.6)
-    table.columns[1].width = Inches(1.1)
-    table.columns[2].width = Inches(1.7)
-    table.columns[3].width = Inches(1.4)
-    table.columns[4].width = Inches(2.4)
-    table.columns[5].width = Inches(1.5)
+    table.columns[0].width = Inches(3.4)
+    table.columns[1].width = Inches(1.0)
+    table.columns[2].width = Inches(1.6)
+    table.columns[3].width = Inches(1.6)
+    table.columns[4].width = Inches(1.9)
+    table.columns[5].width = Inches(2.2)
 
-    headers = ["Model / Pipeline", "Classes", "Test Accuracy", "Macro-F1", "Posterior Calibration", "CPU Latency"]
+    headers = ["Model / Pipeline", "Classes", "Train (70%)", "Val (10%)", "Test (20%)", "Safety & Latency"]
     for c_idx, h in enumerate(headers):
         cell = table.cell(0, c_idx)
         cell.fill.solid()
@@ -645,11 +645,11 @@ def build_deck():
         p.font.color.rgb = CYAN
 
     rows_data = [
-        ["Uniform Chance Level", "9", "11.11%", "0.1111", "—", "—"],
-        ["Lara-Arellano Repro (GA + kNN)", "2", "93.51%", "0.9326", "Uncalibrated", "6.2 ms"],
-        ["Local Multi-Class Baseline", "9", "70.39%", "0.7012", "Uncalibrated", "8.4 ms"],
-        ["MDRC-AGA (Calibrated Stacker)", "9", "73.55%", "0.7355", "ECE: 0.166, Brier: 0.434", "11.2 ms"],
-        ["★ MDRC-AGA (Peak Soft Voter)", "9", "90.85% (735/809)", "0.9085", "Soft Probabilities", "11.2 ms"]
+        ["Uniform Chance Level", "9", "11.11%", "11.11%", "11.11%", "Chance Baseline"],
+        ["Lara-Arellano Repro (Yes/No)", "2", "100.00%", "85.71%", "83.24% (154/185)", "Latency: 6.2 ms"],
+        ["Conventional Flat Baseline", "9", "78.40%", "68.15%", "66.25%", "Latency: 8.4 ms"],
+        ["MDRC-AGA (Calibrated Stacker)", "9", "100.00%", "65.43%", "62.67% (507/809)", "ECE: 0.091, Brier: 0.516"],
+        ["★ MDRC-AGA (Peak Soft Voter)", "9", "100.00%", "88.64%", "86.77% (702/809)", "Latency: 11.2 ms (Real-Time)"]
     ]
 
     for r_idx, row in enumerate(rows_data):
@@ -669,11 +669,11 @@ def build_deck():
             if r_idx == 4 or (r_idx == 3 and c_idx == 0):
                 p.font.bold = True
 
-    add_stat_box(s14, Inches(0.8), Inches(5.2), Inches(3.6), Inches(1.7), "90.85%", "Peak 9-Class Decoding Accuracy\n(735 of 809 trials correctly classified)", EMERALD)
-    add_stat_box(s14, Inches(4.85), Inches(5.2), Inches(3.6), Inches(1.7), "+20.46%", "Absolute Lead Over 70.39%\nUn-optimized Multi-Class Baseline", CYAN)
+    add_stat_box(s14, Inches(0.8), Inches(5.2), Inches(3.6), Inches(1.7), "86.77%", "Test Accuracy (20% Split)\n(702 of 809 trials correctly classified)", EMERALD)
+    add_stat_box(s14, Inches(4.85), Inches(5.2), Inches(3.6), Inches(1.7), "88.64%", "Validation Accuracy (10% Split)\n(359 of 405 trials correctly classified)", CYAN)
     add_stat_box(s14, Inches(8.9), Inches(5.2), Inches(3.6), Inches(1.7), "11.2 ms", "Real-Time Inference Latency\n(Leaves >13.8 ms Headroom under 25 ms)", GOLD)
 
-    add_speaker_notes(s14, "Here are our exact, honest results matching our JSON ground truth. Chance is 11.11%. The un-optimized baseline reaches 70.39%. Our Calibrated Stacker achieves 73.55% with calibrated probabilities. Our Multi-Metric Soft Voter reaches 90.85% peak accuracy, successfully decoding 735 out of 809 trials.")
+    add_speaker_notes(s14, "Here are our exact results across the 70/10/20 partition directly matching our JSON metrics. In the 10% validation set, our Soft Voter reaches 88.64%, and on the locked 20% test set, it achieves 86.77% accuracy (702/809 correct) with 11.2 ms latency.")
 
     # =========================================================================
     # SLIDE 15: 9x9 CONFUSION MATRIX ANALYSIS
@@ -786,8 +786,8 @@ def build_deck():
                  ("1. Verified Stage 1 Replication:", "Successfully reproduced Lara-Arellano et al. (MDPI 2025) binary baseline at 93.51% test accuracy."),
                  ("2. Uncovered 'Flat-Feature Trap':", "Mathematically demonstrated why conventional flat moments fail on multi-class vocabularies (70.39%)."),
                  ("3. Novel MDRC-AGA Architecture:", "Engineered 1,695D Riemannian filter bank with continuous evolutionary band scaling."),
-                 ("4. Peak 9-Class Decoding (90.85%):", "735 of 809 held-out test trials correctly decoded with 11.2 ms CPU latency."),
-                 ("5. Clinically Calibrated Stacker (73.55%):", "Tuned for probabilistic safety with ECE = 0.166 and Brier = 0.434.")
+                 ("4. Peak 9-Class Decoding (86.77%):", "702 of 809 test trials correctly decoded with 88.64% validation accuracy and 11.2 ms CPU latency."),
+                 ("5. Clinically Calibrated Stacker (62.67%):", "Tuned for probabilistic safety with ECE = 0.091 and Brier = 0.516.")
              ], border_color=EMERALD)
 
     add_card(s19, Inches(6.8), Inches(1.8), Inches(5.7), Inches(3.8),

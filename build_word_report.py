@@ -598,19 +598,19 @@ def create_docx():
     r_t2c.font.bold = True
     r_t2c.font.size = Pt(8)
     
-    tbl_bench = doc.add_table(rows=6, cols=5)
+    tbl_bench = doc.add_table(rows=6, cols=6)
     tbl_bench.alignment = WD_TABLE_ALIGNMENT.CENTER
     tbl_bench.autofit = False
     
-    b_headers = ["Model & Pipeline", "Classes", "Accuracy", "Macro F1", "Mean Latency"]
-    b_widths = [Inches(2.4), Inches(1.0), Inches(1.2), Inches(1.2), Inches(1.4)]
+    b_headers = ["Model & Pipeline", "Classes", "Train (70%)", "Val (10%)", "Test (20%)", "Mean Latency"]
+    b_widths = [Inches(2.2), Inches(0.8), Inches(1.1), Inches(1.1), Inches(1.1), Inches(1.1)]
     
     b_rows = [
-        ["Uniform Chance Baseline", "9", "11.11%", "0.1111", "—"],
-        ["Local Multi-Class Baseline", "9", "70.39%", "0.7012", "8.4 ms"],
-        ["Lara-Arellano Paper Repro", "2", "93.51%", "0.9326", "6.2 ms"],
-        ["MDRC-AGA (Calibrated Stacker)", "9", "73.55%", "0.7355", "11.2 ms"],
-        ["MDRC-AGA (Peak Soft Voter)", "9", "90.85%", "0.9085", "11.2 ms"]
+        ["Uniform Chance Baseline", "9", "11.11%", "11.11%", "11.11%", "—"],
+        ["Local Multi-Class Baseline", "9", "78.40%", "68.15%", "66.25%", "8.4 ms"],
+        ["Lara-Arellano Paper Repro", "2", "100.00%", "85.71%", "83.24%", "6.2 ms"],
+        ["MDRC-AGA (Calibrated Stacker)", "9", "100.00%", "65.43%", "62.67%", "11.2 ms"],
+        ["MDRC-AGA (Peak Soft Voter)", "9", "100.00%", "88.64%", "86.77%", "11.2 ms"]
     ]
     
     for c_idx, h in enumerate(b_headers):
@@ -638,7 +638,7 @@ def create_docx():
             if c_idx == 0 or r_idx == len(b_rows) - 1:
                 r.font.bold = True
 
-    add_p("Our evaluation across the 809 held-out test trials (20% partition) provides two complementary decision heads from the Stage 2 Riemannian architecture. The Multi-Metric Soft Voter reaches a peak decoding accuracy of 90.85% (735/809 correct), achieving a +20.46 percentage point improvement over the un-optimized baseline (70.39%) and 88.65% on the binary Yes vs No subset. For applications requiring strict posterior probability reliability, the Calibrated Stacker Ensemble (L2-logistic regression, shrinkage LDA, Platt-ridge) achieves 73.55% accuracy, 0.7355 Macro-F1, an Expected Calibration Error (ECE) of 0.166, and a Brier score of 0.434.")
+    add_p("Our evaluation across the 70/10/20 partition (N = 4,044 trials) provides two complementary decision heads from the Stage 2 Riemannian architecture. The Multi-Metric Soft Voter reaches a testing decoding accuracy of 86.77% (702/809 correct) and a validation accuracy of 88.64% (359/405 correct), achieving a +20.52 percentage point improvement over the flat baseline (66.25%) and 83.24% on the binary Yes vs No subset. For applications requiring strict posterior probability reliability, the Calibrated Stacker Ensemble achieves 62.67% test accuracy, 0.6269 Macro-F1, an Expected Calibration Error (ECE) of 0.091, and a Brier score of 0.516.")
 
     # Fig 3: Confusion Matrix
     fig3_path = os.path.join(img_dir, "fig3_confusion_matrix.png")
