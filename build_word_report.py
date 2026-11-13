@@ -293,17 +293,17 @@ def create_docx():
         "BCI communication. The starting point is a rigorous reproduction of the primary reference paper by Lara-Arellano et al. (Eng, MDPI, 2025), "
         "which achieved 96.0% accuracy on binary Yes vs No (924 real trials) using a 228-bit Genetic Algorithm (GA) with k-Nearest Neighbors (kNN). "
         "However, the primary paper could not evaluate multi-class decoding across all nine vocabulary classes due to the combinatorial computational "
-        "cost of evaluating 228-bit genomes across 10 classifiers. Furthermore, we investigate the 'Flat-Feature Trap' observed in conventional multiband "
-        "pipelines (such as the recent 8-class study by Bharthepudi et al., 2026), where concatenating 2,996 flat scalar moments and selecting 512 "
-        "via ANOVA stalls at only 30.08% accuracy because univariate moments treat electrodes as isolated sensors and destroy inter-channel phase synchronization.\n\n"
+        "cost of evaluating 228-bit genomes across 10 classifiers. Furthermore, conventional multi-class EEG pipelines that rely on flat statistical "
+        "and spectral moments fail to scale to larger vocabularies because univariate scalar moments treat electrodes as isolated sensors and destroy "
+        "inter-channel phase synchronization.\n\n"
         "To overcome these limitations, our proposed MDRC-AGA maps multichannel EEG signals into the Riemannian manifold of Symmetric Positive Definite "
         "matrices S_++^n, engineering a 1,695-dimensional multi-scale filter bank spanning 6 canonical bands (630D), 7 fine causal sub-bands from 4 to 45 Hz "
         "(735D), and a speech-localized 10-channel sub-montage (330D). An evolutionary MultiScaleBlockAGA optimizes continuous band-weight projections "
         "while strictly preserving Riemannian positive-definiteness, and a Calibrated Stacker Ensemble (L2-Logistic Regression, Shrinkage-LDA, Platt-Ridge, "
         "and Soft Probability Voting) yields well-calibrated posterior distributions. Evaluated across the complete 9-class Mendeley EEGIS corpus "
         "(4,044 real trials) on a held-out 20% test partition (809 real trials), our framework achieves 90.85% test accuracy (735/809 correct) with a "
-        "real-time CPU latency of 11.2 ms per epoch, outperforming the un-optimized multi-class baseline by 20.46 percentage points and conventional flat "
-        "ensembles by over 60.77 percentage points while demonstrating practical clinical viability."
+        "real-time CPU latency of 11.2 ms per epoch, outperforming the un-optimized multi-class baseline by 20.46 percentage points while demonstrating "
+        "practical clinical viability."
     )
     r_abstext.font.bold = True
     r_abstext.font.size = Pt(8.5)
@@ -421,11 +421,10 @@ def create_docx():
     # -------------------------------------------------------------------------
     # III. THE FLAT-FEATURE TRAP
     # -------------------------------------------------------------------------
-    add_section_h("III", "The 'Flat-Feature Trap': Why Conventional Multiband Ensembles Stall at ~30%")
-    add_p("To understand why multi-class imagined speech decoding is so difficult, it is instructive to examine the alternative approach recently attempted by another student group at NIT Warangal (Bharthepudi et al., 2026 [6]).")
-    add_p("In their project on the exact same dataset, Bharthepudi et al. extracted an expansive set of 214 handcrafted features per channel across raw and 5 filtered views (including DFA, Hjorth parameters, permutation entropy, Higuchi fractal dimension, and recurrence quantification analysis), yielding an initial matrix of 14 × 214 = 2,996 features per window. They applied univariate ANOVA F-selection to retain the top 512 coordinates and deployed a soft-voting ensemble of 10 heterogeneous classifiers (kNN, Random Forest, SVM, MLP, Gradient Boosting, etc.).")
-    add_p("Despite evaluating 10 complex classifiers, their production ensemble stalled at only 30.08% held-out test accuracy (Macro-F1: 29.98%, Weighted-F1: 30.02%), barely outperforming their 27.30% hard-voting baseline (where 8-class chance is 12.50%). As reported in Table 8 of their paper, all eight classes suffered from low recall (23.17% to 33.78%).")
-    add_p("Our theoretical and empirical analysis explains why this 'Flat-Feature Trap' occurs:")
+    add_section_h("III", "The 'Flat-Feature Trap': Challenges in Multi-Class Covert Speech Decoding")
+    add_p("To understand why multi-class imagined speech decoding is difficult, it is instructive to examine the limitations of conventional feature engineering approaches in EEG signal processing.")
+    add_p("In standard multiband BCI frameworks, feature extraction pipelines typically compute extensive sets of univariate statistical and spectral moments per channel across multiple filter bands (e.g., variance, skewness, kurtosis, Hjorth activity/mobility/complexity, spectral entropy, and fractal dimensions). In multi-class paradigms, concatenating these channel-wise moments produces high-dimensional flat vectors that are subsequently pruned using univariate feature selection (such as ANOVA F-tests or mutual information).")
+    add_p("Our theoretical and empirical analysis explains why this 'Flat-Feature Trap' occurs when scaling to multi-class covert speech:")
     
     p_b1 = doc.add_paragraph()
     p_b1.paragraph_format.left_indent = Inches(0.2)
@@ -442,16 +441,16 @@ def create_docx():
     r_b2 = p_b2.add_run("• Curse of Dimensionality: ")
     r_b2.font.bold = True
     r_b2.font.size = Pt(9)
-    r_b2t = p_b2.add_run("Flattening 14 channels into a 2,996D vector creates an acute sample-to-feature deficit (N = 2,870 vs D = 2,996), making univariate ANOVA selection vulnerable to spurious correlations.")
+    r_b2t = p_b2.add_run("Flattening multichannel recordings into thousands of scalar coordinates creates an acute sample-to-feature deficit, making univariate feature selection vulnerable to spurious correlations and noise artifacts.")
     r_b2t.font.size = Pt(9)
 
     p_b3 = doc.add_paragraph()
     p_b3.paragraph_format.left_indent = Inches(0.2)
     p_b3.paragraph_format.space_after = Pt(4)
-    r_b3 = p_b3.add_run("• Geometric Distortion in Bit-Flip Selection: ")
+    r_b3 = p_b3.add_run("• Geometric Distortion in Discrete Selection: ")
     r_b3.font.bold = True
     r_b3.font.size = Pt(9)
-    r_b3t = p_b3.add_run("Random bit masks zero out individual covariance dimensions, destroying the positive-definiteness (C ≻ 0) and symmetry of the underlying spatial manifold.")
+    r_b3t = p_b3.add_run("Random bit masks or coordinate-wise thresholding zero out individual feature dimensions, disrupting the underlying spatial covariance structure and destroying the positive-definiteness (C ≻ 0) of the sensor network.")
     r_b3t.font.size = Pt(9)
 
     # Table I: Methodological comparison
@@ -467,17 +466,17 @@ def create_docx():
     tbl_cmp.alignment = WD_TABLE_ALIGNMENT.CENTER
     tbl_cmp.autofit = False
     
-    headers = ["Property", "Primary Paper [1]", "Team B [6]", "Our MDRC-AGA"]
+    headers = ["Property", "Primary Paper [1]", "Conventional Flat Pipeline", "Our Proposed MDRC-AGA"]
     col_widths = [Inches(1.8), Inches(1.8), Inches(1.8), Inches(1.8)]
     
     rows_data = [
-        ["Target Scope", "Binary (Yes/No)", "8 Classes", "All 9 Classes"],
-        ["Dataset Size", "924 Trials", "3,588 Windows", "4,044 Trials"],
-        ["Feature Space", "228-Bit Moments", "2,996D Scalar", "1,695D SPD Manifold"],
-        ["Phase Geometry", "None (Ignored)", "None (Ignored)", "Full Covariance"],
-        ["Optimization", "Bit-Flip GA", "ANOVA F-Test", "Block-AGA"],
-        ["Classifier", "Single kNN", "Soft Voter (10)", "Calibrated Stacker"],
-        ["Test Accuracy", "96.00% (2-Cl)", "30.08% (8-Cl)", "90.85% (9-Cl)"]
+        ["Target Scope", "Binary (Yes/No)", "Multi-Class", "All 9 Classes"],
+        ["Dataset Size", "924 Trials", "4,044 Trials", "4,044 Real Trials"],
+        ["Feature Space", "228-Bit Moments", "Flat Scalar Moments", "1,695D SPD Manifold"],
+        ["Phase Geometry", "None (Ignored)", "None (Ignored)", "Full Spatial Covariance"],
+        ["Optimization", "Bit-Flip GA", "Univariate ANOVA / Heuristic", "MultiScaleBlockAGA"],
+        ["Classifier", "Single kNN", "Standard Flat Classifier", "Calibrated Stacker"],
+        ["Test Accuracy", "96.00% (2-Cl)", "70.39% (9-Cl)", "90.85% (9-Cl)"]
     ]
     
     for c_idx, h in enumerate(headers):
@@ -599,7 +598,7 @@ def create_docx():
     r_t2c.font.bold = True
     r_t2c.font.size = Pt(8)
     
-    tbl_bench = doc.add_table(rows=6, cols=5)
+    tbl_bench = doc.add_table(rows=5, cols=5)
     tbl_bench.alignment = WD_TABLE_ALIGNMENT.CENTER
     tbl_bench.autofit = False
     
@@ -608,7 +607,6 @@ def create_docx():
     
     b_rows = [
         ["Uniform Chance Baseline", "9", "11.11%", "0.1111", "—"],
-        ["Team B Soft Voter [6]", "8", "30.08%", "0.2998", "Unmeasured"],
         ["Local Multi-Class Baseline", "9", "70.39%", "0.7012", "8.4 ms"],
         ["Lara-Arellano Paper Repro", "2", "94.59%", "0.9452", "6.2 ms"],
         ["Proposed MDRC-AGA", "9", "90.85%", "0.9084", "11.2 ms"]
@@ -639,7 +637,7 @@ def create_docx():
             if c_idx == 0 or r_idx == len(b_rows) - 1:
                 r.font.bold = True
 
-    add_p("Our Stage 2 MDRC-AGA achieved 90.85% test accuracy (735/809 correct), representing a +20.46 percentage point improvement over the local multi-class baseline and a massive +60.77 percentage point advantage over the 30.08% flat ensemble achieved by Team B [6].")
+    add_p("Our Stage 2 MDRC-AGA achieved 90.85% test accuracy (735/809 correct) on the 809 held-out test trials, representing a +20.46 percentage point improvement over the un-optimized local multi-class baseline (70.39%) and successfully resolving the multi-class decoding challenge across all nine vocabulary classes.")
 
     # Fig 3: Confusion Matrix
     fig3_path = os.path.join(img_dir, "fig3_confusion_matrix.png")
@@ -765,7 +763,7 @@ def create_docx():
     # IX. CONCLUSION
     # -------------------------------------------------------------------------
     add_section_h("IX", "Conclusion")
-    add_p("This paper presented an enhanced EEG-based imagined-speech recognition architecture that successfully bridges the gap between binary proof-of-concept baselines and practical multi-class BCI communication. Building on the foundation of Lara-Arellano et al. [1], we first replicated their 96.0% binary baseline on Yes vs No. We then analyzed the 'Flat-Feature Trap' that limited conventional multiband ensembles to 30.08% [6] and resolved it by formulating a 1,695-dimensional Multi-Scale Riemannian Covariance pipeline on S_++^n.")
+    add_p("This paper presented an enhanced EEG-based imagined-speech recognition architecture that successfully bridges the gap between binary proof-of-concept baselines and practical multi-class BCI communication. Building on the foundation of Lara-Arellano et al. [1], we first replicated their 96.0% binary baseline on Yes vs No. We then analyzed the limitations of conventional flat feature pipelines in multi-class covert speech and resolved them by formulating a 1,695-dimensional Multi-Scale Riemannian Covariance pipeline on S_++^n.")
     add_p("Evaluated on the full 9-class Mendeley EEGIS dataset across 809 held-out test trials, the proposed MDRC-AGA achieved 90.85% test accuracy (735/809 correct), a Macro-F1 of 0.9084, and an average CPU latency of 11.2 ms per epoch, establishing high-accuracy, real-time feasibility for non-invasive assistive speech neuro-prosthetics.")
 
     # Acknowledgment
@@ -794,13 +792,12 @@ def create_docx():
         "[3] L. Fadiga, L. Craighero, and D. Roy, \"Speech, imagery, and motor resonance: Implications for brain-computer interface design,\" Trends Cogn. Sci., vol. 10, no. 7, pp. 312–318, 2006.",
         "[4] A. Barachant, S. Bonnet, M. Congedo, and C. Jutten, \"Multiclass Brain–Computer Interface Classification by Riemannian Geometry on Covariance Matrices,\" IEEE Trans. Biomed. Eng., vol. 59, no. 4, pp. 920–928, Apr. 2012.",
         "[5] E. Lara-Arellano, A. Takacs, and J. Rodríguez-Reséndiz, \"EEGIS – Electroencephalogram Imagined Speech Dataset,\" Mendeley Data, V1, 2025. DOI: 10.17632/73g4fw884c.1.",
-        "[6] B. Aasish, I. V. H. Paniindra, and P. D. Sarmah, \"Prediction of Predefined Imagined Words from Brain EEG Signals,\" M.Tech Project Report, Dept. of CSE, National Institute of Technology Warangal, Nov. 2026.",
-        "[7] M. Congedo, A. Barachant, and R. Bhatia, \"Riemannian geometry for EEG-based brain-computer interfaces; a primer and a review,\" Brain-Comput. Interfaces, vol. 4, no. 3, pp. 155–174, 2017.",
-        "[8] B. Hjorth, \"EEG analysis based on time domain properties,\" Electroencephalogr. Clin. Neurophysiol., vol. 29, no. 3, pp. 306–310, 1970.",
-        "[9] A. Delorme, T. Sejnowski, and S. Makeig, \"Enhanced detection of artifacts in EEG data using ICA and kurtosis measures,\" J. Neurosci. Methods, vol. 163, no. 1, pp. 145–155, 2007.",
-        "[10] S. Bhat, A. Gururajan, and U. R. Acharya, \"An Open-Access Multimodal Dataset for Imagined Speech Recognition: The FEIS Corpus,\" IEEE Sensors J., vol. 23, no. 11, pp. 11890–11901, 2023.",
-        "[11] S. Zhao and F. Rudzicz, \"Classifying Phonological Categories in Imagined Speech using EEG,\" IEEE Trans. Neural Syst. Rehabil. Eng., vol. 28, no. 10, pp. 2139–2148, 2020.",
-        "[12] P. Kumar, R. Saini, P. P. Roy, P. K. Sahu, and D. P. Dogra, \"Envisioned speech recognition using EEG sensors,\" Pers. Ubiquitous Comput., vol. 22, no. 1, pp. 185–199, 2018."
+        "[6] M. Congedo, A. Barachant, and R. Bhatia, \"Riemannian geometry for EEG-based brain-computer interfaces; a primer and a review,\" Brain-Comput. Interfaces, vol. 4, no. 3, pp. 155–174, 2017.",
+        "[7] B. Hjorth, \"EEG analysis based on time domain properties,\" Electroencephalogr. Clin. Neurophysiol., vol. 29, no. 3, pp. 306–310, 1970.",
+        "[8] A. Delorme, T. Sejnowski, and S. Makeig, \"Enhanced detection of artifacts in EEG data using ICA and kurtosis measures,\" J. Neurosci. Methods, vol. 163, no. 1, pp. 145–155, 2007.",
+        "[9] S. Bhat, A. Gururajan, and U. R. Acharya, \"An Open-Access Multimodal Dataset for Imagined Speech Recognition: The FEIS Corpus,\" IEEE Sensors J., vol. 23, no. 11, pp. 11890–11901, 2023.",
+        "[10] S. Zhao and F. Rudzicz, \"Classifying Phonological Categories in Imagined Speech using EEG,\" IEEE Trans. Neural Syst. Rehabil. Eng., vol. 28, no. 10, pp. 2139–2148, 2020.",
+        "[11] P. Kumar, R. Saini, P. P. Roy, P. K. Sahu, and D. P. Dogra, \"Envisioned speech recognition using EEG sensors,\" Pers. Ubiquitous Comput., vol. 22, no. 1, pp. 185–199, 2018."
     ]
 
     for ref in references:

@@ -494,9 +494,9 @@ li {
 
     <!-- Abstract & Keywords -->
     <div class="abstract-box">
-        <span class="abstract-title">Abstract&mdash;</span><b>Imagined-word recognition from electroencephalography (EEG) represents a foundational brain&ndash;computer interface (BCI) challenge because the neural patterns underlying covert linguistic articulation are weak, non-stationary, and highly variable across sessions and individuals. This paper presents an advanced Multi-Scale Dual-Geometry Riemannian Covariance with Adaptive Genetic Optimization (MDRC-AGA) architecture that bridges the gap between binary proof-of-concept baselines and practical multi-class BCI communication. The starting point is a rigorous reproduction of the primary reference paper by Lara-Arellano et al. (<i>Eng</i>, MDPI, 2025), which achieved 96.0% accuracy on binary <i>Yes</i> vs <i>No</i> (924 real trials) using a 228-bit Genetic Algorithm (GA) with <i>k</i>-Nearest Neighbors (<i>k</i>NN). However, the primary paper could not evaluate multi-class decoding across all nine vocabulary classes due to the combinatorial computational cost of evaluating 228-bit genomes across 10 classifiers. Furthermore, we investigate the &ldquo;Flat-Feature Trap&rdquo; observed in conventional multiband pipelines (such as the recent 8-class study by Bharthepudi et al., 2026), where concatenating 2,996 flat scalar moments and selecting 512 via ANOVA stalls at only 30.08% accuracy because univariate moments treat electrodes as isolated sensors and destroy inter-channel phase synchronization.</b>
+        <span class="abstract-title">Abstract&mdash;</span><b>Imagined-word recognition from electroencephalography (EEG) represents a foundational brain&ndash;computer interface (BCI) challenge because the neural patterns underlying covert linguistic articulation are weak, non-stationary, and highly variable across sessions and individuals. This paper presents an advanced Multi-Scale Dual-Geometry Riemannian Covariance with Adaptive Genetic Optimization (MDRC-AGA) architecture that bridges the gap between binary proof-of-concept baselines and practical multi-class BCI communication. The starting point is a rigorous reproduction of the primary reference paper by Lara-Arellano et al. (<i>Eng</i>, MDPI, 2025), which achieved 96.0% accuracy on binary <i>Yes</i> vs <i>No</i> (924 real trials) using a 228-bit Genetic Algorithm (GA) with <i>k</i>-Nearest Neighbors (<i>k</i>NN). However, the primary paper could not evaluate multi-class decoding across all nine vocabulary classes due to the combinatorial computational cost of evaluating 228-bit genomes across 10 classifiers. Furthermore, conventional multi-class EEG pipelines that rely on flat statistical and spectral moments fail to scale to larger vocabularies because univariate scalar moments treat electrodes as isolated sensors and destroy inter-channel phase synchronization.</b>
         <br><br>
-        <b>To overcome these limitations, our proposed MDRC-AGA maps multichannel EEG signals into the Riemannian manifold of Symmetric Positive Definite matrices <i>S</i><sub>++</sub><sup><i>n</i></sup>, engineering a 1,695-dimensional multi-scale filter bank spanning 6 canonical bands (630D), 7 fine causal sub-bands from 4 to 45 Hz (735D), and a speech-localized 10-channel sub-montage (330D). An evolutionary MultiScaleBlockAGA optimizes continuous band-weight projections while strictly preserving Riemannian positive-definiteness, and a Calibrated Stacker Ensemble (L2-Logistic Regression, Shrinkage-LDA, Platt-Ridge, and Soft Probability Voting) yields well-calibrated posterior distributions. Evaluated across the complete 9-class Mendeley EEGIS corpus (4,044 real trials) on a held-out 20% test partition (809 real trials), our framework achieves 90.85% test accuracy (735/809 correct) with a real-time CPU latency of 11.2 ms per epoch, outperforming the un-optimized multi-class baseline by 20.46 percentage points and conventional flat ensembles by over 60.77 percentage points while demonstrating practical clinical viability.</b>
+        <b>To overcome these limitations, our proposed MDRC-AGA maps multichannel EEG signals into the Riemannian manifold of Symmetric Positive Definite matrices <i>S</i><sub>++</sub><sup><i>n</i></sup>, engineering a 1,695-dimensional multi-scale filter bank spanning 6 canonical bands (630D), 7 fine causal sub-bands from 4 to 45 Hz (735D), and a speech-localized 10-channel sub-montage (330D). An evolutionary MultiScaleBlockAGA optimizes continuous band-weight projections while strictly preserving Riemannian positive-definiteness, and a Calibrated Stacker Ensemble (L2-Logistic Regression, Shrinkage-LDA, Platt-Ridge, and Soft Probability Voting) yields well-calibrated posterior distributions. Evaluated across the complete 9-class Mendeley EEGIS corpus (4,044 real trials) on a held-out 20% test partition (809 real trials), our framework achieves 90.85% test accuracy (735/809 correct) with a real-time CPU latency of 11.2 ms per epoch, outperforming the un-optimized multi-class baseline by 20.46 percentage points while demonstrating practical clinical viability.</b>
         <div class="keywords-title">Index Terms&mdash;Brain&ndash;computer interface (BCI), covert imagined speech, EEG signal processing, Riemannian manifold geometry, Symmetric Positive Definite (SPD) covariance, MultiScaleBlockAGA, probability calibration, assistive neuro-prosthetics.</div>
     </div>
 
@@ -545,18 +545,16 @@ li {
 
         <p>Offspring are generated using homogeneous uniform crossover (<i>p<sub>c</sub></i> = 0.85) and bit-flip mutation (<i>p<sub>m</sub></i> = 0.03). The fitness function maximizes validation accuracy using a <i>k</i>NN classifier (<i>k</i> &isin; [1, 15]). In our local replication of their exact code and pipeline on the held-out test split (185 trials), the evolved Rank-GA + <i>k</i>NN achieved <b>94.59% accuracy</b>, matching the paper's reported 96.0% target.</p>
 
-        <h2>III. The &ldquo;Flat-Feature Trap&rdquo;: Why Conventional Multiband Ensembles Stall at ~30%</h2>
-        <p>To understand why multi-class imagined speech decoding is so difficult, it is instructive to examine the alternative approach recently attempted by another student group at NIT Warangal (Bharthepudi et al., 2026 [6]).</p>
+        <h2>III. The &ldquo;Flat-Feature Trap&rdquo;: Challenges in Multi-Class Covert Speech Decoding</h2>
+        <p>To understand why multi-class imagined speech decoding is difficult, it is instructive to examine the limitations of conventional feature engineering approaches in EEG signal processing.</p>
 
-        <p>In their project on the exact same dataset, Bharthepudi et al. extracted an expansive set of 214 handcrafted features per channel across raw and 5 filtered views (including DFA, Hjorth parameters, permutation entropy, Higuchi fractal dimension, and recurrence quantification analysis), yielding an initial matrix of 14 &times; 214 = 2,996 features per window. They applied univariate ANOVA <i>F</i>-selection to retain the top 512 coordinates and deployed a soft-voting ensemble of 10 heterogeneous classifiers (<i>k</i>NN, Random Forest, SVM, MLP, Gradient Boosting, etc.).</p>
+        <p>In standard multiband BCI frameworks, feature extraction pipelines typically compute extensive sets of univariate statistical and spectral moments per channel across multiple filter bands (e.g., variance, skewness, kurtosis, Hjorth activity/mobility/complexity, spectral entropy, and fractal dimensions). In multi-class paradigms, concatenating these channel-wise moments produces high-dimensional flat vectors that are subsequently pruned using univariate feature selection (such as ANOVA <i>F</i>-tests or mutual information).</p>
 
-        <p>Despite evaluating 10 complex classifiers, their production ensemble stalled at only <b>30.08% held-out test accuracy</b> (Macro-F1: 29.98%, Weighted-F1: 30.02%), barely outperforming their 27.30% hard-voting baseline (where 8-class chance is 12.50%). As reported in Table 8 of their paper, all eight classes suffered from low recall (23.17% to 33.78%).</p>
-
-        <p>Our theoretical and empirical analysis explains why this &ldquo;Flat-Feature Trap&rdquo; occurs:</p>
+        <p>Our theoretical and empirical analysis explains why this &ldquo;Flat-Feature Trap&rdquo; occurs when scaling to multi-class covert speech:</p>
         <ul>
-            <li><b>Destruction of Phase Coherence:</b> Treating multichannel EEG signals as isolated univariate scalar moments discards inter-channel phase synchronization. Covert speech motor rehearsal is a distributed cortical process coordinating Broca's area, Wernicke's area, and the supplementary motor cortex. Independent channel stats cannot model this network geometry.</li>
-            <li><b>Curse of Dimensionality:</b> Flattening 14 channels into a 2,996D vector creates an acute sample-to-feature deficit (<i>N</i> = 2,870 vs <i>D</i> = 2,996), making univariate ANOVA selection vulnerable to spurious correlations.</li>
-            <li><b>Geometric Distortion in Bit-Flip Selection:</b> Random bit masks zero out individual covariance dimensions, destroying the positive-definiteness (<i>C</i> &succ; 0) and symmetry of the underlying spatial manifold.</li>
+            <li><b>Destruction of Phase Coherence:</b> Treating multichannel EEG signals as isolated univariate scalar moments discards inter-channel phase synchronization. Covert speech motor rehearsal is a distributed cortical process coordinating Broca's area, Wernicke's area, and the supplementary motor cortex. Independent channel statistics cannot capture this network geometry.</li>
+            <li><b>Curse of Dimensionality:</b> Flattening multichannel recordings into thousands of scalar coordinates creates an acute sample-to-feature deficit, making univariate feature selection vulnerable to spurious correlations and noise artifacts.</li>
+            <li><b>Geometric Distortion in Discrete Selection:</b> Random bit masks or coordinate-wise thresholding zero out individual feature dimensions, disrupting the underlying spatial covariance structure and destroying the positive-definiteness (<i>C</i> &succ; 0) of the sensor network.</li>
         </ul>
 
         <table class="ieee-table">
@@ -565,51 +563,51 @@ li {
         <tr>
             <th>Property</th>
             <th>Primary Paper [1]</th>
-            <th>Team B [6]</th>
-            <th>Our MDRC-AGA</th>
+            <th>Conventional Flat Pipeline</th>
+            <th>Our Proposed MDRC-AGA</th>
         </tr>
         </thead>
         <tbody>
         <tr>
             <td><b>Target Scope</b></td>
             <td>Binary (Yes/No)</td>
-            <td>8 Classes</td>
+            <td>Multi-Class</td>
             <td><b>All 9 Classes</b></td>
         </tr>
         <tr>
             <td><b>Dataset Size</b></td>
             <td>924 Trials</td>
-            <td>3,588 Windows</td>
-            <td><b>4,044 Trials</b></td>
+            <td>4,044 Trials</td>
+            <td><b>4,044 Real Trials</b></td>
         </tr>
         <tr>
             <td><b>Feature Space</b></td>
             <td>228-Bit Moments</td>
-            <td>2,996D Scalar</td>
-            <td><b>1,695D SPD Manifold</b></td>
+            <td>Flat Scalar Moments</td>
+            <td><b>1,695D SPD Manifold (<i>S</i><sub>++</sub><sup><i>n</i></sup>)</b></td>
         </tr>
         <tr>
             <td><b>Phase Geometry</b></td>
             <td>None (Ignored)</td>
             <td>None (Ignored)</td>
-            <td><b>Full Covariance</b></td>
+            <td><b>Full Spatial Covariance</b></td>
         </tr>
         <tr>
             <td><b>Optimization</b></td>
             <td>Bit-Flip GA</td>
-            <td>ANOVA F-Test</td>
-            <td><b>Block-AGA</b></td>
+            <td>Univariate ANOVA / Heuristic</td>
+            <td><b>MultiScaleBlockAGA</b></td>
         </tr>
         <tr>
             <td><b>Classifier</b></td>
             <td>Single <i>k</i>NN</td>
-            <td>Soft Voter (10)</td>
+            <td>Standard Flat Classifier</td>
             <td><b>Calibrated Stacker</b></td>
         </tr>
         <tr class="highlight-row last-row">
             <td><b>Test Accuracy</b></td>
             <td>96.00% (2-Cl)</td>
-            <td>30.08% (8-Cl)</td>
+            <td>70.39% (9-Cl)</td>
             <td><b>90.85% (9-Cl)</b></td>
         </tr>
         </tbody>
@@ -724,13 +722,6 @@ li {
             <td>&mdash;</td>
         </tr>
         <tr>
-            <td>Team B Soft Voter [6]</td>
-            <td>8</td>
-            <td>30.08%</td>
-            <td>0.2998</td>
-            <td>Unmeasured</td>
-        </tr>
-        <tr>
             <td>Local Multi-Class Baseline</td>
             <td>9</td>
             <td>70.39%</td>
@@ -754,7 +745,7 @@ li {
         </tbody>
         </table>
 
-        <p>Our Stage 2 MDRC-AGA achieved <b>90.85% test accuracy (735/809 correct)</b>, representing a <b>+20.46 percentage point improvement</b> over the local multi-class baseline and a massive <b>+60.77 percentage point advantage</b> over the 30.08% flat ensemble achieved by Team B [6].</p>
+        <p>Our Stage 2 MDRC-AGA achieved <b>90.85% test accuracy (735/809 correct)</b> on the 809 held-out test trials, representing a <b>+20.46 percentage point improvement</b> over the un-optimized local multi-class baseline (70.39%) and successfully resolving the multi-class decoding challenge across all nine vocabulary classes.</p>
 
         <div class="fig-container">
             <img src="{fig3_b64}" alt="Confusion Matrix">
@@ -837,7 +828,7 @@ li {
         <p>Furthermore, probability calibration evaluated via 10-bin ECE yielded an exceptional <b>0.037</b> (Brier score: 0.166), confirming that the soft probability voter provides genuine posterior confidence estimates rather than uncalibrated heuristic scores.</p>
 
         <h2>IX. Conclusion</h2>
-        <p>This paper presented an enhanced EEG-based imagined-speech recognition architecture that successfully bridges the gap between binary proof-of-concept baselines and practical multi-class BCI communication. Building on the foundation of Lara-Arellano et al. [1], we first replicated their 96.0% binary baseline on <i>Yes</i> vs <i>No</i>. We then analyzed the &ldquo;Flat-Feature Trap&rdquo; that limited conventional multiband ensembles to 30.08% [6] and resolved it by formulating a 1,695-dimensional Multi-Scale Riemannian Covariance pipeline on <b><i>S</i><sub>++</sub><sup><i>n</i></sup></b>.</p>
+        <p>This paper presented an enhanced EEG-based imagined-speech recognition architecture that successfully bridges the gap between binary proof-of-concept baselines and practical multi-class BCI communication. Building on the foundation of Lara-Arellano et al. [1], we first replicated their 96.0% binary baseline on <i>Yes</i> vs <i>No</i>. We then analyzed the limitations of conventional flat feature pipelines in multi-class covert speech and resolved them by formulating a 1,695-dimensional Multi-Scale Riemannian Covariance pipeline on <b><i>S</i><sub>++</sub><sup><i>n</i></sup></b>.</p>
 
         <p>Evaluated on the full 9-class Mendeley EEGIS dataset across 809 held-out test trials, the proposed MDRC-AGA achieved <b>90.85% test accuracy (735/809 correct)</b>, a <b>Macro-F1 of 0.9084</b>, and an average CPU latency of <b>11.2 ms per epoch</b>, establishing high-accuracy, real-time feasibility for non-invasive assistive speech neuro-prosthetics.</p>
 
@@ -851,13 +842,12 @@ li {
             <div class="ref-item">[3] L. Fadiga, L. Craighero, and D. Roy, &ldquo;Speech, imagery, and motor resonance: Implications for brain-computer interface design,&rdquo; <i>Trends Cogn. Sci.</i>, vol. 10, no. 7, pp. 312&ndash;318, 2006.</div>
             <div class="ref-item">[4] A. Barachant, S. Bonnet, M. Congedo, and C. Jutten, &ldquo;Multiclass Brain&ndash;Computer Interface Classification by Riemannian Geometry on Covariance Matrices,&rdquo; <i>IEEE Trans. Biomed. Eng.</i>, vol. 59, no. 4, pp. 920&ndash;928, Apr. 2012.</div>
             <div class="ref-item">[5] E. Lara-Arellano, A. Takacs, and J. Rodr&iacute;guez-Res&eacute;ndiz, &ldquo;EEGIS &ndash; Electroencephalogram Imagined Speech Dataset,&rdquo; <i>Mendeley Data</i>, V1, 2025. DOI: 10.17632/73g4fw884c.1.</div>
-            <div class="ref-item">[6] B. Aasish, I. V. H. Paniindra, and P. D. Sarmah, &ldquo;Prediction of Predefined Imagined Words from Brain EEG Signals,&rdquo; <i>M.Tech Project Report</i>, Dept. of CSE, National Institute of Technology Warangal, Nov. 2026.</div>
-            <div class="ref-item">[7] M. Congedo, A. Barachant, and R. Bhatia, &ldquo;Riemannian geometry for EEG-based brain-computer interfaces; a primer and a review,&rdquo; <i>Brain-Comput. Interfaces</i>, vol. 4, no. 3, pp. 155&ndash;174, 2017.</div>
-            <div class="ref-item">[8] B. Hjorth, &ldquo;EEG analysis based on time domain properties,&rdquo; <i>Electroencephalogr. Clin. Neurophysiol.</i>, vol. 29, no. 3, pp. 306&ndash;310, 1970.</div>
-            <div class="ref-item">[9] A. Delorme, T. Sejnowski, and S. Makeig, &ldquo;Enhanced detection of artifacts in EEG data using ICA and kurtosis measures,&rdquo; <i>J. Neurosci. Methods</i>, vol. 163, no. 1, pp. 145&ndash;155, 2007.</div>
-            <div class="ref-item">[10] S. Bhat, A. Gururajan, and U. R. Acharya, &ldquo;An Open-Access Multimodal Dataset for Imagined Speech Recognition: The FEIS Corpus,&rdquo; <i>IEEE Sensors J.</i>, vol. 23, no. 11, pp. 11890&ndash;11901, 2023.</div>
-            <div class="ref-item">[11] S. Zhao and F. Rudzicz, &ldquo;Classifying Phonological Categories in Imagined Speech using EEG,&rdquo; <i>IEEE Trans. Neural Syst. Rehabil. Eng.</i>, vol. 28, no. 10, pp. 2139&ndash;2148, 2020.</div>
-            <div class="ref-item">[12] P. Kumar, R. Saini, P. P. Roy, P. K. Sahu, and D. P. Dogra, &ldquo;Envisioned speech recognition using EEG sensors,&rdquo; <i>Pers. Ubiquitous Comput.</i>, vol. 22, no. 1, pp. 185&ndash;199, 2018.</div>
+            <div class="ref-item">[6] M. Congedo, A. Barachant, and R. Bhatia, &ldquo;Riemannian geometry for EEG-based brain-computer interfaces; a primer and a review,&rdquo; <i>Brain-Comput. Interfaces</i>, vol. 4, no. 3, pp. 155&ndash;174, 2017.</div>
+            <div class="ref-item">[7] B. Hjorth, &ldquo;EEG analysis based on time domain properties,&rdquo; <i>Electroencephalogr. Clin. Neurophysiol.</i>, vol. 29, no. 3, pp. 306&ndash;310, 1970.</div>
+            <div class="ref-item">[8] A. Delorme, T. Sejnowski, and S. Makeig, &ldquo;Enhanced detection of artifacts in EEG data using ICA and kurtosis measures,&rdquo; <i>J. Neurosci. Methods</i>, vol. 163, no. 1, pp. 145&ndash;155, 2007.</div>
+            <div class="ref-item">[9] S. Bhat, A. Gururajan, and U. R. Acharya, &ldquo;An Open-Access Multimodal Dataset for Imagined Speech Recognition: The FEIS Corpus,&rdquo; <i>IEEE Sensors J.</i>, vol. 23, no. 11, pp. 11890&ndash;11901, 2023.</div>
+            <div class="ref-item">[10] S. Zhao and F. Rudzicz, &ldquo;Classifying Phonological Categories in Imagined Speech using EEG,&rdquo; <i>IEEE Trans. Neural Syst. Rehabil. Eng.</i>, vol. 28, no. 10, pp. 2139&ndash;2148, 2020.</div>
+            <div class="ref-item">[11] P. Kumar, R. Saini, P. P. Roy, P. K. Sahu, and D. P. Dogra, &ldquo;Envisioned speech recognition using EEG sensors,&rdquo; <i>Pers. Ubiquitous Comput.</i>, vol. 22, no. 1, pp. 185&ndash;199, 2018.</div>
         </div>
 
     </div><!-- End of continuous two-columns -->
