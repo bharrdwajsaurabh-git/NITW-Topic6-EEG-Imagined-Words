@@ -13,7 +13,7 @@ Enhancing the Primary Research Paper (Lara-Arellano et al., 2025):
      Calibrated Ridge, and MultiMetricSoftVotingClassifier to deliver high accuracy
      and calibrated posterior probabilities.
   5. Exports deployment bundle and populates `test_signals/` with verified held-out
-     test trials (80/20 test split) so CLI & GUI demo achieve ~89-100% accuracy.
+     test trials (70/10/20 train/evaluate/test pipeline) so CLI & GUI demo achieve ~89-100% accuracy.
 """
 
 import os

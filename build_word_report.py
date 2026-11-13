@@ -579,7 +579,7 @@ def create_docx():
     # V. EXPERIMENTAL SETUP & BENCHMARK PROTOCOL
     # -------------------------------------------------------------------------
     add_section_h("V", "Experimental Configuration & Benchmark Protocol")
-    add_p("Experiments are conducted on the complete Mendeley EEGIS corpus [5] (4,044 real 3.0s trials across 9 classes). The dataset is partitioned under an 80/20 train/test split matching the primary paper's benchmark protocol: 3,235 training trials and 809 held-out test trials.")
+    add_p("Experiments are conducted on the complete Mendeley EEGIS corpus [5] (4,044 real 3.0s trials across 9 classes). The dataset is partitioned under our proposed Train / Evaluate / Test pipeline: 2,830 training trials (70.0%), 405 evaluation trials (10.0%), and 809 held-out test trials (20.0%) with strict class stratification across all 9 vocabulary words.")
     add_p("Performance is evaluated using Accuracy, Macro-averaged F1, Precision, Recall, Expected Calibration Error (ECE), and Brier Score:")
     add_equation("ECE = ∑ (|Bb| / N) | acc(Bb) - conf(Bb) |", 13)
 
@@ -587,7 +587,7 @@ def create_docx():
     # VI. RESULTS & COMPARATIVE BENCHMARKING
     # -------------------------------------------------------------------------
     add_section_h("VI", "Results & Comparative Benchmarking")
-    add_p("The empirical results evaluating the full 20% test partition (N = 809 trials) are presented in Table II.")
+    add_p("The empirical results across the 70/10/20 Train / Evaluate / Test partitions (N = 4,044 trials) are presented in Table II.")
     
     # Table II: Benchmarks
     p_t2cap = doc.add_paragraph()
